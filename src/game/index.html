@@ -1,0 +1,112 @@
+<!doctype html>
+
+<html>
+<head>
+
+	<title>gorescript</title>
+
+	<style>
+	
+		body { margin: 0; padding: 0; overflow: hidden; background-color: #000; }
+		canvas { position: fixed; }
+	
+	</style>
+
+</head>
+<body>
+
+	<script src="../deps/jquery.min.js"></script>
+	<script src="../deps/jszip.min.js"></script>
+	<script src="../deps/tween.min.js"></script>
+	<script src="../deps/three.min.js"></script>
+	<script src="../deps/OBJExporter.js"></script>
+	<script src="../deps/OBJLoader.js"></script>
+
+	<script src="../deps/post-processing/ConvolutionShader.js"></script>
+	<script src="../deps/post-processing/CopyShader.js"></script>
+	<script src="../deps/post-processing/FXAAShader.js"></script>
+	<script src="../deps/post-processing/SSAOShader.js"></script>
+	<script src="../deps/post-processing/VignetteShader.js"></script>
+	
+	<script src="../deps/post-processing/EffectComposer.js"></script>
+	<script src="../deps/post-processing/ShaderPass.js"></script>
+	<script src="../deps/post-processing/RenderPass.js"></script>
+	<script src="../deps/post-processing/MaskPass.js"></script>
+	<script src="../deps/post-processing/BloomPass.js"></script>
+
+	<script src="../common/Base.js"></script>
+	<script src="../common/Canvas2d.js"></script>
+	<script src="../common/Extensions.js"></script>
+	<script src="../common/InputHelper.js"></script>
+	<script src="../common/MathHelper.js"></script>
+	<script src="../common/PolygonHelper.js"></script>
+	<script src="../common/LineHelper.js"></script>
+	<script src="../common/MapEnums.js"></script>
+	<script src="../common/Cube.js"></script>
+
+	<script src="js/Settings.js"></script>
+	<script src="js/Game.js"></script>
+
+	<script src="js/ui/DebugUI.js"></script>
+	<script src="js/ui/LoadingUI.js"></script>
+	
+	<script src="js/helpers/CollisionHelper.js"></script>
+	<script src="js/helpers/HitscanHelper.js"></script>
+
+	<script src="js/shaders/ColorShader.js"></script>
+	<script src="js/shaders/BrightnessFilterShader.js"></script>
+	<script src="js/shaders/GlowShader.js"></script>
+	<script src="js/shaders/NoiseShader.js"></script>
+	<script src="js/shaders/PhongGlowShader.js"></script>
+	<script src="js/shaders/MeshPhongGlowMaterial.js"></script>
+
+	<script src="js/enums/Assets.js"></script>
+	<script src="js/enums/Weapons.js"></script>
+	<script src="js/enums/Projectiles.js"></script>
+	<script src="js/enums/Monsters.js"></script>
+
+	<script src="js/grid-objects/GridObject.js"></script>	
+	<script src="js/grid-objects/Player.js"></script>
+	<script src="js/grid-objects/Concrete.js"></script>
+	<script src="js/grid-objects/Item.js"></script>	
+	<script src="js/grid-objects/Projectile.js"></script>
+	<script src="js/grid-objects/Monster.js"></script>
+	<script src="js/grid-objects/Door.js"></script>
+	<script src="js/grid-objects/Elevator.js"></script>
+	<script src="js/grid-objects/TVScreen.js"></script>
+
+	<script src="js/loaders/MapLoader.js"></script>
+	<script src="js/loaders/FontLoader.js"></script>
+	<script src="js/loaders/AssetLoader.js"></script>
+	<script src="js/loaders/ZipAssetLoader.js"></script>
+
+	<script src="js/factories/ViewFactory.js"></script>
+	<script src="js/factories/GridFactory.js"></script>
+	
+	<script src="js/components/GraphicsManager.js"></script>
+	<script src="js/components/SoundManager.js"></script>
+	<script src="js/components/MusicManager.js"></script>
+	<script src="js/components/AIManager.js"></script>
+	<script src="js/components/CollisionManager.js"></script>
+	<script src="js/components/Grid.js"></script>
+	<script src="js/components/DemoRecorder.js"></script>
+	<script src="js/components/FPSControls.js"></script>
+	<script src="js/components/TVStation.js"></script>
+	<script src="js/components/MapScript.js"></script>
+
+	<script src="js/views/PlayerView.js"></script>
+	<script src="js/views/ParticleView.js"></script>
+	<script src="js/views/AnimationView.js"></script>
+	<script src="js/views/LightingView.js"></script>
+
+	<script src="js/ui/UIManager.js"></script>
+	<script src="js/ui/VectorCanvas.js"></script>
+	<script src="js/ui/UIEnums.js"></script>	
+
+	<script src="js/ui/components/Menu.js"></script>
+	<script src="js/ui/components/PowerBars.js"></script>
+	<script src="js/ui/components/Crosshair.js"></script>
+	<script src="js/ui/components/Notifications.js"></script>
+
+</body>
+</html>
