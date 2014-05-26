@@ -119,13 +119,13 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 			} else {
 				if (!target.dead && !this.inPain) {
 					var distanceToTarget = this.position.distanceTo(target.position);
-					if (distanceToTarget < this.meleeRange) {
-						if (this.isFacing(target.position)) {
-							this.grid.soundManager.playSound("monster_bite");
-							this.meleeAttackCooldown = this.meleeAttackMaxCooldown;
-							target.onHit(this.meleeDamage);
-							this.grid.addMonsterImpactParticles(target.position);
-						}
+					if (distanceToTarget < this.meleeRange && this.isFacing(target.position) &&
+						this.grid.collisionManager.checkMonsterLineOfSight(this, target, this.meleeRange)) {
+
+						this.grid.soundManager.playSound("monster_bite");
+						this.meleeAttackCooldown = this.meleeAttackMaxCooldown;
+						target.onHit(this.meleeDamage);
+						this.grid.addMonsterImpactParticles(target.position);
 					}
 				}
 			}

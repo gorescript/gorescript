@@ -169,6 +169,22 @@ GS.CollisionManager.prototype = {
 		}
 	}(),
 
+	checkMonsterLineOfSight: function() {
+		var direction = new THREE.Vector3();
+		var position = new THREE.Vector3();
+		var typesEnvironment = [GS.Elevator, GS.Door, GS.Concrete];
+		var typesEntity = [GS.Player];
+
+		return function(monster, target, range) {
+			position.copy(monster.position);
+			direction.copy(target.position).sub(monster.position).normalize();
+
+			var steps = Math.ceil(range / GS.HitscanHelper.unitLength);
+			var result = GS.HitscanHelper.getIntersection(position, direction, this.grid, typesEnvironment, typesEntity, steps, monster);
+			return (result.type === GS.CollisionTypes.Entity && result.gridObject === target);
+		}
+	}(),
+
 	collideMonster: function(monster, oldPos, newPos) {
 		this.collideMonsterPlayerEnvironment(monster, oldPos, newPos);
 		this.updateGridLocationEllipsoid(monster, newPos);

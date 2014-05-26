@@ -1,6 +1,6 @@
 GS.HitscanHelper = {
 	unitLength: 64,
-	range: 5,
+	steps: 5,
 
 	spread: function(weapon, xAngle, yAngle, callback) {
 		var angleForX = weapon.spread.angleOffset + 20 * (Math.abs(yAngle - 90) / 90) * (Math.abs(yAngle - 90) / 90);
@@ -29,7 +29,8 @@ GS.HitscanHelper = {
 		var ray = new THREE.Ray();
 		var point = new THREE.Vector3();
 
-		return function(pos, dir, grid, typesEnvironment, typesEntity) {
+		return function(pos, dir, grid, typesEnvironment, typesEntity, steps, except) {
+			steps = steps || this.steps;
 			newPos.copy(pos);
 			step.copy(dir).multiplyScalar(this.unitLength);
 
@@ -43,7 +44,7 @@ GS.HitscanHelper = {
 
 			ray.set(pos, dir);
 
-			for (var i = 0; i < this.range; i++) {
+			for (var i = 0; i < steps; i++) {
 				endPoint.copy(newPos).add(step);
 				
 				newPos.toVector2(points[0]);
@@ -54,8 +55,8 @@ GS.HitscanHelper = {
 					break;
 				}
 
-				this.checkEnvironmentIntersection(ray, grid, gridLocation, typesEnvironment, result);
-				this.checkEntityIntersection(ray, grid, gridLocation, typesEntity, result);
+				this.checkEnvironmentIntersection(ray, grid, gridLocation, typesEnvironment, result, except);
+				this.checkEntityIntersection(ray, grid, gridLocation, typesEntity, result, except);
 
 				if (result.type !== GS.CollisionTypes.None) {
 					break;
@@ -72,11 +73,14 @@ GS.HitscanHelper = {
 		var aux = new THREE.Vector3();
 		var point = new THREE.Vector3();
 
-		return function(ray, grid, gridLocation, types, result) {
+		return function(ray, grid, gridLocation, types, result, except) {
 			var triangleIterator = grid.getTriangleIterator(gridLocation, types);
 
 			triangleIterator(function(gridObject, v0, v1, v2) {
-				GAME.envHits++;
+				if (gridObject === except) {
+					return;
+				}
+
 				if (ray.intersectTriangle(v0, v1, v2, true, point) !== null) {
 					var dist = point.distanceToSquared(ray.origin);
 
@@ -98,11 +102,11 @@ GS.HitscanHelper = {
 	checkEntityIntersection: function() {
 		var point = new THREE.Vector3();
 
-		return function(ray, grid, gridLocation, types, result) {
+		return function(ray, grid, gridLocation, types, result, except) {
 			var cells = grid.getCellsFromGridLocation(gridLocation);
 		
 			grid.forEachUniqueGridObjectInCells(cells, types, function(gridObject) {
-				if (gridObject.dead) {
+				if (gridObject.dead || gridObject === except) {
 					return;
 				}
 
