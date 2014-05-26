@@ -71,9 +71,10 @@ GS.AIManager.prototype = {
 			elevators: {},
 			monsters: {},
 			sectors: {},
+			switches: {},
 		};
 
-		this.grid.forEachUniqueGridObject([GS.Item, GS.Door, GS.Elevator, GS.Monster, GS.Concrete], function(gridObject) {
+		this.grid.forEachUniqueGridObject([GS.Item, GS.Door, GS.Elevator, GS.Monster, GS.Concrete, GS.Switch], function(gridObject) {
 			if (gridObject instanceof GS.Item) {
 				library.items[gridObject.sourceObj.id] = gridObject;
 			} else
@@ -88,6 +89,9 @@ GS.AIManager.prototype = {
 			} else
 			if (gridObject instanceof GS.Concrete && gridObject.type == GS.MapLayers.Sector) {
 				library.sectors[gridObject.sourceObj.id] = gridObject;
+			} else 
+			if (gridObject instanceof GS.Switch) {
+				library.switches[gridObject.segment.id] = gridObject;
 			}
 		});
 
@@ -118,6 +122,12 @@ GS.AIManager.prototype = {
 	onPlayerItemPickup: function(player, item) {
 		if (this.script !== undefined) {
 			this.script.onItemPickup(item);
+		}
+	},
+
+	onSwitchStateChange: function(switchObj) {
+		if (this.script !== undefined) {
+			this.script.onSwitchStateChange(switchObj);
 		}
 	},
 

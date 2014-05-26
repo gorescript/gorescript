@@ -34,6 +34,9 @@ GS.ViewFactory.prototype = {
 			}
 		}
 
+		this.textures.switch_on.flipY = false;
+		this.textures.switch_off.flipY = false;
+
 		var entities = this.map.layerObjects[GS.MapLayers.Entity];
 		var entityMaterials = {};
 		for (var i = 0; i < entities.length; i++) {
@@ -551,6 +554,28 @@ GS.ViewFactory.prototype = {
 		tvScreen.view.mesh = this.getTVScreenMesh(tvScreen);
 	},
 
+	applySwitchView: function(switchObj) {
+		switchObj.segment.bottomY += 8;
+		switchObj.segment.topY = switchObj.segment.bottomY + 8;
+		switchObj.view.mesh = this.getTVScreenMesh(switchObj);
+
+		switchObj.view.collisionData.boundingBox.setFromPoints([
+			new THREE.Vector3(switchObj.segment.start.x, switchObj.segment.bottomY, switchObj.segment.start.y),
+			new THREE.Vector3(switchObj.segment.end.x, switchObj.segment.topY, switchObj.segment.end.y),
+		]);
+
+		switchObj.view.textureOn = this.textures.switch_on;
+		switchObj.view.textureOff = this.textures.switch_off;
+
+		switchObj.view.mesh.material = new THREE.MeshBasicMaterial({ 
+			map: switchObj.view.textureOff,
+			depthWrite: false,
+			polygonOffset: true,
+			polygonOffsetFactor: -4,
+			transparent: true,
+		});
+	},
+
 	getTVScreenMesh: function(tvScreen) {
 		var seg = tvScreen.segment;
 
@@ -575,7 +600,7 @@ GS.ViewFactory.prototype = {
 		geometry.computeFaceNormals();
 		geometry.computeVertexNormals();
 
-		var mesh = new THREE.Mesh(geometry, this.materials.tvScreen);
+		var mesh = new THREE.Mesh(geometry, undefined);
 		mesh.matrixAutoUpdate = false;
 		mesh.renderDepth = 1000;
 		return mesh;

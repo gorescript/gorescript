@@ -33,6 +33,8 @@ GS.Assets[GS.AssetTypes.Texture] = {
 	"brown": 				{ filename: "brown.png", 					type: GS.TextureTypes.Map },
 
 	"tv": 					{ filename: "tv.png", 						type: GS.TextureTypes.TVScreen },
+	"switch_off": 			{ filename: "switch_off.png",				type: GS.TextureTypes.TVScreen },
+	"switch_on": 			{ filename: "switch_on.png",				type: GS.TextureTypes.TVScreen },
 
 	"ammo": 				{ filename: "ammo.png", 					type: GS.TextureTypes.Entity },
 	"ammo_glow": 			{ filename: "ammo_glow.png", 				type: GS.TextureTypes.Entity },
@@ -90,6 +92,7 @@ GS.Assets[GS.AssetTypes.Sound] = {
 	"pickup_weapon": 		{ filename: "pickup_weapon.ogg",			allowMultipleAtOnce: true },
 	"shotgun_fire": 		{ filename: "shotgun_fire.ogg",				allowMultipleAtOnce: true },
 	"player_death": 		{ filename: "player_death.ogg",				allowMultipleAtOnce: true },
+	"switch_on": 			{ filename: "switch_on.ogg",				allowMultipleAtOnce: true },
 };
 
 GS.Assets[GS.AssetTypes.MusicTrack] = {

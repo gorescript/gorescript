@@ -99,7 +99,7 @@ GS.Grid.prototype = {
 
 	addEntityMeshesToScene: function() {
 		var that = this;
-		this.forEachUniqueGridObject([GS.Item, GS.Monster, GS.Door, GS.Elevator, GS.TVScreen], function(gridObject) {
+		this.forEachUniqueGridObject([GS.Item, GS.Monster, GS.Door, GS.Elevator, GS.TVScreen, GS.Switch], function(gridObject) {
 			if (that.debugEntityMeshes && gridObject.view.debugMesh !== undefined) {
 				gridObject.view.mesh.children.push(gridObject.view.debugMesh);
 			}

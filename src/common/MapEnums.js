@@ -11,6 +11,7 @@ GS.SegmentTypes = {
 	InteriorCeiling: 2,
 	Exterior: 3,
 	TVScreen: 4,
+	Switch: 5,
 };
 
 GS.MapEntities = {

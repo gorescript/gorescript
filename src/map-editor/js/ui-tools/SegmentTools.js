@@ -165,23 +165,27 @@ GS.SegmentTools.prototype = GS.inherit(GS.LayerObjectTools, {
 			var $txtBottomY = $("#seg-selected-bottom-y");
 			var $txtTopY = $("#seg-selected-top-y");
 			var $chkTVScreen = $("#chk-seg-selected-tv");
+			var $chkSwitch = $("#chk-seg-selected-switch");
 			var $txtTexId = $("#seg-selected-tex");
 
 			if (count == 1) {
 				seg = selected[0];
 
 				var isTVScreen = (seg.type === GS.SegmentTypes.TVScreen);
+				var isSwitch = (seg.type === GS.SegmentTypes.Switch);
 
 				$txtId.text(seg.id);
 				$txtBottomY.val(seg.bottomY);
 				$txtTopY.val(seg.topY);
 				$chkTVScreen.prop("checked", isTVScreen);
+				$chkSwitch.prop("checked", isSwitch);
 				$txtTexId.val(seg.texId);
 			} else {
 				$txtId.text("multiple");
 				$txtBottomY.val("");
 				$txtTopY.val("");
 				$chkTVScreen.prop("checked", false);
+				$chkSwitch.prop("checked", false);
 				$txtTexId.val("");
 			}
 
@@ -208,11 +212,25 @@ GS.SegmentTools.prototype = GS.inherit(GS.LayerObjectTools, {
 				var value = $(this).is(":checked");
 				for (var i = 0; i < selected.length; i++) {
 					if (value) {
+						$chkSwitch.prop("checked", false);
 						selected[i].type = GS.SegmentTypes.TVScreen;
 					} else {
 						selected[i].type = GS.SegmentTypes.User;
 					}
 				}
+			});
+
+			$chkSwitch.off("change.detail");
+			$chkSwitch.on("change.detail", function() { 
+				var value = $(this).is(":checked");
+				for (var i = 0; i < selected.length; i++) {
+					if (value) {
+						$chkTVScreen.prop("checked", false);
+						selected[i].type = GS.SegmentTypes.Switch;
+					} else {
+						selected[i].type = GS.SegmentTypes.User;
+					}
+				}				
 			});
 
 			$txtTexId.off("change.detail");

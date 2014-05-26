@@ -20,6 +20,9 @@ GS.MapScript.prototype = {
 	onItemPickup: function(item) {
 	},
 
+	onSwitchStateChange: function(switchObj) {
+	},
+
 	getGridObjectsById: function(type, idArray) {
 		var list = [];
 		var source = this.lib[type];

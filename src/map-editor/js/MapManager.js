@@ -365,10 +365,6 @@ GS.MapManager.prototype = {
 	},
 
 	isSegmentVisible: function(seg) {
-		if (seg.type === GS.SegmentTypes.TVScreen) {
-			var i = 1;
-		}
-
 		switch (seg.type) {
 			case GS.SegmentTypes.User:
 				return this.showUserDrawnSegments;
@@ -379,6 +375,7 @@ GS.MapManager.prototype = {
 			case GS.SegmentTypes.Exterior:
 				return this.showGeneratedExteriorSides;
 			case GS.SegmentTypes.TVScreen:
+			case GS.SegmentTypes.Switch:
 				return this.showTVScreens;
 		}
 	},
@@ -708,7 +705,7 @@ GS.MapManager.prototype = {
 		this.edgeTool.computeEdges();
 
 		var all = this.getSelectionOfAllLayerObjects(GS.MapLayers.Segment, function(seg) {
-			return (seg.type !== GS.SegmentTypes.TVScreen) ? true : undefined;
+			return (seg.type !== GS.SegmentTypes.TVScreen && seg.type !== GS.SegmentTypes.Switch) ? true : undefined;
 		});
 		this.removeLayerObjects(GS.MapLayers.Segment, all);
 		this.map.layerObjectIds[GS.MapLayers.Segment] = 0;
@@ -734,7 +731,7 @@ GS.MapManager.prototype = {
 
 		var segs = this.map.layerObjects[GS.MapLayers.Segment];
 		for (var i = 0; i < segs.length; i++) {
-			if (segs[i].type !== GS.SegmentTypes.TVScreen) {
+			if (segs[i].type !== GS.SegmentTypes.TVScreen && segs[i].type !== GS.SegmentTypes.Switch) {
 				count += 2;
 			}
 		}

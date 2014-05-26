@@ -113,15 +113,19 @@ GS.GridFactory.prototype = {
 			points.push(new THREE.Vector2().copy(seg.end));
 			var gridLocation = grid.getGridLocationFromPoints(points);
 
-			if (seg.type !== GS.SegmentTypes.TVScreen) {
+			if (seg.type !== GS.SegmentTypes.TVScreen && seg.type !== GS.SegmentTypes.Switch) {
 				var gridObject = new GS.Concrete(grid, GS.MapLayers.Segment, seg);
 				gridObject.sector = sectorDict[seg.sectorId];
 				this.viewFactory.applySegmentView(gridObject);
 				gridObject.assignToCells(gridLocation);
 
 				lightMapObjects.push(gridObject);
-			} else {
+			} else
+			if (seg.type === GS.SegmentTypes.TVScreen) {
 				this.addTVScreen(grid, gridLocation, seg);
+			} else
+			if (seg.type === GS.SegmentTypes.Switch) {
+				this.addSwitch(grid, gridLocation, seg);
 			}
 		}		
 
@@ -172,5 +176,11 @@ GS.GridFactory.prototype = {
 		var tvScreen = new GS.TVScreen(grid, seg);
 		this.viewFactory.applyTVScreenView(tvScreen);
 		tvScreen.assignToCells(gridLocation);
+	},
+
+	addSwitch: function(grid, gridLocation, seg) {
+		var switchObj = new GS.Switch(grid, seg);
+		this.viewFactory.applySwitchView(switchObj);
+		switchObj.assignToCells(gridLocation);
 	},
 };

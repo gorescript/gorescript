@@ -131,7 +131,7 @@ GS.CollisionManager.prototype = {
 		var endPoint = new THREE.Vector3();
 		var aux = new THREE.Vector3();
 		var points = [ new THREE.Vector2(), new THREE.Vector2() ];
-		var usableTypes = [GS.Door];
+		var usableTypes = [GS.Door, GS.Switch];
 
 		return function(player) {
 			player.useTarget = null;

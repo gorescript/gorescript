@@ -341,7 +341,7 @@ GS.PolygonHelper = {
 		for (var i = 0; i < segments.length; i++) {
 			var seg = segments[i];
 
-			if (seg.type === GS.SegmentTypes.TVScreen) {
+			if (seg.type === GS.SegmentTypes.TVScreen || seg.type === GS.SegmentTypes.Switch) {
 				continue;
 			}
 
