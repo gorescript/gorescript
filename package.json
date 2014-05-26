@@ -4,24 +4,25 @@
   "version": "0.1.0",
   "homepage": "http://timeinvariant.com/gorescript",
   "repository": {
-	"type": "git",
-	"url": "https://github.com/timeinvariant/gorescript.git"
+    "type": "git",
+    "url": "https://github.com/timeinvariant/gorescript.git"
   },
   "author": {
-	"name": "Sergiu Valentin Bucur",
-	"email": "timeinvariantgames@gmail.com",
-	"url": "http://timeinvariant.com/"
+    "name": "Sergiu Valentin Bucur",
+    "email": "timeinvariantgames@gmail.com",
+    "url": "http://timeinvariant.com/"
   },
   "licenses": [
-	{
-	  "type": "MIT",
-	  "url": "http://github.com/timeinvariant/gorescript/blob/master/LICENSE.txt"
-	}
+    {
+      "type": "MIT",
+      "url": "http://github.com/timeinvariant/gorescript/blob/master/LICENSE.txt"
+    }
   ],
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-contrib-uglify": "~0.4.0",
     "grunt-contrib-copy": "~0.5.0",
-    "grunt-shell": "^0.7.0"
+    "grunt-shell": "^0.7.0",
+    "archiver": "^0.10.0-alpha"
   }
 }
