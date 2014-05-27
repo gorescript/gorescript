@@ -40,6 +40,7 @@ GS.Elevator.prototype = GS.inherit(GS.GridObject, {
 
 	update: function() {
 		this.velocity.set(0, 0, 0);
+		var oldY = 0;
 		
 		switch (this.state) {
 			case GS.ElevatorStates.Down:
@@ -63,20 +64,26 @@ GS.Elevator.prototype = GS.inherit(GS.GridObject, {
 				break;
 
 			case GS.ElevatorStates.GoingDown:
+				oldY = this.position.y;
 				this.position.y -= this.speed;
-				this.velocity.y = -this.speed;
 				if (this.position.y <= this.downY) {
 					this.position.y = this.downY;
+					this.velocity.y = this.downY - oldY;
 					this.state = GS.ElevatorStates.Down;
+				} else {
+					this.velocity.y = -this.speed;
 				}
 				break;
 
 			case GS.ElevatorStates.GoingUp:
+				oldY = this.position.y;
 				this.position.y += this.speed;
-				this.velocity.y = this.speed;
 				if (this.position.y >= this.upY) {
 					this.position.y = this.upY;
+					this.velocity.y = this.upY - oldY;
 					this.state = GS.ElevatorStates.Up;
+				} else {
+					this.velocity.y = this.speed;
 				}
 				break;
 		}
