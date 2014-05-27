@@ -388,6 +388,8 @@ GS.CollisionManager.prototype = {
 							gridObject.position.toVector2(pos2d);
 							if (GS.PolygonHelper.sectorContainsPoint(elevator.sector, pos2d, true)) {
 								gridObject.elevatorId = elevator.id;
+							} else {
+								return;
 							}
 						}
 					}

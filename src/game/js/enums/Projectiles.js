@@ -5,7 +5,7 @@ GS.Projectiles = {
 		speed: 5,
 		maxDistance: 500,
 		color: new THREE.Color().setRGB(1, 1, 1).getHex(),
-		damage: 5,
+		damage: 10,
 	},
 	hyper_blaster_bolt: {
 		hitSound: "hyper_blaster_hit",
@@ -13,6 +13,6 @@ GS.Projectiles = {
 		speed: 5,
 		maxDistance: 500,
 		color: new THREE.Color().setRGB(1, 1, 1).getHex(),
-		damage: 5,
+		damage: 10,
 	},
 };
