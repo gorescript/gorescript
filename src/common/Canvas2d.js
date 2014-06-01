@@ -246,7 +246,11 @@ GS.Canvas2d.prototype = {
 		this.bufferCtx.restore();
 	},
 
-	drawImage: function(pos, img, atlasOffset, atlasSize) {
+	drawImage: function(pos, img, size) {
+		this.bufferCtx.drawImage(img, pos.x, pos.y, size.x, size.y);
+	},
+
+	drawImageFromAtlas: function(pos, img, atlasOffset, atlasSize) {
 		this.bufferCtx.drawImage(img, atlasOffset.x, atlasOffset.y, atlasSize.x, atlasSize.y, pos.x, pos.y, atlasSize.x, atlasSize.y);
 	},
 

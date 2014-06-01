@@ -110,12 +110,29 @@ GS.VectorCanvas.prototype = {
 	}(),
 
 	drawImage: function() {
+		var v0 = new THREE.Vector2();
+		var v1 = new THREE.Vector2();
+
+		return function(fixedOffset, pos, img, size, isFixedSize) {
+			this.convertToScreenCoords(pos, v0, fixedOffset);
+
+			if (!isFixedSize) {
+				this.convertToScreenCoords(size, v1);
+			} else {
+				v1.copy(size);
+			}
+
+			this.cvs.drawImage(v0, img, v1);
+		}
+	}(),
+
+	drawImageFromAtlas: function() {
 		var v = new THREE.Vector2();
 
 		return function(fixedOffset, pos, img, atlasOffset, atlasSize) {
 			this.convertToScreenCoords(pos, v, fixedOffset);
 
-			this.cvs.drawImage(v, img, atlasOffset, atlasSize);
+			this.cvs.drawImageFromAtlas(v, img, atlasOffset, atlasSize);
 		}
 	}(),
 

@@ -164,6 +164,10 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.grid.player.controls.disable();
 		this.grid.player.controls.detachEvents();
 		this.uiManager.menuActive = true;
+
+		if (this.debugMode) {
+			GS.DebugUI.visible = false;
+		}
 	},
 
 	closeMenu: function() {
@@ -172,6 +176,10 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.grid.player.controls.attachEvents();
 		this.grid.player.controls.enable();
 		this.uiManager.menuActive = false;
+		
+		if (this.debugMode) {
+			GS.DebugUI.visible = true;
+		}
 	},
 
 	initComponents: function(assets) {

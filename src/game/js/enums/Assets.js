@@ -56,6 +56,7 @@ GS.Assets[GS.AssetTypes.CubeTexture] = {
 
 GS.Assets[GS.AssetTypes.UIWidget] = {
 	"hud": 					{ filename: "hud.png" },
+	"logo": 				{ filename: "logo.png" },
 };
 
 GS.Assets[GS.AssetTypes.Mesh] = {

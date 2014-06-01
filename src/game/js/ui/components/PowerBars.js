@@ -71,7 +71,7 @@ GS.UIComponents.PowerBars.prototype = {
 		this.cvs.text(this.healthBar.textOffset, this.healthBar.pos, this.health, 
 			GS.UIColors.foreground, this.fontSize, "middle", "right", GS.UIFont);
 
-		this.cvs.drawImage(this.healthBar.imageOffset, this.healthBar.pos, this.tex,
+		this.cvs.drawImageFromAtlas(this.healthBar.imageOffset, this.healthBar.pos, this.tex,
 			this.healthBar.imageAtlasOffset, this.healthBar.imageAtlasSize);
 
 		if (this.ammo !== undefined) {
@@ -79,7 +79,7 @@ GS.UIComponents.PowerBars.prototype = {
 					this.boxCornerRadius, GS.UIColors.background);
 			this.cvs.text(this.ammoBar.textOffset, this.ammoBar.pos, this.ammo, GS.UIColors.foreground, 
 				this.fontSize, "middle", "right", GS.UIFont);
-			this.cvs.drawImage(this.ammoBar.imageOffset, this.ammoBar.pos, this.tex,
+			this.cvs.drawImageFromAtlas(this.ammoBar.imageOffset, this.ammoBar.pos, this.tex,
 				this.ammoBar.imageAtlasOffset, this.ammoBar.imageAtlasSize);
 		}
 	},
