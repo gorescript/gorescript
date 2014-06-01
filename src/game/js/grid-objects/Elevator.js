@@ -70,7 +70,7 @@ GS.Elevator.prototype = GS.inherit(GS.GridObject, {
 					this.position.y = this.downY;
 					this.velocity.y = this.downY - oldY;
 					this.state = GS.ElevatorStates.Down;
-					this.grid.soundManager.playSound("door_close");
+					this.grid.soundManager.playSound("elevator_stop");
 				} else {
 					this.velocity.y = -this.speed;
 				}
@@ -83,7 +83,7 @@ GS.Elevator.prototype = GS.inherit(GS.GridObject, {
 					this.position.y = this.upY;
 					this.velocity.y = this.upY - oldY;
 					this.state = GS.ElevatorStates.Up;
-					this.grid.soundManager.playSound("door_close");
+					this.grid.soundManager.playSound("elevator_stop");
 				} else {
 					this.velocity.y = this.speed;
 				}
@@ -140,14 +140,14 @@ GS.Elevator.prototype = GS.inherit(GS.GridObject, {
 
 	goDown: function() {
 		this.state = GS.ElevatorStates.GoingDown;
-		this.grid.soundManager.playSound("door_open");
+		this.grid.soundManager.playSound("elevator_move");
 
 		return this;
 	},
 
 	goUp: function() {
 		this.state = GS.ElevatorStates.GoingUp;
-		this.grid.soundManager.playSound("door_open");
+		this.grid.soundManager.playSound("elevator_move");
 
 		return this;
 	},

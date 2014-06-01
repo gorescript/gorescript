@@ -81,6 +81,8 @@ GS.Assets[GS.AssetTypes.Mesh] = {
 GS.Assets[GS.AssetTypes.Sound] = {
 	"door_close": 			{ filename: "door_close.ogg",				allowMultipleAtOnce: true },
 	"door_open": 			{ filename: "door_open.ogg",				allowMultipleAtOnce: true },
+	"elevator_move": 		{ filename: "elevator_move.ogg",			allowMultipleAtOnce: true },
+	"elevator_stop": 		{ filename: "elevator_stop.ogg",			allowMultipleAtOnce: true },
 	"hyper_blaster_fire": 	{ filename: "hyper_blaster_fire.ogg",		allowMultipleAtOnce: true },
 	"hyper_blaster_hit": 	{ filename: "hyper_blaster_hit.ogg",		allowMultipleAtOnce: true },
 	"monster_pain": 		{ filename: "monster_pain.ogg",				allowMultipleAtOnce: false },
