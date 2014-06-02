@@ -15,8 +15,7 @@ GS.MapLoader.prototype = {
 			url: path, 
 			dataType: "text",
 			success: function(jsonStr) {
-				var map = that.parse(jsonStr);
-				callback(map);
+				callback(jsonStr);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				throw errorThrown;

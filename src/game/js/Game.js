@@ -133,6 +133,11 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		// GAME.grid.exportMapToOBJ();
 
 		this.nextState = GS.GameStates.Play;
+
+		if (this.uiManager.menuActive) {
+			this.openMenu();
+		}
+
 		this.musicManager.playTrack("simple_action_beat");
 		// this.openMenu();
 	},
@@ -184,7 +189,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 	initComponents: function(assets) {
 		var that = this;
-		var map = assets[GS.AssetTypes.Map][this.mapName];
+		var map = this.assetLoader.mapLoader.parse(assets[GS.AssetTypes.Map][this.mapName]);
 
 		var viewFactory = new GS.ViewFactory(this.renderer, map, assets, this.tvStation);
 		viewFactory.init();		
