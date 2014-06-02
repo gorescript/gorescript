@@ -12,6 +12,7 @@ GS.Game = function() {
 	this.state = GS.GameStates.PreLoad;
 	this.nextState = null;
 	this.updated = false;
+	this.firstTime = true;
 	
 	this.antialias = false;
 	this.clearColor = 0x336699;
@@ -33,7 +34,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 	init: function() {
 		GS.DebugUI.init();
-		GS.DebugUI.visible = this.debugMode;
+		GS.DebugUI.visible = false;
 
 		this.loadingUI = new GS.LoadingUI();
 		this.loadingUI.init();
@@ -62,7 +63,20 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	registerConsoleCommands: function() {
 		var that = this;
 
+		window.newGame = function() {
+			if (that.uiManager.menuActive) {
+				that.closeMenu();
+			}
+
+			that.mapName = "airstrip1"; 
+			that.nextState = GS.GameStates.PreLoad; 
+		};
+
 		window.load = function(mapName) { 
+			if (that.uiManager.menuActive) {
+				that.closeMenu();
+			}
+
 			that.mapName = mapName; 
 			that.nextState = GS.GameStates.PreLoad; 
 		};
@@ -134,12 +148,12 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 		this.nextState = GS.GameStates.Play;
 
-		if (this.uiManager.menuActive) {
-			this.openMenu();
-		}
-
 		this.musicManager.playTrack("simple_action_beat");
-		// this.openMenu();
+
+		if (this.firstTime) {
+			this.openMenu();
+			this.firstTime = false;
+		}
 	},
 
 	play: function() {
@@ -161,6 +175,8 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		if (!GS.InputHelper.keysPressed && GS.InputHelper.isKeyDown(this.keys.Escape)) {
 			this.closeMenu();
 		}
+
+		this.uiManager.update();
 	},
 
 	openMenu: function() {
@@ -292,6 +308,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		delete window.load;
 		delete window.fov;
 		delete window.debug;
+		delete window.newGame;
 
 		if (this.grid !== undefined) {
 			this.grid.dispose();
