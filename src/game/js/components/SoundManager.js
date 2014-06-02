@@ -1,5 +1,5 @@
 GS.SoundManager = function() {
-	this.volume = 1;
+	this.volume = 0.5;
 };
 
 GS.SoundManager.prototype = {
@@ -23,7 +23,10 @@ GS.SoundManager.prototype = {
 
 		this.gainNode = this.ctx.createGain();
 		this.gainNode.gain.value = this._volume;
-		this.gainNode.connect(this.ctx.destination);
+
+		this.compressor = this.ctx.createDynamicsCompressor();
+		this.gainNode.connect(this.compressor);
+		this.compressor.connect(this.ctx.destination);
 
 		this.initSounds();
 	},
