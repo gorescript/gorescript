@@ -1,6 +1,6 @@
 GS.DebugUI = {
 	fontSize: 24,
-	maxTempLines: 10,
+	maxTempLines: 5,
 	defaultTimeout: 5000,
 
 	overlayMargin: 10,

@@ -63,6 +63,23 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	registerConsoleCommands: function() {
 		var that = this;
 
+		if (this.firstTime) {
+			console.log([
+				"",
+				"gorescript - pre-alpha - http://timeinvariant.com",
+				"",
+				"the following commands are available:",
+				"",
+				"god - usage: 'god' - toggle god mode",
+				"fly - usage: 'fly' - toggle fly mode",
+				"noclip - usage: 'noclip' - toggle noclip mode",
+				"giveall - usage: 'giveall' - give all weapons and max ammo",
+				"fov - usage: 'fov(x)' where 'x' is a number between 60 and 120",
+				"debug - usage: 'debug' - toggle top right corner messages",
+				"",
+			].join("\n"));
+		}
+
 		window.newGame = function() {
 			if (that.uiManager.menuActive) {
 				that.closeMenu();
@@ -82,9 +99,12 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		};
 
 		window.fov = function(value) { 
-			that.cameraFov = Math.floor(GS.MathHelper.clamp(value, 60, 120));
-			GS.Settings.fov = that.cameraFov;
-			that.updateFov();
+			var n = parseInt(value);
+			if (!isNaN(n)) {
+				that.cameraFov = Math.floor(GS.MathHelper.clamp(value, 60, 120));
+				GS.Settings.fov = that.cameraFov;
+				that.updateFov();
+			}
 		};
 
 		window.__defineGetter__("debug", function() {
@@ -104,8 +124,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.loadingUI.percentLoaded = 0;
 		this.loadingUI.show();
 
-		this.lastLoadStartTime = new Date();
-
 		this.scene = new THREE.Scene();
 		this.scene.fog = new THREE.Fog(new THREE.Color().setRGB(0, 0, 0).getHex(), 500, 900);
 
@@ -114,7 +132,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.nextState = GS.GameStates.Loading;
 		} else {
 			this.nextState = GS.GameStates.PostLoad;
-		}		
+		}
 	},
 
 	initAssetLoader: function() {
@@ -137,22 +155,19 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	},
 
 	postLoad: function() {
-		this.initComponents(this.assetLoader.assets);
-		this.uiManager.initComponents(this.assetLoader.assets, this.grid);
-
-		if (this.debugMode) {
-			console.log("loading time: " + ((new Date() - this.lastLoadStartTime) / 1000).toFixed(2) + "s");
-		}
-
-		// GAME.grid.exportMapToOBJ();
-
-		this.nextState = GS.GameStates.Play;
-
-		this.musicManager.playTrack("simple_action_beat");
-
 		if (this.firstTime) {
+			this.loadingUI.spinnerOnly = true;
+			this.uiManager.initComponents(this.assetLoader.assets);
 			this.openMenu();
 			this.firstTime = false;
+		} else {
+			this.initComponents(this.assetLoader.assets);			
+			this.uiManager.initComponents(this.assetLoader.assets, this.grid);			
+
+			// GAME.grid.exportMapToOBJ();
+
+			this.nextState = GS.GameStates.Play;
+			this.musicManager.playTrack("simple_action_beat");
 		}
 	},
 
@@ -173,7 +188,9 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		GS.InputHelper.checkPressedKeys();
 
 		if (!GS.InputHelper.keysPressed && GS.InputHelper.isKeyDown(this.keys.Escape)) {
-			this.closeMenu();
+			if (this.grid !== undefined) {
+				this.closeMenu();
+			}
 		}
 
 		this.uiManager.update();
@@ -181,9 +198,13 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 	openMenu: function() {
 		this.nextState = GS.GameStates.Menu;
-		this.grid.player.inMenu = true;
-		this.grid.player.controls.disable();
-		this.grid.player.controls.detachEvents();
+
+		if (this.grid !== undefined) {
+			this.grid.player.inMenu = true;
+			this.grid.player.controls.disable();
+			this.grid.player.controls.detachEvents();
+		}
+
 		this.graphicsManager.monochromeEnabled = true;
 		this.uiManager.menuActive = true;
 
@@ -194,9 +215,13 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 	closeMenu: function() {
 		this.nextState = GS.GameStates.Play;
-		this.grid.player.inMenu = false;		
-		this.grid.player.controls.attachEvents();
-		this.grid.player.controls.enable();
+
+		if (this.grid !== undefined) {
+			this.grid.player.inMenu = false;
+			this.grid.player.controls.attachEvents();
+			this.grid.player.controls.enable();
+		}
+
 		this.graphicsManager.monochromeEnabled = false;
 		this.uiManager.menuActive = false;
 		
@@ -220,9 +245,9 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		
 		this.grid.player.controls.addEventListener("pointerLockDisabled", function() { that.openMenu(); });
 
-		if (this.debugMode) {
-			console.log("collision triangles", viewFactory.triangleCount);
-		}
+		// if (this.debugMode) {
+		// 	console.log("collision triangles", viewFactory.triangleCount);
+		// }
 	},
 
 	update: function() {
@@ -277,7 +302,10 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.loadingUI.draw();
 		} else 
 		if (this.state == GS.GameStates.Play || this.state == GS.GameStates.Menu) {
-			this.graphicsManager.draw();
+			if (this.grid !== undefined) {
+				this.graphicsManager.draw();
+			}
+
 			this.uiManager.draw();
 		}
 	},

@@ -2,6 +2,8 @@ GS.LoadingUI = function() {
 	this.redraw = true;
 	this.hidden = true;
 
+	this.spinnerOnly = false;
+
 	this.screenInfo = {
 		width: null,
 		height: null,
@@ -41,8 +43,13 @@ GS.LoadingUI.prototype = {
 
 		this.cvs.clear();
 
-		this.cvs.box(this.loadingBox.topLeft, this.loadingBox.bottomRight, "#fff", 3);
-		this.cvs.boxFill(this.loadingBox.contentTopLeft, this.loadingBox.contentCurrentBottomRight, "#fff");
+		if (this.spinnerOnly) {
+			this.cvs.text(this.screenInfo.center, "Imagine it's 1994...", "#fff", 40, "middle", "center", GS.UIFont);
+		}
+		else {
+			this.cvs.box(this.loadingBox.topLeft, this.loadingBox.bottomRight, "#fff", 3);
+			this.cvs.boxFill(this.loadingBox.contentTopLeft, this.loadingBox.contentCurrentBottomRight, "#fff");
+		}
 
 		this.cvs.flip();
 	},

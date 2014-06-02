@@ -181,6 +181,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 	onDeath: function() {
 		this.dead = true;
 		this.grid.soundManager.playSound("player_death");
+		GS.DebugUI.addTempLine("ESC to open menu and restart");
 
 		if (this.weapon !== undefined) {
 			this.playerView.onDeath();
@@ -195,7 +196,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 		var isMedkit = this.pickupMedkit(name);
 
 		if (!isWeapon && !isAmmo) {
-			this.grid.soundManager.playSound("pickup_item");
+			this.grid.soundManager.playSound("pickup_item");			
 		}
 
 		item.remove();
@@ -210,6 +211,8 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 			if (!weapon.pickedUp) {
 				weapon.pickedUp = true;
 
+				GS.DebugUI.addTempLine("picked up " + name);
+
 				if (this.weapon === undefined ||
 					this.swapWeaponsOnPickup && weapon.powerLevel > this.weapon.powerLevel) {
 					this.weapon = weapon;
@@ -223,6 +226,8 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 			if (weapon.ammo > weapon.ammoMax) {
 				weapon.ammo = weapon.ammoMax;
 			}
+
+			GS.DebugUI.addTempLine("picked up " + weapon.ammoClip + " " + name + " ammo");
 
 			return true;
 		}
@@ -240,6 +245,8 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 					if (weapon.ammo > weapon.ammoMax) {
 						weapon.ammo = weapon.ammoMax;
 					}
+
+					GS.DebugUI.addTempLine("picked up " + weapon.ammoClip + " " + key + " ammo");
 				}
 			});
 			this.grid.soundManager.playSound("pickup_ammo");
@@ -251,6 +258,8 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 	pickupMedkit: function(name) {
 		var that = this;
 		if (name == "medkit") {
+			GS.DebugUI.addTempLine("picked up medkit");
+
 			this.health += 25;
 			if (this.health > 100) {
 				this.health = 100;

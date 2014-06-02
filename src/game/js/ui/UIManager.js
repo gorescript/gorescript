@@ -32,19 +32,21 @@ GS.UIManager.prototype = {
 		this.assets = {
 			images: assets[GS.AssetTypes.UIWidget],
 		};
-		this.components = [];		
+		this.components = [];
 
-		this.powerBars = new GS.UIComponents.PowerBars(this.vectorCanvas, this.assets, this.grid.player);
-		this.powerBars.init();
-		this.components.push(this.powerBars);
+		if (this.grid !== undefined) {
+			this.powerBars = new GS.UIComponents.PowerBars(this.vectorCanvas, this.assets, this.grid.player);
+			this.powerBars.init();
+			this.components.push(this.powerBars);
 
-		this.crosshair = new GS.UIComponents.Crosshair(this.vectorCanvas, this.assets, this.grid.player);
-		this.crosshair.init();
-		this.components.push(this.crosshair);
+			this.crosshair = new GS.UIComponents.Crosshair(this.vectorCanvas, this.assets, this.grid.player);
+			this.crosshair.init();
+			this.components.push(this.crosshair);
 
-		this.notifications = new GS.UIComponents.Notifications(this.vectorCanvas, this.assets, this.grid.player);
-		this.notifications.init();
-		this.components.push(this.notifications);
+			this.notifications = new GS.UIComponents.Notifications(this.vectorCanvas, this.assets, this.grid.player);
+			this.notifications.init();
+			this.components.push(this.notifications);
+		}
 
 		this.menu = new GS.UIComponents.Menu(this.vectorCanvas, this.assets);
 		this.menu.init();

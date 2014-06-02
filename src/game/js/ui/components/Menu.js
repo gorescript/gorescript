@@ -51,6 +51,40 @@ GS.UIComponents.Menu.prototype = {
 		this.btnCredits.disabled = true;
 
 		this.children.push(this.topPanel);
+
+		this.initFooter();
+	},
+
+	initFooter: function() {
+		this.label1 = new GS.UIComponents.MenuLabel(this.cvs, "WASD + mouse to move/shoot",
+			new THREE.Vector2(-12, -316), new THREE.Vector2(1, 1));
+		this.label1.textAlign = "right";
+		this.children.push(this.label1);
+
+		this.label2 = new GS.UIComponents.MenuLabel(this.cvs, "2, 3, 4 to switch between weapons",
+			new THREE.Vector2(-12, -276), new THREE.Vector2(1, 1));
+		this.label2.textAlign = "right";
+		this.children.push(this.label2);
+
+		this.label3 = new GS.UIComponents.MenuLabel(this.cvs, "ESC to open this menu",
+			new THREE.Vector2(-12, -236), new THREE.Vector2(1, 1));
+		this.label3.textAlign = "right";
+		this.children.push(this.label3);
+
+		this.label4 = new GS.UIComponents.MenuLabel(this.cvs, "open dev tools for cheats",
+			new THREE.Vector2(-12, -156), new THREE.Vector2(1, 1));
+		this.label4.textAlign = "right";
+		this.children.push(this.label4);
+
+		this.label5 = new GS.UIComponents.MenuLabel(this.cvs, "works best in Chrome 34+",
+			new THREE.Vector2(-12, -76), new THREE.Vector2(1, 1));
+		this.label5.textAlign = "right";
+		this.children.push(this.label5);
+
+		this.label6 = new GS.UIComponents.MenuLabel(this.cvs, "pre-alpha · timeinvariant.com",
+			new THREE.Vector2(-12, -36), new THREE.Vector2(1, 1));
+		this.label6.textAlign = "right";
+		this.children.push(this.label6);
 	},
 
 	update: function() {
