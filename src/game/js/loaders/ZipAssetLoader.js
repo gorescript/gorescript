@@ -206,9 +206,8 @@ GS.ZipAssetLoader.prototype = {
 
 	loadMap: function(name, filename) {
 		var path = this.path[GS.AssetTypes.Map] + filename;
-		var text = this.zip.file(path).asText();
 
-		this.assets[GS.AssetTypes.Map][name] = this.mapLoader.parse(text);
+		this.assets[GS.AssetTypes.Map][name] = this.zip.file(path).asText();
 		this.checkIfFullyLoaded();
 	},
 
