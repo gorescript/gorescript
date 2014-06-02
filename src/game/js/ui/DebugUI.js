@@ -31,8 +31,8 @@ GS.DebugUI = {
 	init: function() {
 		var that = this;
 
-		this.width = window.innerWidth;
-		this.height = window.innerHeight;
+		this.width = GS.getViewportWidth();
+		this.height = GS.getViewportHeight();
 
 		window.addEventListener("resize", function() { that.onResize(); }, false);
 
@@ -177,8 +177,8 @@ GS.DebugUI = {
 	},
 
 	onResize: function() {
-		this.width = window.innerWidth;
-		this.height = window.innerHeight;
+		this.width = GS.getViewportWidth();
+		this.height = GS.getViewportHeight();
 
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;

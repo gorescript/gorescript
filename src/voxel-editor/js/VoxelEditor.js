@@ -300,9 +300,9 @@ GS.VoxelEditor.prototype = {
 		this.minHeight = 720;
 
 		this.menuWidth = 300;
-		this.menuHeight = Math.max(window.innerHeight, this.minHeight);
-		this.canvasInfo.width = Math.max(window.innerWidth - this.menuWidth, this.minWidth - this.menuWidth);
-		this.canvasInfo.height = Math.max(window.innerHeight, this.minHeight);
+		this.menuHeight = Math.max(GS.getViewportHeight(), this.minHeight);
+		this.canvasInfo.width = Math.max(GS.getViewportWidth() - this.menuWidth, this.minWidth - this.menuWidth);
+		this.canvasInfo.height = Math.max(GS.getViewportHeight(), this.minHeight);
 	},
 
 	onResize: function() {

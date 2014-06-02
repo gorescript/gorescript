@@ -12,7 +12,7 @@ GS.VectorCanvas.prototype = {
 	},
 
 	onResize: function() {
-		this.ratio.set(window.innerWidth, window.innerHeight);
+		this.ratio.set(GS.getViewportWidth(), GS.getViewportHeight());
 	},
 
 	convertToScreenCoords: function(v0, v, fixedOffset) {
@@ -162,7 +162,7 @@ GS.VectorCanvas.prototype = {
 		var v0 = new THREE.Vector2();
 		var v1 = new THREE.Vector2();
 
-		return function(fixedOffset, pos, size, isFixedSize, radius, color, lineWidth) {
+		return function(fixedOffset, pos, size, isFixedSize, radius, color) {
 			this.convertToScreenCoords(pos, v0, fixedOffset);
 
 			if (!isFixedSize) {

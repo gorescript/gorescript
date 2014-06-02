@@ -22,8 +22,8 @@ GS.RotationControls.prototype = {
 	constructor: GS.RotationControls,
 
 	init: function() {
-		this.ox = GS.InputHelper.mouseX / window.innerWidth;
-		this.oy = GS.InputHelper.mouseY / window.innerHeight;
+		this.ox = GS.InputHelper.mouseX / GS.getViewportWidth();
+		this.oy = GS.InputHelper.mouseY / GS.getViewportHeight();
 
 		this.updateCamera();
 
@@ -32,8 +32,8 @@ GS.RotationControls.prototype = {
 			if (GS.InputHelper[that.mouseDownProperty]) {
 				var distanceFactor = 0.5 + (that.distance - that.minDistance) / (that.maxDistance - that.minDistance);
 
-				var mx = GS.InputHelper.mouseX / window.innerWidth;
-				var my = GS.InputHelper.mouseY / window.innerHeight;
+				var mx = GS.InputHelper.mouseX / GS.getViewportWidth();
+				var my = GS.InputHelper.mouseY / GS.getViewportHeight();
 				that.xAngle += (mx - that.ox) * that.dragSpeed * distanceFactor;
 				that.yAngle += -(my - that.oy) * that.dragSpeed * distanceFactor;
 				that.ox = mx;
@@ -49,8 +49,8 @@ GS.RotationControls.prototype = {
 				that.updateCamera();
 				$(that.canvasSelector).css("cursor", "move");
 			} else {
-				that.ox = GS.InputHelper.mouseX / window.innerWidth;
-				that.oy = GS.InputHelper.mouseY / window.innerHeight;
+				that.ox = GS.InputHelper.mouseX / GS.getViewportWidth();
+				that.oy = GS.InputHelper.mouseY / GS.getViewportHeight();
 				$(that.canvasSelector).css("cursor", "default");
 			}
 		});

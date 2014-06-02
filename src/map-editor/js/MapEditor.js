@@ -452,9 +452,9 @@ GS.MapEditor.prototype = {
 		this.minHeight = 720;
 
 		this.menuWidth = 300;
-		this.menuHeight = Math.max(window.innerHeight, this.minHeight);
-		this.canvasWidth = Math.max(window.innerWidth - this.menuWidth, this.minWidth - this.menuWidth);
-		this.canvasHeight = Math.max(window.innerHeight, this.minHeight);
+		this.menuHeight = Math.max(GS.getViewportHeight(), this.minHeight);
+		this.canvasWidth = Math.max(GS.getViewportWidth() - this.menuWidth, this.minWidth - this.menuWidth);
+		this.canvasHeight = Math.max(GS.getViewportHeight(), this.minHeight);
 	},
 
 	onResize: function() {

@@ -42,7 +42,7 @@ GS.GraphicsManager.prototype = {
 		});
 		this.depthMaterial.blending = THREE.NoBlending;
 
-		this.depthTarget = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, { 
+		this.depthTarget = new THREE.WebGLRenderTarget(GS.getViewportWidth(), GS.getViewportHeight(), { 
 			minFilter: THREE.NearestFilter, 
 			magFilter: THREE.NearestFilter, 
 			format: THREE.RGBAFormat 
@@ -50,7 +50,7 @@ GS.GraphicsManager.prototype = {
 
 		this.effectSSAO = new THREE.ShaderPass(THREE.SSAOShader);
 		this.effectSSAO.uniforms["tDepth"].value = this.depthTarget;
-		this.effectSSAO.uniforms["size"].value.set(window.innerWidth, window.innerHeight);
+		this.effectSSAO.uniforms["size"].value.set(GS.getViewportWidth(), GS.getViewportHeight());
 		this.effectSSAO.uniforms["cameraNear"].value = this.camera.near;
 		this.effectSSAO.uniforms["cameraFar"].value = this.camera.far;
 
@@ -66,12 +66,12 @@ GS.GraphicsManager.prototype = {
 		this.effectColor.uniforms["color"].value = new THREE.Color(0x000000);
 
 		this.effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
-		this.effectFXAA.uniforms["resolution"].value.set(1 / window.innerWidth, 1 / window.innerHeight);
+		this.effectFXAA.uniforms["resolution"].value.set(1 / GS.getViewportWidth(), 1 / GS.getViewportHeight());
 
 		this.effectVignette = new THREE.ShaderPass(THREE.VignetteShader);
 		this.effectNoise = new THREE.ShaderPass(GS.NoiseShader);
 		this.effectNoise.uniforms["tNoise"].value = this.getNoiseTexture(this.noiseTextureSize);
-		this.effectNoise.uniforms["ratio"].value.set(window.innerWidth / this.noiseTextureSize, window.innerHeight / this.noiseTextureSize);
+		this.effectNoise.uniforms["ratio"].value.set(GS.getViewportWidth() / this.noiseTextureSize, GS.getViewportHeight() / this.noiseTextureSize);
 
 
 		this.effectMonochrome = new THREE.ShaderPass(THREE.LuminosityShader);
@@ -137,15 +137,15 @@ GS.GraphicsManager.prototype = {
 
 	onResize: function() {
 		var depthTarget = this.depthTarget.clone();
-		depthTarget.width = window.innerWidth;
-		depthTarget.height = window.innerHeight;
+		depthTarget.width = GS.getViewportWidth();
+		depthTarget.height = GS.getViewportHeight();
 		this.depthTarget = depthTarget;
 		this.effectSSAO.uniforms["tDepth"].value = this.depthTarget;
 
-		this.effectSSAO.uniforms["size"].value.set(window.innerWidth, window.innerHeight);
-		this.effectFXAA.uniforms["resolution"].value.set(1 / window.innerWidth, 1 / window.innerHeight);
-		this.effectNoise.uniforms["ratio"].value.set(window.innerWidth / this.noiseTextureSize, window.innerHeight / this.noiseTextureSize);
-		this.composer.setSize(window.innerWidth, window.innerHeight);
+		this.effectSSAO.uniforms["size"].value.set(GS.getViewportWidth(), GS.getViewportHeight());
+		this.effectFXAA.uniforms["resolution"].value.set(1 / GS.getViewportWidth(), 1 / GS.getViewportHeight());
+		this.effectNoise.uniforms["ratio"].value.set(GS.getViewportWidth() / this.noiseTextureSize, GS.getViewportHeight() / this.noiseTextureSize);
+		this.composer.setSize(GS.getViewportWidth(), GS.getViewportHeight());
 	},
 
 	getNoiseTexture: function(size) {

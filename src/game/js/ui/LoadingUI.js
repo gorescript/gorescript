@@ -69,8 +69,8 @@ GS.LoadingUI.prototype = {
 	},
 
 	computeScreenInfo: function() {
-		this.screenInfo.width = window.innerWidth;
-		this.screenInfo.height = window.innerHeight;
+		this.screenInfo.width = GS.getViewportWidth();
+		this.screenInfo.height = GS.getViewportHeight();
 		this.screenInfo.center.set(Math.floor(this.screenInfo.width / 2), Math.floor(this.screenInfo.height / 2));
 
 		this.loadingBox.topLeft.copy(this.screenInfo.center);

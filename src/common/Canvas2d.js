@@ -13,8 +13,8 @@ GS.Canvas2d.prototype = {
 		var that = this;
 
 		var screenCanvas = document.createElement("canvas");
-		screenCanvas.width = window.innerWidth;
-		screenCanvas.height = window.innerHeight;
+		screenCanvas.width = GS.getViewportWidth();
+		screenCanvas.height = GS.getViewportHeight();
 		screenCanvas.style.backgroundColor = "rgba(0, 0, 0, " + this.alpha + ")";
 		screenCanvas.id = this.canvasId;
 		this.screenCanvas = screenCanvas;
@@ -31,8 +31,8 @@ GS.Canvas2d.prototype = {
 		this.screenCtx = screenCtx;
 
 		var bufferCanvas = document.createElement("canvas");
-		bufferCanvas.width = window.innerWidth;
-		bufferCanvas.height = window.innerHeight;
+		bufferCanvas.width = GS.getViewportWidth();
+		bufferCanvas.height = GS.getViewportHeight();
 		bufferCanvas.style.backgroundColor = "rgba(0, 0, 0, 1)";
 		this.bufferCanvas = bufferCanvas;
 
@@ -274,10 +274,10 @@ GS.Canvas2d.prototype = {
 			canvas = this.clone();
 		}
 
-		this.screenCanvas.width = window.innerWidth;
-		this.screenCanvas.height = window.innerHeight;
-		this.bufferCanvas.width = window.innerWidth;
-		this.bufferCanvas.height = window.innerHeight;
+		this.screenCanvas.width = GS.getViewportWidth();
+		this.screenCanvas.height = GS.getViewportHeight();
+		this.bufferCanvas.width = GS.getViewportWidth();
+		this.bufferCanvas.height = GS.getViewportHeight();
 
 		if (this.redrawOnResize) {
 			this.screenCtx.drawImage(canvas, 0, 0);
