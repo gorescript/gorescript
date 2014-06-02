@@ -43,7 +43,7 @@ GS.AnimationView.prototype = {
 			loop.index = 0;
 			loop.frames = that.animations[key];
 			loop.max = loop.frames.length;
-			loop.cooldown = loop.delay;
+			loop.cooldown = Math.floor(Math.random() * loop.delay);
 		});
 
 		this.initInactiveLoop();

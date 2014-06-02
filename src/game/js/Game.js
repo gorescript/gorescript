@@ -168,6 +168,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.grid.player.inMenu = true;
 		this.grid.player.controls.disable();
 		this.grid.player.controls.detachEvents();
+		this.graphicsManager.monochromeEnabled = true;
 		this.uiManager.menuActive = true;
 
 		if (this.debugMode) {
@@ -180,6 +181,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.grid.player.inMenu = false;		
 		this.grid.player.controls.attachEvents();
 		this.grid.player.controls.enable();
+		this.graphicsManager.monochromeEnabled = false;
 		this.uiManager.menuActive = false;
 		
 		if (this.debugMode) {

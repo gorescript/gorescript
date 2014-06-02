@@ -14,6 +14,7 @@ GS.GraphicsManager.prototype = {
 		this.ssaoEnabled = true;
 		this.noiseEnabled = true;
 		this.vignetteEnabled = true;
+		this.monochromeEnabled = false;
 	},
 
 	setGrid: function(grid) {
@@ -72,6 +73,9 @@ GS.GraphicsManager.prototype = {
 		this.effectNoise.uniforms["tNoise"].value = this.getNoiseTexture(this.noiseTextureSize);
 		this.effectNoise.uniforms["ratio"].value.set(window.innerWidth / this.noiseTextureSize, window.innerHeight / this.noiseTextureSize);
 
+
+		this.effectMonochrome = new THREE.ShaderPass(THREE.LuminosityShader);
+
 		var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
 		effectCopy.renderToScreen = true;
 
@@ -81,8 +85,9 @@ GS.GraphicsManager.prototype = {
 		this.composer.addPass(this.effectGlow);
 		this.composer.addPass(this.effectSSAO);
 		this.composer.addPass(this.effectColor);
-		this.composer.addPass(this.effectFXAA);		
+		this.composer.addPass(this.effectFXAA);
 		this.composer.addPass(this.effectVignette);		
+		this.composer.addPass(this.effectMonochrome);
 		this.composer.addPass(effectCopy);
 	},
 
@@ -217,6 +222,16 @@ GS.GraphicsManager.prototype = {
 
 	get vignetteEnabled() {
 		return this.effectVignette.enabled = value;
+	},
+
+	set monochromeEnabled(value) {
+		if (this.effectMonochrome !== undefined) {
+			this.effectMonochrome.enabled = value;
+		}
+	},
+
+	get monochromeEnabled() {
+		return this.effectMonochrome.enabled = value;
 	},
 
 	set noiseEnabled(value) {
