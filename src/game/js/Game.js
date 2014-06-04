@@ -343,6 +343,8 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 var GAME;
 window.addEventListener("load", function() {
-	GAME = new GS.Game();
-	GAME.init();
+	GS.Detector.run(function() {
+		GAME = new GS.Game();
+		GAME.init();
+	});
 }, false);
