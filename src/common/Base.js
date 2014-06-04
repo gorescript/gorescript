@@ -48,6 +48,13 @@ GS.logOnce = function(id, str) {
 },
 
 GS.isFirefox = typeof InstallTrigger !== "undefined";
+GS.isIFrame = function() {
+    try {
+        return window.self !== window.top;
+    } catch (e) {
+        return true;
+    }
+}();
 
 GS.minViewportWidth = 1024;
 GS.minViewportHeight = 768;

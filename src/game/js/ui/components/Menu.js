@@ -71,10 +71,12 @@ GS.UIComponents.Menu.prototype = {
 		this.label3.textAlign = "right";
 		this.children.push(this.label3);
 
-		this.label4 = new GS.UIComponents.MenuLabel(this.cvs, "open dev tools for cheats",
-			new THREE.Vector2(-12, -156), new THREE.Vector2(1, 1));
-		this.label4.textAlign = "right";
-		this.children.push(this.label4);
+		if (!GS.isIFrame) {
+			this.label4 = new GS.UIComponents.MenuLabel(this.cvs, "open dev tools for cheats",
+				new THREE.Vector2(-12, -156), new THREE.Vector2(1, 1));
+			this.label4.textAlign = "right";
+			this.children.push(this.label4);
+		}
 
 		this.label5 = new GS.UIComponents.MenuLabel(this.cvs, "works best in Chrome 34+",
 			new THREE.Vector2(-12, -76), new THREE.Vector2(1, 1));

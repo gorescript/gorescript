@@ -63,7 +63,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	registerConsoleCommands: function() {
 		var that = this;
 
-		if (this.firstTime) {
+		if (this.firstTime && !GS.isIFrame) {
 			console.log([
 				"",
 				"gorescript - pre-alpha - http://timeinvariant.com",
