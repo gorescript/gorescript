@@ -74,7 +74,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 				"fly - usage: 'fly' - toggle fly mode",
 				"noclip - usage: 'noclip' - toggle noclip mode",
 				"giveall - usage: 'giveall' - give all weapons and max ammo",
-				"fov - usage: 'fov(x)' where 'x' is a number between 60 and 120",
 				"debug - usage: 'debug' - toggle top right corner messages",
 				"",
 			].join("\n"));
@@ -96,15 +95,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 			that.mapName = mapName; 
 			that.nextState = GS.GameStates.PreLoad; 
-		};
-
-		window.fov = function(value) { 
-			var n = parseInt(value);
-			if (!isNaN(n)) {
-				that.cameraFov = Math.floor(GS.MathHelper.clamp(value, 60, 120));
-				GS.Settings.fov = that.cameraFov;
-				that.updateFov();
-			}
 		};
 
 		window.__defineGetter__("debug", function() {
@@ -324,6 +314,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	},
 
 	updateFov: function() {
+		this.cameraFov = GS.Settings.fov;
 		this.camera.fov = GS.Settings.fov;
 		this.camera.updateProjectionMatrix();
 
@@ -334,7 +325,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 	dispose: function() {
 		delete window.load;
-		delete window.fov;
 		delete window.debug;
 		delete window.newGame;
 

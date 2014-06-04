@@ -46,7 +46,7 @@ GS.PlayerView = function() {
 	this.weaponReady = false;
 
 	this.weaponBob = {
-		enabled: true,
+		enabled: GS.Settings.weaponBob,
 		magnitudeX: 0.5,
 		magnitudeY: 0.5,
 		offset: new THREE.Vector3(),
@@ -55,7 +55,7 @@ GS.PlayerView = function() {
 	};
 
 	this.viewBob = {
-		enabled: true,
+		enabled: GS.Settings.viewBob,
 		magnitude: 1.5,
 		offset: 0,
 		radian: 0,

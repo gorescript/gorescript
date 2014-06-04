@@ -24,6 +24,7 @@ GS.UIComponents.Menu = function(vectorCanvas, assets) {
 	};
 
 	this.children = [];
+	this.activePanel = null;
 
 	this.visible = true;
 };
@@ -32,6 +33,20 @@ GS.UIComponents.Menu.prototype = {
 	constructor: GS.UIComponents.Menu,
 
 	init: function() {
+		this.initTopPanel();
+		this.initOptionsPanel();
+		this.initGraphicsPanel();
+		this.initSoundPanel();
+		this.initGameplayPanel();
+		this.initControlsPanel();
+		this.initFooter();
+
+		this.activePanel = this.topPanel;
+	},
+
+	initTopPanel: function() {
+		var that = this;
+
 		this.topPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 60, 65);
 
@@ -45,14 +60,99 @@ GS.UIComponents.Menu.prototype = {
 		this.btnLoadGame.disabled = true;
 
 		this.btnOptions = this.topPanel.addButton("options");
-		this.btnOptions.disabled = true;
+		this.btnOptions.onClick = function() { that.activePanel = that.optionsPanel; };
 
 		this.btnCredits = this.topPanel.addButton("credits");
 		this.btnCredits.disabled = true;
+	},
 
-		this.children.push(this.topPanel);
+	initOptionsPanel: function() {
+		var that = this;
 
-		this.initFooter();
+		this.optionsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 60, 65);
+
+		this.btnGraphics = this.optionsPanel.addButton("graphics");
+		this.btnGraphics.onClick = function() { that.activePanel = that.graphicsPanel; }
+
+		this.btnSound = this.optionsPanel.addButton("sound");
+		this.btnSound.disabled = true;
+		this.btnSound.onClick = function() { that.activePanel = that.soundPanel; }
+
+		this.btnGameplay = this.optionsPanel.addButton("gameplay");
+		this.btnGameplay.onClick = function() { that.activePanel = that.gameplayPanel; }
+
+		this.btnControls = this.optionsPanel.addButton("controls");
+		this.btnControls.disabled = true;
+		this.btnControls.onClick = function() { that.activePanel = that.controlsPanel; }
+
+		this.btnOptionsBack = this.optionsPanel.addButton("back");
+		this.btnOptionsBack.onClick = function() { that.activePanel = that.topPanel; };
+	},
+
+	initGraphicsPanel: function() {
+		var that = this;
+
+		this.graphicsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
+
+		this.btnToggleSSAO = this.graphicsPanel.addToggleButton("SSAO");
+		this.btnToggleSSAO.button.onClick = function(e) { GS.Settings.ssao = (e.state === "on"); };
+
+		this.btnToggleBloom = this.graphicsPanel.addToggleButton("bloom");
+		this.btnToggleBloom.button.onClick = function(e) { GS.Settings.bloom = (e.state === "on"); };
+
+		this.btnToggleNoise = this.graphicsPanel.addToggleButton("noise filter");
+		this.btnToggleNoise.button.onClick = function(e) { GS.Settings.noise = (e.state === "on"); };
+
+		this.btnToggleVignette = this.graphicsPanel.addToggleButton("vignette");
+		this.btnToggleVignette.button.onClick = function(e) { GS.Settings.vignette = (e.state === "on"); };
+
+		this.btnToggleFXAA = this.graphicsPanel.addToggleButton("FXAA");
+		this.btnToggleFXAA.button.onClick = function(e) { GS.Settings.fxaa = (e.state === "on"); };
+
+		this.graphicsPanel.addEmptyRow();
+
+		this.btnGraphicsBack = this.graphicsPanel.addButton("back");
+		this.btnGraphicsBack.onClick = function() { that.activePanel = that.optionsPanel; };
+	},
+
+	initSoundPanel: function() {
+		var that = this;
+
+		this.soundPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
+
+		this.btnSoundBack = this.soundPanel.addButton("back");
+		this.btnSoundBack.onClick = function() { that.activePanel = that.optionsPanel; };
+	},
+
+	initGameplayPanel: function() {
+		var that = this;
+
+		this.gameplayPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
+
+		this.btnToggleViewBob = this.gameplayPanel.addToggleButton("view bobbing");
+		this.btnToggleViewBob.button.onClick = function(e) { GS.Settings.viewBob = (e.state === "on"); };
+
+		this.btnToggleWeaponBob = this.gameplayPanel.addToggleButton("weapon bobbing");
+		this.btnToggleWeaponBob.button.onClick = function(e) { GS.Settings.weaponBob = (e.state === "on"); };
+
+		this.gameplayPanel.addEmptyRow();
+
+		this.btnGameplayBack = this.gameplayPanel.addButton("back");
+		this.btnGameplayBack.onClick = function() { that.activePanel = that.optionsPanel; };
+	},
+
+	initControlsPanel: function() {
+		var that = this;
+
+		this.controlsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
+
+		this.btnControlsBack = this.controlsPanel.addButton("back");
+		this.btnControlsBack.onClick = function() { that.activePanel = that.optionsPanel; };
 	},
 
 	initFooter: function() {
@@ -90,6 +190,8 @@ GS.UIComponents.Menu.prototype = {
 	},
 
 	update: function() {
+		this.activePanel.update();
+
 		for (var i = 0; i < this.children.length; i++) {
 			this.children[i].update();
 		}
@@ -98,6 +200,8 @@ GS.UIComponents.Menu.prototype = {
 	draw: function() {
 		this.cvs.boxFill(this.background.offset, this.background.pos, this.background.size, false, GS.UIColors.menuBackground);
 		this.cvs.drawImage(this.logo.offset, this.logo.pos, this.logo.image, this.logo.size, true);
+
+		this.activePanel.draw();
 
 		for (var i = 0; i < this.children.length; i++) {
 			this.children[i].draw();

@@ -48,8 +48,10 @@ GS.UIManager.prototype = {
 			this.components.push(this.notifications);
 		}
 
-		this.menu = new GS.UIComponents.Menu(this.vectorCanvas, this.assets);
-		this.menu.init();
+		if (this.menu === undefined) {
+			this.menu = new GS.UIComponents.Menu(this.vectorCanvas, this.assets);
+			this.menu.init();
+		}
 
 		this.overrideRedraw = true;
 	},

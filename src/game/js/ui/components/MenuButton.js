@@ -1,4 +1,4 @@
-GS.UIComponents.MenuButton = function(vectorCanvas, text, offset, pos, size, onClick) {
+GS.UIComponents.MenuButton = function(vectorCanvas, text, offset, pos, size, onClick, states) {
 	this.cvs = vectorCanvas;
 
 	this.fontSize = 40;
@@ -12,6 +12,10 @@ GS.UIComponents.MenuButton = function(vectorCanvas, text, offset, pos, size, onC
 	this.borderRadius = 10;
 
 	this.onClick = onClick || function() {};
+	this.states = states;
+	if (this.states !== undefined) {
+		this.currentStateIndex = 0;
+	}
 
 	this.min = new THREE.Vector2();
 	this.max = new THREE.Vector2();
@@ -45,10 +49,10 @@ GS.UIComponents.MenuButton.prototype = {
 
 			if (mx >= this.min.x && my >= this.min.y && mx < this.max.x && my < this.max.y) {
 				this.hover = true;
-				this.$canvas.css("cursor", "pointer");
+				// this.$canvas.css("cursor", "pointer");
 				this.backgroundColor = GS.UIColors.buttonHover;
 			} else {
-				this.$canvas.css("cursor", "default");
+				// this.$canvas.css("cursor", "default");
 				this.hover = false;
 			}
 
@@ -57,9 +61,20 @@ GS.UIComponents.MenuButton.prototype = {
 					this.active = true;
 					this.backgroundColor = GS.UIColors.buttonActive;
 				} else {
-					if (this.active) {
-						this.$canvas.css("cursor", "default");
-						this.onClick();
+					if (this.active) {						
+						// this.$canvas.css("cursor", "default");
+						if (this.states !== undefined) {
+							this.currentStateIndex++;
+							if (this.currentStateIndex >= this.states.length) {
+								this.currentStateIndex = 0;
+							}
+
+							this.text = this.states[this.currentStateIndex];
+							this.onClick({ state: this.text });
+						} else {
+							this.onClick();
+						}
+
 						this.active = false;
 						this.backgroundColor = GS.UIColors.buttonHover;
 					}

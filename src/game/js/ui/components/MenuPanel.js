@@ -8,6 +8,7 @@ GS.UIComponents.MenuPanel = function(vectorCanvas, offset, pos, size, fontSize, 
 	this.pos = pos;
 	this.size = size;
 	this.rowHeight = rowHeight || 40;
+	this.rowCount = 0;
 };
 
 GS.UIComponents.MenuPanel.prototype = {
@@ -17,14 +18,7 @@ GS.UIComponents.MenuPanel.prototype = {
 	},
 
 	addButton: function(text, onClick) {
-		var n = this.children.length;
-		var offset = this.offset.clone();
-		offset.y += n * this.rowHeight;
-
-		if (Math.abs(offset.y - this.offset.y) > this.size.y) {
-			throw "menu panel exceeds height";
-		}
-
+		var offset = this.getRowOffset();
 		var size = new THREE.Vector2(this.size.x, this.rowHeight);
 
 		var button = new GS.UIComponents.MenuButton(this.cvs, text, offset, this.pos, size, onClick);
@@ -32,7 +26,54 @@ GS.UIComponents.MenuPanel.prototype = {
 
 		this.children.push(button);
 
+		this.rowCount++;
+
 		return button;
+	},
+
+	addToggleButton: function(text, states, onClick) {
+		var offset = this.getRowOffset();
+		var labelOffset = offset.clone();
+		labelOffset.x += this.size.x * 0.5 - 10;
+		labelOffset.y += this.rowHeight * 0.5;
+
+		var label = new GS.UIComponents.MenuLabel(this.cvs, text, labelOffset, this.pos);
+		label.fontSize = this.fontSize;
+		label.textAlign = "right";
+
+		this.children.push(label);
+
+		var buttonOffset = offset.clone();
+		var buttonSize = new THREE.Vector2(this.size.x * 0.2, this.rowHeight);
+		buttonOffset.x += this.size.x * 0.5 + 10;
+
+		states = states || ["on", "off"];
+		var button = new GS.UIComponents.MenuButton(this.cvs, states[0], buttonOffset, this.pos, buttonSize, onClick, states);
+		button.fontSize = this.fontSize;
+
+		this.children.push(button);
+
+		this.rowCount++;
+
+		return {
+			label: label,
+			button: button,
+		};
+	},
+
+	addEmptyRow: function() {
+		this.rowCount++;
+	},
+
+	getRowOffset: function() {
+		var offset = this.offset.clone();
+		offset.y += this.rowCount * this.rowHeight;
+
+		if (Math.abs(offset.y - this.offset.y) > this.size.y) {
+			throw "menu panel exceeds height";
+		}
+
+		return offset;
 	},
 
 	update: function() {
