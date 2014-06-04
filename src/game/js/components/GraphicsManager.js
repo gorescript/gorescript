@@ -9,11 +9,11 @@ GS.GraphicsManager.prototype = {
 	init: function() {
 		this.initEffectComposer();
 
-		this.bloomEnabled = true;
-		this.fxaaEnabled = true;
-		this.ssaoEnabled = true;
-		this.noiseEnabled = true;
-		this.vignetteEnabled = true;
+		this.bloomEnabled = GS.Settings.bloom;
+		this.fxaaEnabled = GS.Settings.fxaa;
+		this.ssaoEnabled = GS.Settings.ssao;
+		this.noiseEnabled = GS.Settings.noise;
+		this.vignetteEnabled = GS.Settings.vignette;
 		this.monochromeEnabled = false;
 	},
 

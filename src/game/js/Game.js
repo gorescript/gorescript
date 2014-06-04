@@ -26,7 +26,7 @@ GS.Game = function() {
 	}
 	
 	this.debugMode = true;
-	this.showFPS = true;
+	this.showFPS = GS.Settings.showFPS;
 };
 
 GS.Game.prototype = GS.inherit(GS.Base, {
@@ -172,6 +172,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.uiManager.update();
 
 		TWEEN.update();
+		GS.DebugUI.update();
 	},
 
 	menu: function() {
@@ -241,8 +242,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	},
 
 	update: function() {
-		GS.DebugUI.update();
-
 		if (this.state == GS.GameStates.PreLoad) {
 			if (!this.updated) {
 				this.updated = true;

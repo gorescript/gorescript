@@ -1,93 +1,105 @@
 GS.Settings = function() {
-	var _fov = 75;
-	var _ssao = true;
-	var _bloom = true;
-	var _noise = true;
-	var _vignette = true;
-	var _fxaa = true;
-	var _viewBob = true;
-	var _weaponBob = true;
+	var settings = {
+		fov: 75,
+		ssao: true,
+		bloom: true,
+		noise: true,
+		vignette: true,
+		fxaa: true,
+		viewBob: true,
+		weaponBob: true,
+		showFPS: true,
+	};
 
 	return {
 		set fov(value) {
 			var n = parseInt(value);
 			if (!isNaN(n)) {
 				n = Math.floor(GS.MathHelper.clamp(n, 60, 120));
-				_fov = n;
+				settings.fov = n;
 
 				GAME.updateFov();
 			}
 		},
 
 		get fov() {
-			return _fov;
+			return settings.fov;
 		},
 
 		set ssao(value) {
-			_ssao = (value === true);
-			GAME.graphicsManager.ssaoEnabled = _ssao;
+			settings.ssao = (value === true);
+			GAME.graphicsManager.ssaoEnabled = settings.ssao;
 		},
 
 		get ssao() {
-			return _ssao;
+			return settings.ssao;
 		},
 
 		set bloom(value) {
-			_bloom = (value === true);
-			GAME.graphicsManager.bloomEnabled = _bloom;
+			settings.bloom = (value === true);
+			GAME.graphicsManager.bloomEnabled = settings.bloom;
 		},
 
 		get bloom() {
-			return _bloom;
+			return settings.bloom;
 		},
 
 		set noise(value) {
-			_noise = (value === true);
-			GAME.graphicsManager.noiseEnabled = _noise;
+			settings.noise = (value === true);
+			GAME.graphicsManager.noiseEnabled = settings.noise;
 		},
 
 		get noise() {
-			return _noise;
+			return settings.noise;
 		},
 
 		set vignette(value) {
-			_vignette = (value === true);
-			GAME.graphicsManager.vignetteEnabled = _vignette;
+			settings.vignette = (value === true);
+			GAME.graphicsManager.vignetteEnabled = settings.vignette;
 		},
 
 		get vignette() {
-			return _vignette;
+			return settings.vignette;
 		},
 
 		set fxaa(value) {
-			_fxaa = (value === true);
-			GAME.graphicsManager.fxaaEnabled = _fxaa;
+			settings.fxaa = (value === true);
+			GAME.graphicsManager.fxaaEnabled = settings.fxaa;
 		},
 
 		get fxaa() {
-			return _fxaa;
+			return settings.fxaa;
 		},
 
 		set viewBob(value) {
-			_viewBob = (value === true);
+			settings.viewBob = (value === true);
 			if (GAME.grid !== undefined) {
-				GAME.grid.player.playerView.viewBob.enabled = _viewBob;
+				GAME.grid.player.playerView.viewBob.enabled = settings.viewBob;
 			}
 		},
 
 		get viewBob() {
-			return _viewBob;
+			return settings.viewBob;
 		},
 
 		set weaponBob(value) {
-			_weaponBob = (value === true);
+			settings.weaponBob = (value === true);
 			if (GAME.grid !== undefined) {
-				GAME.grid.player.playerView.weaponBob.enabled = _weaponBob;
+				GAME.grid.player.playerView.weaponBob.enabled = settings.weaponBob;
 			}
 		},
 
 		get weaponBob() {
-			return _weaponBob;
+			return settings.weaponBob;
+		},
+
+		set showFPS(value) {
+			settings.showFPS = (value === true);
+			GAME.showFPS = settings.showFPS;
+		},
+
+		get showFPS() {
+			return settings.showFPS;
 		},
 	}
 }();

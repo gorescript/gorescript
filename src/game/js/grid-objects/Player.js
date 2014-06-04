@@ -211,7 +211,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 			if (!weapon.pickedUp) {
 				weapon.pickedUp = true;
 
-				GS.DebugUI.addTempLine("picked up " + name);
+				GS.DebugUI.addTempLine("picked up " + weapon.name);
 
 				if (this.weapon === undefined ||
 					this.swapWeaponsOnPickup && weapon.powerLevel > this.weapon.powerLevel) {
@@ -227,7 +227,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 				weapon.ammo = weapon.ammoMax;
 			}
 
-			GS.DebugUI.addTempLine("picked up " + weapon.ammoClip + " " + name + " ammo");
+			GS.DebugUI.addTempLine("picked up " + weapon.ammoClip + " " + weapon.name + " ammo");
 
 			return true;
 		}
@@ -246,7 +246,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 						weapon.ammo = weapon.ammoMax;
 					}
 
-					GS.DebugUI.addTempLine("picked up " + weapon.ammoClip + " " + key + " ammo");
+					GS.DebugUI.addTempLine("picked up " + weapon.ammoClip + " " + weapon.name + " ammo");
 				}
 			});
 			this.grid.soundManager.playSound("pickup_ammo");

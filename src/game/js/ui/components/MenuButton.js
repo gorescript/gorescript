@@ -13,9 +13,7 @@ GS.UIComponents.MenuButton = function(vectorCanvas, text, offset, pos, size, onC
 
 	this.onClick = onClick || function() {};
 	this.states = states;
-	if (this.states !== undefined) {
-		this.currentStateIndex = 0;
-	}
+	this._currentStateIndex = 0;
 
 	this.min = new THREE.Vector2();
 	this.max = new THREE.Vector2();
@@ -64,12 +62,12 @@ GS.UIComponents.MenuButton.prototype = {
 					if (this.active) {						
 						// this.$canvas.css("cursor", "default");
 						if (this.states !== undefined) {
-							this.currentStateIndex++;
-							if (this.currentStateIndex >= this.states.length) {
-								this.currentStateIndex = 0;
+							this._currentStateIndex++;
+							if (this._currentStateIndex >= this.states.length) {
+								this._currentStateIndex = 0;
 							}
 
-							this.text = this.states[this.currentStateIndex];
+							this.text = this.states[this._currentStateIndex];
 							this.onClick({ state: this.text });
 						} else {
 							this.onClick();
@@ -91,5 +89,18 @@ GS.UIComponents.MenuButton.prototype = {
 		}
 
 		this.cvs.text(this.textOffset, this.pos, this.text, this.foregroundColor, this.fontSize, this.textBaseline, this.textAlign, GS.UIFont);
+	},
+
+	set currentStateIndex(value) {
+		if (this.states !== undefined) {
+			if (value >= 0 && value < this.states.length) {
+				this._currentStateIndex = value;
+				this.text = this.states[this._currentStateIndex];
+			}
+		}
+	},
+
+	get currentStateIndex() {
+		return this._currentStateIndex;
 	},
 };

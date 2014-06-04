@@ -86,6 +86,8 @@ GS.UIComponents.Menu.prototype = {
 		this.btnControls.disabled = true;
 		this.btnControls.onClick = function() { that.activePanel = that.controlsPanel; }
 
+		this.optionsPanel.addEmptyRow();
+
 		this.btnOptionsBack = this.optionsPanel.addButton("back");
 		this.btnOptionsBack.onClick = function() { that.activePanel = that.topPanel; };
 	},
@@ -97,19 +99,30 @@ GS.UIComponents.Menu.prototype = {
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
 
 		this.btnToggleSSAO = this.graphicsPanel.addToggleButton("SSAO");
+		this.btnToggleSSAO.button.currentStateIndex = (GS.Settings.ssao === true) ? 0 : 1;
 		this.btnToggleSSAO.button.onClick = function(e) { GS.Settings.ssao = (e.state === "on"); };
 
 		this.btnToggleBloom = this.graphicsPanel.addToggleButton("bloom");
+		this.btnToggleBloom.button.currentStateIndex = (GS.Settings.bloom === true) ? 0 : 1;
 		this.btnToggleBloom.button.onClick = function(e) { GS.Settings.bloom = (e.state === "on"); };
 
 		this.btnToggleNoise = this.graphicsPanel.addToggleButton("noise filter");
+		this.btnToggleNoise.button.currentStateIndex = (GS.Settings.noise === true) ? 0 : 1;
 		this.btnToggleNoise.button.onClick = function(e) { GS.Settings.noise = (e.state === "on"); };
 
 		this.btnToggleVignette = this.graphicsPanel.addToggleButton("vignette");
+		this.btnToggleVignette.button.currentStateIndex = (GS.Settings.vignette === true) ? 0 : 1;
 		this.btnToggleVignette.button.onClick = function(e) { GS.Settings.vignette = (e.state === "on"); };
 
 		this.btnToggleFXAA = this.graphicsPanel.addToggleButton("FXAA");
+		this.btnToggleFXAA.button.currentStateIndex = (GS.Settings.fxaa === true) ? 0 : 1;
 		this.btnToggleFXAA.button.onClick = function(e) { GS.Settings.fxaa = (e.state === "on"); };
+
+		this.graphicsPanel.addEmptyRow();
+
+		this.btnToggleShowFPS = this.graphicsPanel.addToggleButton("show FPS");
+		this.btnToggleShowFPS.button.currentStateIndex = (GS.Settings.showFPS === true) ? 0 : 1;
+		this.btnToggleShowFPS.button.onClick = function(e) { GS.Settings.showFPS = (e.state === "on"); };
 
 		this.graphicsPanel.addEmptyRow();
 
@@ -134,9 +147,11 @@ GS.UIComponents.Menu.prototype = {
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
 
 		this.btnToggleViewBob = this.gameplayPanel.addToggleButton("view bobbing");
+		this.btnToggleViewBob.button.currentStateIndex = (GS.Settings.viewBob === true) ? 0 : 1;
 		this.btnToggleViewBob.button.onClick = function(e) { GS.Settings.viewBob = (e.state === "on"); };
 
 		this.btnToggleWeaponBob = this.gameplayPanel.addToggleButton("weapon bobbing");
+		this.btnToggleWeaponBob.button.currentStateIndex = (GS.Settings.weaponBob === true) ? 0 : 1;
 		this.btnToggleWeaponBob.button.onClick = function(e) { GS.Settings.weaponBob = (e.state === "on"); };
 
 		this.gameplayPanel.addEmptyRow();

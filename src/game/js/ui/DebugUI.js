@@ -1,14 +1,16 @@
 GS.DebugUI = {
 	fontSize: 24,
 	maxTempLines: 5,
-	defaultTimeout: 5000,
+	defaultTimeout: GS.msToFrames(5000),
 
 	overlayMargin: 10,
 	overlayPadding: 5,
 	overlayWidth: 0,
-	overlayHeight: 0,
+	overlayHeight: 0,	
 	overlayX: 0,
 	overlayY: 0,
+
+	visibleStaticLines: 0,
 
 	staticLines: {},
 	tempLines: [],
@@ -55,10 +57,10 @@ GS.DebugUI = {
 
 	update: function() {
 		var hasChanged = false;
-		var now = new Date();
 		for (var i = this.tempLines.length - 1; i >= 0; i--) {
 			var line = this.tempLines[i];
-			if (line.timeout > 0 && (now - line.startTime > line.timeout)) {
+			line.timeout--;
+			if (line.timeout === 0) {
 				this.tempLines.splice(i, 1);
 				this.hasChanged = true;
 			}
@@ -78,7 +80,7 @@ GS.DebugUI = {
 
 		this.ctx.clearRect(0, 0, this.width, this.height);
 
-		if (Object.keys(this.staticLines).length > 0 || this.tempLines.length > 0) {
+		if (this.visibleStaticLines > 0 || this.tempLines.length > 0) {
 			this.ctx.save();
 
 			this.ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
@@ -87,8 +89,10 @@ GS.DebugUI = {
 
 			var y = this.overlayY + this.overlayPadding;
 			for (var i in this.staticLines) {
-				this.ctx.fillText(this.staticLines[i].text, this.overlayX + this.overlayPadding, y);
-				y += this.fontSize + this.overlayPadding;
+				if (this.staticLines[i].visible) {
+					this.ctx.fillText(this.staticLines[i].text, this.overlayX + this.overlayPadding, y);
+					y += this.fontSize + this.overlayPadding;
+				}
 			}
 
 			for (var i = 0; i < this.tempLines.length; i++) {
@@ -107,8 +111,15 @@ GS.DebugUI = {
 
 	calculateOverlayCoords: function() {
 		this.overlayWidth = 0;
-		this.overlayHeight = (Object.keys(this.staticLines).length + this.tempLines.length) * 
-			(this.fontSize + this.overlayPadding) + this.overlayPadding;
+		this.visibleStaticLines = 0;
+
+		for (var i in this.staticLines) {
+			if (this.staticLines[i].visible) {
+				this.visibleStaticLines++;
+			}
+		}
+
+		this.overlayHeight = (this.visibleStaticLines + this.tempLines.length) * (this.fontSize + this.overlayPadding) + this.overlayPadding;
 
 		// lower right
 		// this.overlayX = this.width - this.overlayWidth - this.overlayMargin;
@@ -119,7 +130,9 @@ GS.DebugUI = {
 		this.overlayY = this.overlayMargin;
 
 		for (var i in this.staticLines) {
-			this.overlayWidth = Math.max(this.overlayWidth, this.ctx.measureText(this.staticLines[i].text).width + this.overlayPadding * 2);
+			if (this.staticLines[i].visible) {
+				this.overlayWidth = Math.max(this.overlayWidth, this.ctx.measureText(this.staticLines[i].text).width + this.overlayPadding * 2);
+			}
 		}
 
 		for (var i = 0; i < this.tempLines.length; i++) {
@@ -144,21 +157,39 @@ GS.DebugUI = {
 		this.setStaticLine(id, numericValue + " (min: " + v.min + ", max: " + v.max + ", avg: " + v.avg.toFixed(0) + ")");
 	},
 
-	setStaticLine: function(id, text, showId) {
-		showId = (showId !== undefined) ? showId : true;
-		if (showId) {
-			text = id + ": " + text;
+	setStaticLine: function(id, text) {
+		text = id + ": " + text;
+		if (id in this.staticLines) {
+			this.staticLines[id].text = text;
+		} else {
+			this.staticLines[id] = {
+				text: text,
+				visible: true,
+			};
 		}
-		this.staticLines[id] = {
-			text: text,
-			showId: showId,
-		};
 		this.hasChanged = true;
 	},
 
 	removeStaticLine: function(id) {
 		delete this.staticLines[id];
 		this.hasChanged = true;
+	},
+
+	setStaticLineVisibility: function(id, value) {
+		if (id in this.staticLines) {
+			this.staticLines[id].visible = (value === true);
+		} else {
+			this.staticLines[id] = {
+				text: "",
+				visible: value,
+			}
+		}
+	},
+
+	getStaticLineVisibility: function(id) {
+		if (id in this.staticLines) {
+			return this.staticLines[id].visible;
+		}
 	},
 
 	addTempLine: function(text, timeout) {
@@ -170,7 +201,6 @@ GS.DebugUI = {
 		var line = {
 			text: text,
 			timeout: timeout,
-			startTime: new Date(),
 		};
 		this.tempLines.push(line);
 		this.hasChanged = true;

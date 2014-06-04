@@ -160,10 +160,8 @@ GS.Base.prototype = {
 			this.fpsCounter.frames = 0;
 			this.fpsCounter.currentTime = newTime;
 
-			if (this.showFPS) {
-				// GS.DebugUI.trackNumericValue("update rate", this.fpsCounter.updateRate);
-				GS.DebugUI.trackNumericValue("fps", this.fpsCounter.frameRate);
-			}
+			// GS.DebugUI.trackNumericValue("update rate", this.fpsCounter.updateRate);
+			GS.DebugUI.trackNumericValue("fps", this.fpsCounter.frameRate);
 		}
 
 		this.requestAnimationFrameId = requestAnimationFrame(function() { that.gameLoop(); });
@@ -178,5 +176,13 @@ GS.Base.prototype = {
 
 	getCurrentTime: function() {
 		return (self.performance !== undefined && self.performance.now !== undefined) ? self.performance.now() : Date.now();
-	},	
+	},
+
+	set showFPS(value) {
+		GS.DebugUI.setStaticLineVisibility("fps", value);
+	},
+
+	get showFPS() {
+		return GS.DebugUI.getStaticLineVisibility("fps");
+	}
 };

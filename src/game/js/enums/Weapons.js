@@ -1,5 +1,6 @@
 GS.Weapons = {
 	pistol: {
+		name: "pistol",
 		powerLevel: 2,
 		ammo: 0,
 		infiniteAmmo: true,
@@ -7,6 +8,7 @@ GS.Weapons = {
 		hitscan: false,
 	},
 	double_shotgun: {
+		name: "shotgun",
 		powerLevel: 3,
 		ammo: 0,
 		ammoMax: 50,
@@ -23,6 +25,7 @@ GS.Weapons = {
 		impactParticleCount: 1,
 	},
 	hyper_blaster: {
+		name: "hyperblaster",
 		powerLevel: 4,
 		ammo: 0,
 		ammoMax: 200,
