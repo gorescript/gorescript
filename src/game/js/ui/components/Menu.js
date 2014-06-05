@@ -294,10 +294,17 @@ GS.UIComponents.Menu.prototype = {
 	},
 
 	initFooter: function() {
-		this.label6 = new GS.UIComponents.MenuLabel(this.cvs, "pre-alpha · timeinvariant.com",
-			new THREE.Vector2(-12, -36), new THREE.Vector2(1, 1));
-		this.label6.textAlign = "right";
-		this.children.push(this.label6);
+		this.label1 = new GS.UIComponents.MenuLabel(this.cvs, "alpha - build 1",
+			new THREE.Vector2(-12, -60), new THREE.Vector2(1, 1));
+		this.label1.textAlign = "right";
+		this.label1.fontSize = 30;		
+		this.children.push(this.label1);
+
+		this.label2 = new GS.UIComponents.MenuLabel(this.cvs, "© 2014 time invariant games",
+			new THREE.Vector2(-12, -25), new THREE.Vector2(1, 1));
+		this.label2.textAlign = "right";
+		this.label2.fontSize = 30;		
+		this.children.push(this.label2);
 	},
 
 	update: function() {
