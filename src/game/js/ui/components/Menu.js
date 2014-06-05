@@ -271,14 +271,14 @@ GS.UIComponents.Menu.prototype = {
 
 		this.creditsPanel.addEmptyRow();
 
-		this.btnCredits7 = this.creditsPanel.addButton("for a more detailed list go to");
-		this.btnCredits7.disabled = true;
-		this.btnCredits8 = this.creditsPanel.addButton("timeinvariant.com/gorescript/#credits");
-		this.btnCredits8.onClick = function() {
-			window.open("http://timeinvariant.com/gorescript/#credits");
-		};
+		// this.btnCredits7 = this.creditsPanel.addButton("for a more detailed list go to");
+		// this.btnCredits7.disabled = true;
+		// this.btnCredits8 = this.creditsPanel.addButton("timeinvariant.com/gorescript/#credits");
+		// this.btnCredits8.onClick = function() {
+		// 	window.open("http://timeinvariant.com/gorescript/#credits");
+		// };
 
-		this.creditsPanel.addEmptyRow();
+		// this.creditsPanel.addEmptyRow();
 
 		this.btnCredits9 = this.creditsPanel.addButton("fork this on");
 		this.btnCredits9.disabled = true;
