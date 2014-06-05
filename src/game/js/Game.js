@@ -9,6 +9,8 @@ GS.GameStates = {
 GS.Game = function() {
 	GS.Base.call(this);
 
+	GS.Settings.loadSettings();
+
 	this.state = GS.GameStates.PreLoad;
 	this.nextState = null;
 	this.updated = false;

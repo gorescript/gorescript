@@ -30,6 +30,18 @@ GS.Settings = function() {
 	};
 
 	return {
+		loadSettings: function() {
+			var jsonStr = localStorage["gs-settings"];
+			if (jsonStr !== undefined) {
+				settings = JSON.parse(jsonStr);
+			}
+		},
+
+		saveSettings: function() {
+			var jsonStr = JSON.stringify(settings);
+			localStorage["gs-settings"] = jsonStr;
+		},
+
 		get fovMin() {
 			return settings.fovMin;
 		},
@@ -45,6 +57,7 @@ GS.Settings = function() {
 				settings.fov = n;
 
 				GAME.updateFov();
+				this.saveSettings();
 			}
 		},
 
@@ -55,6 +68,7 @@ GS.Settings = function() {
 		set ssao(value) {
 			settings.ssao = (value === true);
 			GAME.graphicsManager.ssaoEnabled = settings.ssao;
+			this.saveSettings();
 		},
 
 		get ssao() {
@@ -64,6 +78,7 @@ GS.Settings = function() {
 		set bloom(value) {
 			settings.bloom = (value === true);
 			GAME.graphicsManager.bloomEnabled = settings.bloom;
+			this.saveSettings();
 		},
 
 		get bloom() {
@@ -73,6 +88,7 @@ GS.Settings = function() {
 		set noise(value) {
 			settings.noise = (value === true);
 			GAME.graphicsManager.noiseEnabled = settings.noise;
+			this.saveSettings();
 		},
 
 		get noise() {
@@ -82,6 +98,7 @@ GS.Settings = function() {
 		set vignette(value) {
 			settings.vignette = (value === true);
 			GAME.graphicsManager.vignetteEnabled = settings.vignette;
+			this.saveSettings();
 		},
 
 		get vignette() {
@@ -91,6 +108,7 @@ GS.Settings = function() {
 		set fxaa(value) {
 			settings.fxaa = (value === true);
 			GAME.graphicsManager.fxaaEnabled = settings.fxaa;
+			this.saveSettings();
 		},
 
 		get fxaa() {
@@ -99,8 +117,9 @@ GS.Settings = function() {
 
 		set viewBob(value) {
 			settings.viewBob = (value === true);
+			this.saveSettings();
 			if (GAME.grid !== undefined) {
-				GAME.grid.player.playerView.viewBob.enabled = settings.viewBob;
+				GAME.grid.player.playerView.viewBob.enabled = settings.viewBob;				
 			}
 		},
 
@@ -110,6 +129,7 @@ GS.Settings = function() {
 
 		set weaponBob(value) {
 			settings.weaponBob = (value === true);
+			this.saveSettings();
 			if (GAME.grid !== undefined) {
 				GAME.grid.player.playerView.weaponBob.enabled = settings.weaponBob;
 			}
@@ -121,6 +141,7 @@ GS.Settings = function() {
 
 		set halfSize(value) {
 			settings.halfSize = (value === true);
+			this.saveSettings();
 			GAME.graphicsManager.halfSizeEnabled = settings.halfSize;
 		},
 
@@ -130,6 +151,7 @@ GS.Settings = function() {
 
 		set showFPS(value) {
 			settings.showFPS = (value === true);
+			this.saveSettings();
 			GAME.showFPS = settings.showFPS;
 		},
 
@@ -152,6 +174,7 @@ GS.Settings = function() {
 				settings.sound = n;
 
 				GAME.soundManager.volume = settings.sound / 10;
+				this.saveSettings();
 			}
 		},
 
@@ -174,6 +197,7 @@ GS.Settings = function() {
 				settings.music = n;
 
 				GAME.musicManager.volume = settings.music / 10;
+				this.saveSettings();
 			}
 		},
 
@@ -198,6 +222,7 @@ GS.Settings = function() {
 				if (GAME.grid !== undefined) {
 					GAME.grid.player.controls.lookSpeed = 0.066 * (settings.mouse / 5);
 				}
+				this.saveSettings();
 			}
 		},
 
