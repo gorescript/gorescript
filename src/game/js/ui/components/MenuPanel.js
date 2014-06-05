@@ -31,7 +31,9 @@ GS.UIComponents.MenuPanel.prototype = {
 		return button;
 	},
 
-	addToggleButton: function(text, states, onClick) {
+	addToggleButton: function(text, states, buttonSize, onClick) {
+		buttonSize = buttonSize || 0.2;
+
 		var offset = this.getRowOffset();
 		var labelOffset = offset.clone();
 		labelOffset.x += this.size.x * 0.5 - 10;
@@ -44,7 +46,7 @@ GS.UIComponents.MenuPanel.prototype = {
 		this.children.push(label);
 
 		var buttonOffset = offset.clone();
-		var buttonSize = new THREE.Vector2(this.size.x * 0.2, this.rowHeight);
+		var buttonSize = new THREE.Vector2(this.size.x * buttonSize, this.rowHeight);
 		buttonOffset.x += this.size.x * 0.5 + 10;
 
 		states = states || ["on", "off"];

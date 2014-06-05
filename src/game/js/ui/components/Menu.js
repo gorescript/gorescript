@@ -39,6 +39,7 @@ GS.UIComponents.Menu.prototype = {
 		this.initSoundPanel();
 		this.initGameplayPanel();
 		this.initControlsPanel();
+		this.initCreditsPanel();
 		this.initFooter();
 
 		this.activePanel = this.topPanel;
@@ -63,7 +64,7 @@ GS.UIComponents.Menu.prototype = {
 		this.btnOptions.onClick = function() { that.activePanel = that.optionsPanel; };
 
 		this.btnCredits = this.topPanel.addButton("credits");
-		this.btnCredits.disabled = true;
+		this.btnCredits.onClick = function() { that.activePanel = that.creditsPanel; };
 	},
 
 	initOptionsPanel: function() {
@@ -212,6 +213,81 @@ GS.UIComponents.Menu.prototype = {
 
 		this.btnControlsBack = this.controlsPanel.addButton("back");
 		this.btnControlsBack.onClick = function() { that.activePanel = that.optionsPanel; };
+	},
+
+	initCreditsPanel: function() {
+		var that = this;
+
+		this.creditsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 25, 28);
+
+		this.btnCredits1 = this.creditsPanel.addToggleButton("code, art", ["sergiu valentin bucur"], 0.6);
+		this.btnCredits1.label.foregroundColor = GS.UIColors.foregroundDisabled;
+		this.btnCredits1.button.onClick = function() {
+			window.open("http://timeinvariant.com");
+		};
+
+		this.creditsPanel.addEmptyRow();
+
+		this.btnCredits2 = this.creditsPanel.addToggleButton("sounds, music", ["freesound.org"], 0.6);
+		this.btnCredits2.label.foregroundColor = GS.UIColors.foregroundDisabled;		
+		this.btnCredits2.button.onClick = function() {
+			window.open("http://freesound.org");
+		};
+		this.btnCredits3 = this.creditsPanel.addToggleButton("", ["opengameart.org"], 0.6);
+		this.btnCredits3.label.foregroundColor = GS.UIColors.foregroundDisabled;
+		this.btnCredits3.button.onClick = function() {
+			window.open("http://opengameart.org");
+		};
+
+		this.creditsPanel.addEmptyRow();
+
+		this.btnCredits4 = this.creditsPanel.addToggleButton("skybox texture", ["alexcpeterson.com/spacescape"], 0.6);
+		this.btnCredits4.label.foregroundColor = GS.UIColors.foregroundDisabled;
+		this.btnCredits4.button.onClick = function() {
+			window.open("http://alexcpeterson.com/spacescape");
+		};
+
+		this.creditsPanel.addEmptyRow();
+
+		this.btnCredits5 = this.creditsPanel.addToggleButton("frameworks", ["three.js"], 0.6);
+		this.btnCredits5.label.foregroundColor = GS.UIColors.foregroundDisabled;
+		this.btnCredits5.button.onClick = function() {
+			window.open("http://threejs.org");
+		};
+		this.btnCredits6 = this.creditsPanel.addToggleButton("", ["tween.js"], 0.6);
+		this.btnCredits6.label.foregroundColor = GS.UIColors.foregroundDisabled;
+		this.btnCredits6.button.onClick = function() {
+			window.open("http://github.com/sole/tween.js/");
+		};
+		this.btnCredits66 = this.creditsPanel.addToggleButton("", ["jszip"], 0.6);
+		this.btnCredits66.label.foregroundColor = GS.UIColors.foregroundDisabled;
+		this.btnCredits66.button.onClick = function() {
+			window.open("http://stuk.github.io/jszip/");
+		};
+
+		this.creditsPanel.addEmptyRow();
+
+		this.btnCredits7 = this.creditsPanel.addButton("for a more detailed list go to");
+		this.btnCredits7.disabled = true;
+		this.btnCredits8 = this.creditsPanel.addButton("timeinvariant.com/gorescript/#credits");
+		this.btnCredits8.onClick = function() {
+			window.open("http://timeinvariant.com/gorescript/#credits");
+		};
+
+		this.creditsPanel.addEmptyRow();
+
+		this.btnCredits9 = this.creditsPanel.addButton("fork this on");
+		this.btnCredits9.disabled = true;
+		this.btnCredits10 = this.creditsPanel.addButton("github.com/timeinvariant/gorescript");
+		this.btnCredits10.onClick = function() {
+			window.open("http://github.com/timeinvariant/gorescript");
+		};
+
+		this.creditsPanel.addEmptyRow();
+
+		this.btnCreditsBack = this.creditsPanel.addButton("back");
+		this.btnCreditsBack.onClick = function() { that.activePanel = that.optionsPanel; };
 	},
 
 	initFooter: function() {
