@@ -25,8 +25,6 @@ GS.UIComponents.MenuButton = function(vectorCanvas, text, offset, pos, size, onC
 
 	this.backgroundColor = GS.UIColors.buttonHover;
 	this.foregroundColor = GS.UIColors.foregroundDisabled;
-
-	this.$canvas = $("canvas");
 };
 
 GS.UIComponents.MenuButton.prototype = {
@@ -47,10 +45,8 @@ GS.UIComponents.MenuButton.prototype = {
 
 			if (mx >= this.min.x && my >= this.min.y && mx < this.max.x && my < this.max.y) {
 				this.hover = true;
-				// this.$canvas.css("cursor", "pointer");
 				this.backgroundColor = GS.UIColors.buttonHover;
 			} else {
-				// this.$canvas.css("cursor", "default");
 				this.hover = false;
 			}
 
@@ -59,8 +55,7 @@ GS.UIComponents.MenuButton.prototype = {
 					this.active = true;
 					this.backgroundColor = GS.UIColors.buttonActive;
 				} else {
-					if (this.active) {						
-						// this.$canvas.css("cursor", "default");
+					if (this.active) {
 						if (this.states !== undefined) {
 							this._currentStateIndex++;
 							if (this._currentStateIndex >= this.states.length) {

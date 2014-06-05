@@ -76,7 +76,6 @@ GS.UIComponents.Menu.prototype = {
 		this.btnGraphics.onClick = function() { that.activePanel = that.graphicsPanel; }
 
 		this.btnSound = this.optionsPanel.addButton("sound");
-		this.btnSound.disabled = true;
 		this.btnSound.onClick = function() { that.activePanel = that.soundPanel; }
 
 		this.btnGameplay = this.optionsPanel.addButton("gameplay");
@@ -125,6 +124,9 @@ GS.UIComponents.Menu.prototype = {
 
 		this.graphicsPanel.addEmptyRow();
 
+		this.numberPickerFOV = this.graphicsPanel.addNumberPicker("field of view", GS.Settings.fov, GS.Settings.fovMin, GS.Settings.fovMax, 5);
+		this.numberPickerFOV.numberPicker.onChange = function(e) { GS.Settings.fov = e.value; };
+
 		this.btnToggleShowFPS = this.graphicsPanel.addToggleButton("show FPS");
 		this.btnToggleShowFPS.button.currentStateIndex = (GS.Settings.showFPS === true) ? 0 : 1;
 		this.btnToggleShowFPS.button.onClick = function(e) { GS.Settings.showFPS = (e.state === "on"); };
@@ -140,6 +142,14 @@ GS.UIComponents.Menu.prototype = {
 
 		this.soundPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
+
+		this.numberPickerSound = this.soundPanel.addNumberPicker("sound volume", GS.Settings.sound, GS.Settings.soundMin, GS.Settings.soundMax, 1);
+		this.numberPickerSound.numberPicker.onChange = function(e) { GS.Settings.sound = e.value; };
+
+		this.numberPickerMusic = this.soundPanel.addNumberPicker("music volume", GS.Settings.music, GS.Settings.musicMin, GS.Settings.musicMax, 1);
+		this.numberPickerMusic.numberPicker.onChange = function(e) { GS.Settings.music = e.value; };
+
+		this.soundPanel.addEmptyRow();
 
 		this.btnSoundBack = this.soundPanel.addButton("back");
 		this.btnSoundBack.onClick = function() { that.activePanel = that.optionsPanel; };
@@ -169,7 +179,13 @@ GS.UIComponents.Menu.prototype = {
 		var that = this;
 
 		this.controlsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
-			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 35, 38);
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 32, 35);
+
+		this.numberPickerMouse = this.controlsPanel.addNumberPicker("mouse sensitivity", 
+			GS.Settings.mouse, GS.Settings.mouseMin, GS.Settings.mouseMax, 1);
+		this.numberPickerMouse.numberPicker.onChange = function(e) { GS.Settings.mouse = e.value; };
+
+		this.controlsPanel.addEmptyRow();
 
 		this.btnToggleMoveForward = this.controlsPanel.addToggleButton("move forward", ["W"]);
 		this.btnToggleMoveForward.button.disabled = true;

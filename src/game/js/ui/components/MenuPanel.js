@@ -61,6 +61,34 @@ GS.UIComponents.MenuPanel.prototype = {
 		};
 	},
 
+	addNumberPicker: function(text, value, min, max, step, onChange) {
+		var offset = this.getRowOffset();
+		var labelOffset = offset.clone();
+		labelOffset.x += this.size.x * 0.5 - 10;
+		labelOffset.y += this.rowHeight * 0.5;
+
+		var label = new GS.UIComponents.MenuLabel(this.cvs, text, labelOffset, this.pos);
+		label.fontSize = this.fontSize;
+		label.textAlign = "right";
+
+		this.children.push(label);
+
+		var numberPickerOffset = offset.clone();
+		var numberPickerSize = new THREE.Vector2(this.size.x * 0.2, this.rowHeight);
+		numberPickerOffset.x += this.size.x * 0.5 + 10;
+		var numberPicker = new GS.UIComponents.MenuNumberPicker(this.cvs, numberPickerOffset, this.pos, numberPickerSize, 
+			this.fontSize, value, min, max, step, onChange);
+
+		this.children.push(numberPicker);
+
+		this.rowCount++;
+
+		return {
+			label: label,
+			numberPicker: numberPicker,
+		};
+	},
+
 	addEmptyRow: function() {
 		this.rowCount++;
 	},

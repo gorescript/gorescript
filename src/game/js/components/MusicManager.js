@@ -1,5 +1,5 @@
 GS.MusicManager = function() {
-	this.volume = 0.5;
+	this.volume = GS.Settings.music / 10;
 };
 
 GS.MusicManager.prototype = {

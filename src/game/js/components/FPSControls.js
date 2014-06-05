@@ -7,7 +7,7 @@ GS.FPSControls = function(camera) {
 	this.lookNoOffset = this.look.clone();
 
 	this.moveSpeed = 1;
-	this.lookSpeed = 0.066;
+	this.lookSpeed = 0.066 * (GS.Settings.mouse / 5);
 
 	this.forwardLookVector = new THREE.Vector3(0, 0, -1);
 	this.forwardMoveVector = new THREE.Vector3(0, 0, -1);

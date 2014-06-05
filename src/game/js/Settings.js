@@ -1,22 +1,47 @@
 GS.Settings = function() {
 	var settings = {
+		fovMin: 60,
+		fovMax: 120,
 		fov: 75,
+
 		ssao: true,
 		bloom: true,
 		noise: true,
 		vignette: true,
 		fxaa: true,
-		viewBob: true,
-		weaponBob: true,
+
 		halfSize: false,
 		showFPS: true,
+
+		viewBob: true,
+		weaponBob: true,
+
+		soundMin: 0,
+		soundMax: 10,
+		sound: 5,
+
+		musicMin: 0,
+		musicMax: 10,
+		music: 5,
+
+		mouseMin: 1,
+		mouseMax: 10,
+		mouse: 5,
 	};
 
 	return {
+		get fovMin() {
+			return settings.fovMin;
+		},
+
+		get fovMax() {
+			return settings.fovMax;
+		},
+
 		set fov(value) {
 			var n = parseInt(value);
 			if (!isNaN(n)) {
-				n = Math.floor(GS.MathHelper.clamp(n, 60, 120));
+				n = Math.floor(GS.MathHelper.clamp(n, settings.fovMin, settings.fovMax));
 				settings.fov = n;
 
 				GAME.updateFov();
@@ -110,6 +135,74 @@ GS.Settings = function() {
 
 		get showFPS() {
 			return settings.showFPS;
+		},
+
+		get soundMin() {
+			return settings.soundMin;
+		},
+
+		get soundMax() {
+			return settings.soundMax;
+		},
+
+		set sound(value) {
+			var n = parseInt(value);
+			if (!isNaN(n)) {
+				n = Math.floor(GS.MathHelper.clamp(n, settings.soundMin, settings.soundMax));
+				settings.sound = n;
+
+				GAME.soundManager.volume = settings.sound / 10;
+			}
+		},
+
+		get sound() {
+			return settings.sound;
+		},
+
+		get musicMin() {
+			return settings.musicMin;
+		},
+
+		get musicMax() {
+			return settings.musicMax;
+		},
+
+		set music(value) {
+			var n = parseInt(value);
+			if (!isNaN(n)) {
+				n = Math.floor(GS.MathHelper.clamp(n, settings.musicMin, settings.musicMax));
+				settings.music = n;
+
+				GAME.musicManager.volume = settings.music / 10;
+			}
+		},
+
+		get music() {
+			return settings.music;
+		},
+
+		get mouseMin() {
+			return settings.mouseMin;
+		},
+
+		get mouseMax() {
+			return settings.mouseMax;
+		},
+
+		set mouse(value) {
+			var n = parseInt(value);
+			if (!isNaN(n)) {
+				n = Math.floor(GS.MathHelper.clamp(n, settings.mouseMin, settings.mouseMax));
+				settings.mouse = n;
+
+				if (GAME.grid !== undefined) {
+					GAME.grid.player.controls.lookSpeed = 0.066 * (settings.mouse / 5);
+				}
+			}
+		},
+
+		get mouse() {
+			return settings.mouse;
 		},
 	}
 }();
