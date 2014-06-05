@@ -294,7 +294,7 @@ GS.UIComponents.Menu.prototype = {
 	},
 
 	initFooter: function() {
-		this.label1 = new GS.UIComponents.MenuLabel(this.cvs, "alpha - build 1",
+		this.label1 = new GS.UIComponents.MenuLabel(this.cvs, GS.GameVersion,
 			new THREE.Vector2(-12, -60), new THREE.Vector2(1, 1));
 		this.label1.textAlign = "right";
 		this.label1.fontSize = 30;		

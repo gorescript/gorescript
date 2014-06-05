@@ -1,3 +1,5 @@
+GS.GameVersion = "alpha - build 2";
+
 GS.GameStates = {
 	PreLoad: 0,
 	Loading: 1,
