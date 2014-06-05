@@ -83,7 +83,6 @@ GS.UIComponents.Menu.prototype = {
 		this.btnGameplay.onClick = function() { that.activePanel = that.gameplayPanel; }
 
 		this.btnControls = this.optionsPanel.addButton("controls");
-		this.btnControls.disabled = true;
 		this.btnControls.onClick = function() { that.activePanel = that.controlsPanel; }
 
 		this.optionsPanel.addEmptyRow();
@@ -170,40 +169,36 @@ GS.UIComponents.Menu.prototype = {
 		var that = this;
 
 		this.controlsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
-			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 35, 38);
+
+		this.btnToggleMoveForward = this.controlsPanel.addToggleButton("move forward", ["W"]);
+		this.btnToggleMoveForward.button.disabled = true;
+		this.btnToggleMoveBackward = this.controlsPanel.addToggleButton("move backward", ["S"]);
+		this.btnToggleMoveBackward.button.disabled = true;
+		this.btnToggleStrafeLeft = this.controlsPanel.addToggleButton("strafe left", ["A"]);
+		this.btnToggleStrafeLeft.button.disabled = true;
+		this.btnToggleStrafeRight = this.controlsPanel.addToggleButton("strafe right", ["D"]);
+		this.btnToggleStrafeRight.button.disabled = true;
+		this.btnToggleUse = this.controlsPanel.addToggleButton("use", ["E"]);
+		this.btnToggleUse.button.disabled = true;
+		this.btnToggleShoot = this.controlsPanel.addToggleButton("shoot", ["left mouse"]);
+		this.btnToggleShoot.button.disabled = true;
+		this.btnTogglePistol = this.controlsPanel.addToggleButton("pistol", ["2"]);
+		this.btnTogglePistol.button.disabled = true;
+		this.btnToggleShotgun = this.controlsPanel.addToggleButton("shotgun", ["3"]);
+		this.btnToggleShotgun.button.disabled = true;
+		this.btnToggleHyperBlaster = this.controlsPanel.addToggleButton("hyperblaster", ["4"]);
+		this.btnToggleHyperBlaster.button.disabled = true;
+		this.btnToggleMenu = this.controlsPanel.addToggleButton("menu", ["ESC"]);
+		this.btnToggleMenu.button.disabled = true;
+
+		this.controlsPanel.addEmptyRow();
 
 		this.btnControlsBack = this.controlsPanel.addButton("back");
 		this.btnControlsBack.onClick = function() { that.activePanel = that.optionsPanel; };
 	},
 
 	initFooter: function() {
-		this.label1 = new GS.UIComponents.MenuLabel(this.cvs, "WASD + mouse to move/shoot",
-			new THREE.Vector2(-12, -316), new THREE.Vector2(1, 1));
-		this.label1.textAlign = "right";
-		this.children.push(this.label1);
-
-		this.label2 = new GS.UIComponents.MenuLabel(this.cvs, "2, 3, 4 to switch between weapons",
-			new THREE.Vector2(-12, -276), new THREE.Vector2(1, 1));
-		this.label2.textAlign = "right";
-		this.children.push(this.label2);
-
-		this.label3 = new GS.UIComponents.MenuLabel(this.cvs, "ESC to open this menu",
-			new THREE.Vector2(-12, -236), new THREE.Vector2(1, 1));
-		this.label3.textAlign = "right";
-		this.children.push(this.label3);
-
-		if (!GS.isIFrame) {
-			this.label4 = new GS.UIComponents.MenuLabel(this.cvs, "open dev tools for cheats",
-				new THREE.Vector2(-12, -156), new THREE.Vector2(1, 1));
-			this.label4.textAlign = "right";
-			this.children.push(this.label4);
-		}
-
-		this.label5 = new GS.UIComponents.MenuLabel(this.cvs, "works best in Chrome 34+",
-			new THREE.Vector2(-12, -76), new THREE.Vector2(1, 1));
-		this.label5.textAlign = "right";
-		this.children.push(this.label5);
-
 		this.label6 = new GS.UIComponents.MenuLabel(this.cvs, "pre-alpha · timeinvariant.com",
 			new THREE.Vector2(-12, -36), new THREE.Vector2(1, 1));
 		this.label6.textAlign = "right";
