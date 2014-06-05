@@ -2,7 +2,12 @@ GS.UIComponents = GS.UIComponents || {};
 
 GS.UIManager = function() {
 	this.reset();
+	this.menuOnly = true;
 	this.menuActive = false;
+
+	this.menuBackOffset = new THREE.Vector2(0, 0);
+	this.menuBackPos = new THREE.Vector2(0, 0);
+	this.menuBackSize = new THREE.Vector2(1, 1);
 };
 
 GS.UIManager.prototype = {
@@ -50,6 +55,7 @@ GS.UIManager.prototype = {
 
 		if (this.menu === undefined) {
 			this.menu = new GS.UIComponents.Menu(this.vectorCanvas, this.assets);
+			this.menu.drawOverlay = false;
 			this.menu.init();
 		}
 
@@ -94,6 +100,10 @@ GS.UIManager.prototype = {
 		} else {
 			this.cvs.clear();
 
+			if (this.menuOnly) {
+				this.vectorCanvas.drawImage(this.menuBackOffset, this.menuBackPos, this.assets.images.menu_back, this.menuBackSize, false);
+			}
+
 			this.menu.draw();
 
 			this.cvs.flip();
@@ -113,6 +123,11 @@ GS.UIManager.prototype = {
 		}
 
 		return false;
+	},
+
+	useIngameMenu: function() {
+		this.menuOnly = false;
+		this.menu.drawOverlay = true;
 	},
 
 	onResize: function() {

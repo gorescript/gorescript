@@ -150,9 +150,10 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.uiManager.initComponents(this.assetLoader.assets);
 			this.openMenu();
 			this.firstTime = false;
-		} else {
+		} else {			
 			this.initComponents(this.assetLoader.assets);			
-			this.uiManager.initComponents(this.assetLoader.assets, this.grid);			
+			this.uiManager.initComponents(this.assetLoader.assets, this.grid);
+			this.uiManager.useIngameMenu();
 
 			// GAME.grid.exportMapToOBJ();
 

@@ -26,6 +26,9 @@ GS.UIComponents.Menu = function(vectorCanvas, assets) {
 	this.children = [];
 	this.activePanel = null;
 
+	this.backgroundColor = GS.UIColors.menuBackground;
+	this.drawOverlay = true;
+
 	this.visible = true;
 };
 
@@ -306,11 +309,13 @@ GS.UIComponents.Menu.prototype = {
 	},
 
 	draw: function() {
-		this.cvs.boxFill(this.background.offset, this.background.pos, this.background.size, false, GS.UIColors.menuBackground);
+		if (this.drawOverlay) {
+			this.cvs.boxFill(this.background.offset, this.background.pos, this.background.size, false, this.backgroundColor);
+		}
+
 		this.cvs.drawImage(this.logo.offset, this.logo.pos, this.logo.image, this.logo.size, true);
 
 		this.activePanel.draw();
-
 		for (var i = 0; i < this.children.length; i++) {
 			this.children[i].draw();
 		}
