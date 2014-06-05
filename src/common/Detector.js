@@ -10,12 +10,12 @@ GS.Detector = {
 			try {
 				var canvas = document.createElement("canvas");
 				return !!window.WebGLRenderingContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
-			} catch( e ) {
+			} catch (e) {
 				return false;
 			}
 		})();
 		if (!webGL) {
-			this.displayErrorMessage("WebGL");
+			this.displayErrorMessage("WebGL, or WebGL failed to initialize");
 			return;
 		}
 
