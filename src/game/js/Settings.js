@@ -8,6 +8,7 @@ GS.Settings = function() {
 		fxaa: true,
 		viewBob: true,
 		weaponBob: true,
+		halfSize: false,
 		showFPS: true,
 	};
 
@@ -91,6 +92,15 @@ GS.Settings = function() {
 
 		get weaponBob() {
 			return settings.weaponBob;
+		},
+
+		set halfSize(value) {
+			settings.halfSize = (value === true);
+			GAME.graphicsManager.halfSizeEnabled = settings.halfSize;
+		},
+
+		get halfSize() {
+			return settings.halfSize;
 		},
 
 		set showFPS(value) {

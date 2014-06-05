@@ -68,7 +68,7 @@ GS.UIComponents.MenuButton.prototype = {
 							}
 
 							this.text = this.states[this._currentStateIndex];
-							this.onClick({ state: this.text });
+							this.onClick({ state: this.text, stateIndex: this._currentStateIndex });
 						} else {
 							this.onClick();
 						}

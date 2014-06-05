@@ -13,7 +13,9 @@ GS.GraphicsManager.prototype = {
 		this.fxaaEnabled = GS.Settings.fxaa;
 		this.ssaoEnabled = GS.Settings.ssao;
 		this.noiseEnabled = GS.Settings.noise;
-		this.vignetteEnabled = GS.Settings.vignette;
+		this.vignetteEnabled = GS.Settings.vignette;		
+		this.halfSizeEnabled = GS.Settings.halfSize;
+
 		this.monochromeEnabled = false;
 	},
 
@@ -136,16 +138,26 @@ GS.GraphicsManager.prototype = {
 	},
 
 	onResize: function() {
+		var width = window.innerWidth;
+		var height = window.innerHeight;
+
+		if (this._halfSizeEnabled) {
+			width *= 0.5;
+			height *= 0.5;
+		}
+
 		var depthTarget = this.depthTarget.clone();
-		depthTarget.width = window.innerWidth;
-		depthTarget.height = window.innerHeight;
+		depthTarget.width = width;
+		depthTarget.height = height;
 		this.depthTarget = depthTarget;
 		this.effectSSAO.uniforms["tDepth"].value = this.depthTarget;
 
-		this.effectSSAO.uniforms["size"].value.set(window.innerWidth, window.innerHeight);
-		this.effectFXAA.uniforms["resolution"].value.set(1 / window.innerWidth, 1 / window.innerHeight);
-		this.effectNoise.uniforms["ratio"].value.set(window.innerWidth / this.noiseTextureSize, window.innerHeight / this.noiseTextureSize);
-		this.composer.setSize(window.innerWidth, window.innerHeight);
+		this.effectSSAO.uniforms["size"].value.set(width, height);
+		this.effectFXAA.uniforms["resolution"].value.set(1 / width, 1 / height);
+		this.effectNoise.uniforms["ratio"].value.set(width / this.noiseTextureSize, height / this.noiseTextureSize);
+		this.composer.setSize(width, height);
+
+		$(this.renderer.domElement).css("width", window.innerWidth + "px").css("height", window.innerHeight + "px");
 	},
 
 	getNoiseTexture: function(size) {
@@ -242,5 +254,14 @@ GS.GraphicsManager.prototype = {
 
 	get noiseEnabled() {
 		return this.effectNoise.enabled = value;
+	},
+
+	set halfSizeEnabled(value) {		
+		this._halfSizeEnabled = value;
+		this.onResize();
+	},
+
+	get halfSizeEnabled() {
+		return this._halfSizeEnabled;
 	},
 };

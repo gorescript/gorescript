@@ -98,6 +98,12 @@ GS.UIComponents.Menu.prototype = {
 		this.graphicsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
 
+		this.btnToggleHalfSize = this.graphicsPanel.addToggleButton("half-size rendering");
+		this.btnToggleHalfSize.button.currentStateIndex = (GS.Settings.halfSize === true) ? 0 : 1;
+		this.btnToggleHalfSize.button.onClick = function(e) { GS.Settings.halfSize = (e.state === "on"); };
+
+		this.graphicsPanel.addEmptyRow();
+
 		this.btnToggleSSAO = this.graphicsPanel.addToggleButton("SSAO");
 		this.btnToggleSSAO.button.currentStateIndex = (GS.Settings.ssao === true) ? 0 : 1;
 		this.btnToggleSSAO.button.onClick = function(e) { GS.Settings.ssao = (e.state === "on"); };
