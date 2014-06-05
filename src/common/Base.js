@@ -56,17 +56,6 @@ GS.isIFrame = function() {
     }
 }();
 
-GS.minViewportWidth = 1024;
-GS.minViewportHeight = 768;
-
-GS.getViewportWidth = function() {
-	return Math.max(window.innerWidth, GS.minViewportWidth);
-};
-
-GS.getViewportHeight = function() {
-	return Math.max(window.innerHeight, GS.minViewportHeight);
-};
-
 GS.Base = function() {
 	this.clearColor = 0x000000;
 	this.antialias = true;
@@ -99,14 +88,15 @@ GS.Base.prototype = {
 
 		this.renderer = new THREE.WebGLRenderer({ antialias: this.antialias });
 		this.renderer.setClearColor(this.clearColor, 1);
-		this.renderer.setSize(GS.getViewportWidth(), GS.getViewportHeight());
+		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		this.renderer.domElement.id = "game-canvas";
 	
-		this.camera = new THREE.PerspectiveCamera(this.cameraFov, GS.getViewportWidth() / GS.getViewportHeight(), this.cameraNear, this.cameraFar);
+		this.camera = new THREE.PerspectiveCamera(this.cameraFov, window.innerWidth / window.innerHeight, this.cameraNear, this.cameraFar);
 
 		this.scene = new THREE.Scene();
 
-		window.addEventListener("resize", function() { that.onResize(); }, false);		
+		window.addEventListener("resize", function() { that.onResize(); }, false);
+		this.onResize();
 
 		document.body.appendChild(this.renderer.domElement);
 
@@ -168,10 +158,10 @@ GS.Base.prototype = {
 	},
 
 	onResize: function() {
-		this.camera.aspect = GS.getViewportWidth() / GS.getViewportHeight();
+		this.camera.aspect = window.innerWidth / window.innerHeight;
 		this.camera.updateProjectionMatrix();
 
-		this.renderer.setSize(GS.getViewportWidth(), GS.getViewportHeight());
+		this.renderer.setSize(window.innerWidth, window.innerHeight);
 	},
 
 	getCurrentTime: function() {

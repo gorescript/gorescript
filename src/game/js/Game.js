@@ -305,8 +305,11 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.uiManager.onResize();
 		this.loadingUI.onResize();
 
-		if (this.state == GS.GameStates.Play) {
+		if (this.graphicsManager !== undefined) {
 			this.graphicsManager.onResize();
+		}
+
+		if (this.grid !== undefined) {
 			this.grid.onResize();
 			this.grid.player.playerView.onResize();
 		}

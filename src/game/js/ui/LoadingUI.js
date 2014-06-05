@@ -26,12 +26,12 @@ GS.LoadingUI = function() {
 
 GS.LoadingUI.prototype = {
 	init: function() {
-		this.computeScreenInfo();
-
 		this.cvs = new GS.Canvas2d(true);
 		this.cvs.canvasId = "loading-canvas";
 		this.cvs.init();
 		this.cvs.screenCanvas.style.zIndex = 50;
+
+		this.onResize();
 	},
 
 	draw: function() {
@@ -75,9 +75,9 @@ GS.LoadingUI.prototype = {
 		this.hidden = true;
 	},
 
-	computeScreenInfo: function() {
-		this.screenInfo.width = GS.getViewportWidth();
-		this.screenInfo.height = GS.getViewportHeight();
+	onResize: function() {
+		this.screenInfo.width = this.cvs.bufferCanvas.width;
+		this.screenInfo.height = this.cvs.bufferCanvas.height;
 		this.screenInfo.center.set(Math.floor(this.screenInfo.width / 2), Math.floor(this.screenInfo.height / 2));
 
 		this.loadingBox.topLeft.copy(this.screenInfo.center);
@@ -99,10 +99,6 @@ GS.LoadingUI.prototype = {
 		this.loadingBox.contentCurrentBottomRight.y = this.loadingBox.contentBottomRight.y;
 
 		this.updateLoadingBoxContent();
-	},
-
-	onResize: function() {
-		this.computeScreenInfo();
 	},
 
 	set percentLoaded(value) {

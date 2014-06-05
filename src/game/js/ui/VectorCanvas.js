@@ -12,7 +12,7 @@ GS.VectorCanvas.prototype = {
 	},
 
 	onResize: function() {
-		this.ratio.set(GS.getViewportWidth(), GS.getViewportHeight());
+		this.ratio.set(this.cvs.bufferCanvas.width, this.cvs.bufferCanvas.height);
 	},
 
 	convertToScreenCoords: function(v0, v, fixedOffset) {

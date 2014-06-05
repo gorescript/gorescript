@@ -2,6 +2,9 @@ GS.Canvas2d = function(hideOnStart) {
 	this.canvasId = "canvas2d";
 	this.hideOnStart = (hideOnStart !== undefined) ? hideOnStart : false;
 
+	this.minWidth = 1280;
+	this.minHeight = 720;
+
 	this.alpha = 1;
 	this.redrawOnResize = true;
 };
@@ -13,8 +16,8 @@ GS.Canvas2d.prototype = {
 		var that = this;
 
 		var screenCanvas = document.createElement("canvas");
-		screenCanvas.width = GS.getViewportWidth();
-		screenCanvas.height = GS.getViewportHeight();
+		screenCanvas.width = window.innerWidth;
+		screenCanvas.height = window.innerHeight;
 		screenCanvas.style.backgroundColor = "rgba(0, 0, 0, " + this.alpha + ")";
 		screenCanvas.id = this.canvasId;
 		this.screenCanvas = screenCanvas;
@@ -31,8 +34,8 @@ GS.Canvas2d.prototype = {
 		this.screenCtx = screenCtx;
 
 		var bufferCanvas = document.createElement("canvas");
-		bufferCanvas.width = GS.getViewportWidth();
-		bufferCanvas.height = GS.getViewportHeight();
+		bufferCanvas.width = window.innerWidth;
+		bufferCanvas.height = window.innerHeight;
 		bufferCanvas.style.backgroundColor = "rgba(0, 0, 0, 1)";
 		this.bufferCanvas = bufferCanvas;
 
@@ -42,6 +45,7 @@ GS.Canvas2d.prototype = {
 		this.bufferCtx = bufferCtx;
 
 		$(window).on("resize." + this.canvasId, function() { that.onResize(); });
+		this.onResize();
 	},
 
 	show: function() {
@@ -274,10 +278,12 @@ GS.Canvas2d.prototype = {
 			canvas = this.clone();
 		}
 
-		this.screenCanvas.width = GS.getViewportWidth();
-		this.screenCanvas.height = GS.getViewportHeight();
-		this.bufferCanvas.width = GS.getViewportWidth();
-		this.bufferCanvas.height = GS.getViewportHeight();
+		this.screenCanvas.width = Math.max(window.innerWidth, this.minWidth);
+		this.screenCanvas.height = Math.max(window.innerHeight, this.minHeight);
+		this.bufferCanvas.width = Math.max(window.innerWidth, this.minWidth);
+		this.bufferCanvas.height = Math.max(window.innerHeight, this.minHeight);
+
+		$(this.screenCanvas).css("width", window.innerWidth + "px").css("height", window.innerHeight + "px");
 
 		if (this.redrawOnResize) {
 			this.screenCtx.drawImage(canvas, 0, 0);

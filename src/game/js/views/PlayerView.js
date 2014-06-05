@@ -37,7 +37,7 @@ GS.PlayerView = function() {
 	$.extend(true, this.weapons, GS.Weapons);
 
 	this.scene = new THREE.Scene();
-	this.camera = new THREE.PerspectiveCamera(75, GS.getViewportWidth() / GS.getViewportHeight(), 0.1, 100);
+	this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
 
 	this.screenOverlayColor = new THREE.Color(0x000000);
 	this.screenOverlayColorFadeSpeed = 0.02;
@@ -256,7 +256,7 @@ GS.PlayerView.prototype = {
 	},	
 
 	onResize: function() {
-		this.camera.aspect = GS.getViewportWidth() / GS.getViewportHeight();
+		this.camera.aspect = window.innerWidth / window.innerHeight;
 		this.camera.updateProjectionMatrix();
 	},
 

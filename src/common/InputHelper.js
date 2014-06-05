@@ -5,12 +5,14 @@ GS.InputHelper = {
 	rightMouseDown: false,
 	mouseX: 0,
 	mouseY: 0,
+	screenRatioX: 1,
+	screenRatioY: 1,
 	mouseWheelEvents: [],
 	ctrl: false,
 	shift: false,
 	alt: false,
 	pressedKeys: [],
-	keysPressed: false,	
+	keysPressed: false,		
 
 	init: function() {
 		var that = this;
@@ -53,8 +55,8 @@ GS.InputHelper = {
 				that.rightMouseDown = false;
 		});
 		$(document).mousemove(function(e){
-			that.mouseX = e.pageX;
-			that.mouseY = e.pageY;
+			that.mouseX = e.pageX * that.screenRatioX;
+			that.mouseY = e.pageY * that.screenRatioY;
 		});
 
 		document.addEventListener("mousewheel", function(e) {

@@ -33,10 +33,13 @@ GS.DebugUI = {
 	init: function() {
 		var that = this;
 
-		this.width = GS.getViewportWidth();
-		this.height = GS.getViewportHeight();
+		this.minWidth = 1280;
+		this.minHeight = 720;
 
-		window.addEventListener("resize", function() { that.onResize(); }, false);
+		this.width = window.innerWidth;
+		this.height = window.innerHeight;
+
+		window.addEventListener("resize", function() { that.onResize(); }, false);		
 
 		var canvas = document.createElement("canvas");
 		canvas.id = "debug-ui-canvas";
@@ -53,6 +56,8 @@ GS.DebugUI = {
 		this.updateFont();
 		
 		document.body.appendChild(this.canvas);
+
+		this.onResize();
 	},
 
 	update: function() {
@@ -207,11 +212,13 @@ GS.DebugUI = {
 	},
 
 	onResize: function() {
-		this.width = GS.getViewportWidth();
-		this.height = GS.getViewportHeight();
+		this.width = Math.max(window.innerWidth, this.minWidth);
+		this.height = Math.max(window.innerHeight, this.minHeight);
 
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;
+
+		$(this.canvas).css("width", window.innerWidth + "px").css("height", window.innerHeight + "px");
 
 		this.ctx.font = this.fontSize + "px 'Lucida Console', Monaco, monospace";
 		this.ctx.textBaseline = "top";

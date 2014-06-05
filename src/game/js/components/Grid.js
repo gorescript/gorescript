@@ -44,7 +44,7 @@ GS.Grid.prototype = {
 		this.skybox = {
 			mesh: skyboxMesh,
 			scene: new THREE.Scene(),
-			camera: new THREE.PerspectiveCamera(GS.Settings.fov, GS.getViewportWidth() / GS.getViewportHeight(), 1, 2000),
+			camera: new THREE.PerspectiveCamera(GS.Settings.fov, window.innerWidth / window.innerHeight, 1, 2000),
 		}
 		this.skybox.scene.add(skyboxMesh);
 	},
@@ -393,7 +393,7 @@ GS.Grid.prototype = {
 	},
 
 	onResize: function() {
-		this.skybox.camera.aspect = GS.getViewportWidth() / GS.getViewportHeight();
+		this.skybox.camera.aspect = window.innerWidth / window.innerHeight;
 		this.skybox.camera.updateProjectionMatrix();
 	},
 

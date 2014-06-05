@@ -118,6 +118,9 @@ GS.UIManager.prototype = {
 	onResize: function() {
 		this.overrideRedraw = true;
 		this.vectorCanvas.onResize();
+
+		GS.InputHelper.screenRatioX = this.cvs.bufferCanvas.width / window.innerWidth;
+		GS.InputHelper.screenRatioY = this.cvs.bufferCanvas.height / window.innerHeight;
 	},
 
 	dispose: function() {
