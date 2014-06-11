@@ -273,7 +273,7 @@
 				var mapLoader = new GS.MapLoader();
 				mapLoader.mapPath = "../game/assets/maps/";
 				mapLoader.load("collision", "collision.js", function(data) {
-					map = data;
+					map = mapLoader.parse(data);
 					init();
 					GS.Base.prototype.load.apply(that);
 				});	
