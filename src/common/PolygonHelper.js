@@ -406,6 +406,30 @@ GS.PolygonHelper = {
 			sector.collisionIndices = PolyK.Triangulate(vertices);
 		}
 	},
+
+	// http://stackoverflow.com/a/9939071/3640489
+	getSectorCentroid: function(sector) {
+		var twicearea = 0, x = 0, y = 0, nPts = sector.vertices.length, p1, p2, f;
+
+		function getPoint(n) {		
+			if (n === sector.vertices.length) {
+				n = 0;
+			}
+			return sector.vertices[n];
+		}
+
+		for (var i = 0, j = nPts - 1; i < nPts; j = i++) {
+			p1 = getPoint(i);
+			p2 = getPoint(j);
+			f = p1.x * p2.y - p2.x * p1.y;
+			twicearea += f;
+			x += (p1.x + p2.x) * f;
+			y += (p1.y + p2.y) * f;
+		}
+		f = twicearea * 3;
+
+		return new THREE.Vector2(x/f, y/f);
+	},
 };
 
 GS.Graph = function(equalsFunc) {

@@ -101,8 +101,8 @@
 				var s1 = getSectorById(sectorLinks[i]);
 				var s2 = getSectorById(sectorLinks[i + 1]);
 
-				sectorDict[s1.id] = { index: -1, sector: s1, center: getSectorCenter(s1) };
-				sectorDict[s2.id] = { index: -1, sector: s2, center: getSectorCenter(s2) };
+				sectorDict[s1.id] = { index: -1, sector: s1, center: GS.PolygonHelper.getSectorCentroid(s1) };
+				sectorDict[s2.id] = { index: -1, sector: s2, center: GS.PolygonHelper.getSectorCentroid(s2) };
 
 				sectorGraph.addEdge(s1, s2);
 			}
@@ -125,15 +125,6 @@
 			}
 
 			throw "sector " + id + " not found";
-		}
-
-		function getSectorCenter(sector) {
-			var center = new THREE.Vector2();
-			for (var i = 0; i < sector.vertices.length; i++) {
-				center.add(sector.vertices[i]);				
-			}
-			center.divideScalar(sector.vertices.length);
-			return center;
 		}
 
 		// --------------------------
