@@ -30,7 +30,6 @@ GS.Game = function() {
 		this.useAssetsZip = true;
 	}
 	
-	this.debugMode = true;
 	this.showFPS = GS.Settings.showFPS;
 };
 
@@ -162,9 +161,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.graphicsManager.monochromeEnabled = true;
 		this.uiManager.menuActive = true;
 
-		if (this.debugMode) {
-			GS.DebugUI.visible = false;
-		}
+		GS.DebugUI.visible = false;
 	},
 
 	closeMenu: function() {
@@ -178,10 +175,8 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 		this.graphicsManager.monochromeEnabled = false;
 		this.uiManager.menuActive = false;
-		
-		if (this.debugMode) {
-			GS.DebugUI.visible = true;
-		}
+
+		GS.DebugUI.visible = true;
 	},
 
 	restartLevel: function() {
@@ -221,9 +216,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		
 		this.grid.player.controls.addEventListener("pointerLockDisabled", function() { that.openMenu(); });
 
-		// if (this.debugMode) {
-		// 	console.log("collision triangles", viewFactory.triangleCount);
-		// }
+		// console.log("collision triangles", viewFactory.triangleCount);
 	},
 
 	update: function() {
