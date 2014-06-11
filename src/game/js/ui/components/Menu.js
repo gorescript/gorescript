@@ -27,7 +27,7 @@ GS.UIComponents.Menu = function(vectorCanvas, assets) {
 	this.activePanel = null;
 
 	this.backgroundColor = GS.UIColors.menuBackground;
-	this.drawOverlay = true;
+	this.ingame = false;
 
 	this.visible = true;
 };
@@ -43,6 +43,7 @@ GS.UIComponents.Menu.prototype = {
 		this.initGameplayPanel();
 		this.initControlsPanel();
 		this.initCreditsPanel();
+		this.initCheatsPanel();
 		this.initFooter();
 
 		this.activePanel = this.topPanel;
@@ -87,6 +88,10 @@ GS.UIComponents.Menu.prototype = {
 
 		this.btnControls = this.optionsPanel.addButton("controls");
 		this.btnControls.onClick = function() { that.activePanel = that.controlsPanel; }
+
+		this.btnCheats = this.optionsPanel.addButton("cheats");
+		this.btnCheats.disabled = true;
+		this.btnCheats.onClick = function() { that.activePanel = that.cheatsPanel; }
 
 		this.optionsPanel.addEmptyRow();
 
@@ -177,6 +182,47 @@ GS.UIComponents.Menu.prototype = {
 
 		this.btnGameplayBack = this.gameplayPanel.addButton("back");
 		this.btnGameplayBack.onClick = function() { that.activePanel = that.optionsPanel; };
+	},
+
+	initCheatsPanel: function() {
+		var that = this;
+
+		this.cheatsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
+
+		this.btnToggleGod = this.cheatsPanel.addToggleButton("god mode");
+		this.btnToggleGod.button.currentStateIndex = 1;
+		this.btnToggleGod.button.onClick = function(e) { 
+			GAME.grid.player.god(); 
+			GS.DebugUI.addTempLine("god mode " + e.state);
+		};
+
+		this.btnToggleFly = this.cheatsPanel.addToggleButton("fly mode");
+		this.btnToggleFly.button.currentStateIndex = 1;
+		this.btnToggleFly.button.onClick = function(e) { 
+			GAME.grid.player.fly();
+			GS.DebugUI.addTempLine("fly mode " + e.state);
+		};
+
+		this.btnToggleNoclip = this.cheatsPanel.addToggleButton("noclip mode");
+		this.btnToggleNoclip.button.currentStateIndex = 1;
+		this.btnToggleNoclip.button.onClick = function(e) { 
+			GAME.grid.player.noClip();
+			GS.DebugUI.addTempLine("noclip mode " + e.state);
+		};
+
+		this.cheatsPanel.addEmptyRow();
+
+		this.btnCheatsGiveAll = this.cheatsPanel.addButton("give ammo and all weapons");
+		this.btnCheatsGiveAll.onClick = function() { 
+			GAME.grid.player.giveAll();
+			GS.DebugUI.addTempLine("all weapons and max ammo given");
+		};
+
+		this.cheatsPanel.addEmptyRow();
+
+		this.btnCheatsBack = this.cheatsPanel.addButton("back");
+		this.btnCheatsBack.onClick = function() { that.activePanel = that.optionsPanel; };
 	},
 
 	initControlsPanel: function() {
@@ -307,6 +353,14 @@ GS.UIComponents.Menu.prototype = {
 		this.children.push(this.label2);
 	},
 
+	switchToIngame: function() {
+		this.ingame = true;
+		this.btnCheats.disabled = false;
+		this.btnToggleGod.button.currentStateIndex = 1;
+		this.btnToggleFly.button.currentStateIndex = 1;
+		this.btnToggleNoclip.button.currentStateIndex = 1;
+	},
+
 	update: function() {
 		this.activePanel.update();
 
@@ -316,7 +370,7 @@ GS.UIComponents.Menu.prototype = {
 	},
 
 	draw: function() {
-		if (this.drawOverlay) {
+		if (this.ingame) {
 			this.cvs.boxFill(this.background.offset, this.background.pos, this.background.size, false, this.backgroundColor);
 		}
 

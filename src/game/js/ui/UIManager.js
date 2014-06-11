@@ -55,7 +55,6 @@ GS.UIManager.prototype = {
 
 		if (this.menu === undefined) {
 			this.menu = new GS.UIComponents.Menu(this.vectorCanvas, this.assets);
-			this.menu.drawOverlay = false;
 			this.menu.init();
 		}
 
@@ -127,7 +126,7 @@ GS.UIManager.prototype = {
 
 	useIngameMenu: function() {
 		this.menuOnly = false;
-		this.menu.drawOverlay = true;
+		this.menu.switchToIngame();
 	},
 
 	onResize: function() {
