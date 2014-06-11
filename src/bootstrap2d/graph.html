@@ -33,21 +33,32 @@
 
 	<script>
 
+		var mapName = "airstrip1";
+
 		var cvs;
 		var map;
 		var sectorGraph;
 		var sectorDict;
+		var regions;
+		var currentRegion;
 
 		function init() {
 			cvs = new GS.Canvas2d();
 			cvs.init();
 			cvs.bufferCtx.translate(0, 300);
 
-			constructSectorGraph(map.sectorLinks);
+			constructSectorGraph(map.sectorLinks);			
+			regions = getRegions();
+
 			GS.DebugUI.setStaticLine("sectors", Object.keys(sectorDict).length);
+			GS.DebugUI.setStaticLine("regions", regions.length);
 		}
 
 		function update() {
+			var mx = GS.InputHelper.mouseX;
+			var my = GS.InputHelper.mouseY;
+
+			currentRegion = getCurrentRegion(new THREE.Vector2(mx, my));			
 		}
 
 		function draw() {
@@ -65,7 +76,7 @@
 				var sector = sectors[i];
 				if (!sector.door) {
 					var height = (sector.floorTopY / 16) * 0.5 + 0.25;
-					color.setRGB(height, height, height);
+					color.setRGB(height, 0, 0);
 				} else {
 					color.setRGB(1, 1, 0);
 				}
@@ -74,23 +85,57 @@
 
 			// var segs = map.layerObjects[GS.MapLayers.Segment];
 			// for (var i = 0; i < segs.length; i++) {
-			// 	cvs.line(segs[i].start.clone().add(drawOffset), segs[i].end.clone().add(drawOffset), "#800000");
+			// 	cvs.line(segs[i].start, segs[i].end, "#800000");
 			// }
 
-			for (var i in sectorDict) {
-				var info = sectorDict[i];
-				if (!info.sector.door) {
-					cvs.circleFill(info.center, 5, "blue");
+			var color = new THREE.Color();
+			var value = 0.25;
+			var step = 0.75 / regions.length;
+
+			for (var i = 0; i < regions.length; i++) {
+				var region = regions[i];
+				if (region === currentRegion) {
+					color.setRGB(0, 1, 0);
 				} else {
-					cvs.circleFill(info.center, 5, "red");
+					var isNeighbor = false;
+					if (currentRegion !== undefined && currentRegion !== null) {
+						for (var j = 0; j < currentRegion.linkedRegions.length; j++) {
+							if (region === currentRegion.linkedRegions[j].region) {
+								isNeighbor = true;
+								break;
+							}
+						}
+					}
+
+					if (isNeighbor) {
+						color.setRGB(0, 0.25, 0);
+					} else {
+						color.setRGB(value, value, value);						
+					}
 				}
 
-				var neighbors = sectorGraph.neighborSets[info.index].elements;
-				for (var j = 0; j < neighbors.length; j++) {
-					var info2 = sectorDict[neighbors[j].id];
-					cvs.line(info.center, info2.center, "blue", 1);
+				for (var j in region.sectorIds) {
+					var sector = sectorDict[j].sector;
+					cvs.polygonFill(sector.vertices, color.getStyle());
 				}
+
+				value += step;
 			}
+
+			// for (var i in sectorDict) {
+			// 	var info = sectorDict[i];
+			// 	if (!info.sector.door) {
+			// 		cvs.circleFill(info.center, 5, "blue");
+			// 	} else {
+			// 		cvs.circleFill(info.center, 5, "red");
+			// 	}
+
+			// 	var neighbors = sectorGraph.neighborSets[info.index].elements;
+			// 	for (var j = 0; j < neighbors.length; j++) {
+			// 		var info2 = sectorDict[neighbors[j].id];
+			// 		cvs.line(info.center, info2.center, "blue", 1);
+			// 	}
+			// }
 		}
 
 		function constructSectorGraph(sectorLinks) {
@@ -127,6 +172,117 @@
 			throw "sector " + id + " not found";
 		}
 
+		function getRegions() {
+			var toVisit = [];
+			var doorCount = 0;
+			var seeds = {};
+			for (var i in sectorDict) {
+				if (sectorDict[i].sector.door) {
+					var neighbors = sectorGraph.neighborSets[sectorDict[i].index].elements;
+					for (var j = 0; j < neighbors.length; j++) {
+						var id = neighbors[j].id;
+						toVisit.push({ id: id, seed: id });
+						seeds[id] = { doorIds: {}, sectorIds: {} };
+					}
+					doorCount++;
+				}
+			}
+
+			regions = [];
+			if (doorCount > 0) {
+				var visited = {};
+				while (toVisit.length > 0) {
+					var current = toVisit.pop();
+					var id = current.id;
+					var seedId = current.seed;
+
+					if (sectorDict[id].sector.door) {
+						seeds[seedId].doorIds[id] = true;
+					}
+					if (visited[id]) {
+						continue;
+					}					
+
+					visited[id] = true;
+					seeds[seedId].sectorIds[id] = true;
+
+					if (sectorDict[id].sector.door) {
+						continue;
+					}
+
+					var neighbors = sectorGraph.neighborSets[sectorDict[id].index].elements;
+					for (var i = 0; i < neighbors.length; i++) {
+						var info = sectorDict[neighbors[i].id];
+						var id = info.sector.id;
+						toVisit.push({ id: id, seed: seedId });
+					}
+				}
+
+				var totalCount = Object.keys(sectorDict).length;
+				var visitedCount = Object.keys(visited).length;
+				console.log("total sectors", totalCount);
+				console.log("visited", visitedCount);
+				console.log("doors", doorCount);
+				console.log("coverage " + (((visitedCount + doorCount) / totalCount) * 100).toFixed(2) + "%");
+
+				var seedCoverage = 0;
+				for (var i in seeds) {
+					var sectorIds = seeds[i].sectorIds;
+					seedCoverage += Object.keys(sectorIds).length;
+				}
+				console.log("seed coverage " + ((seedCoverage / visitedCount) * 100).toFixed(2) + "%");
+
+				for (var i in seeds) {
+					var sectorIds = seeds[i].sectorIds;
+					if (Object.keys(sectorIds).length > 0) {
+						regions.push({ doorIds: seeds[i].doorIds, sectorIds: sectorIds });
+					}
+				}
+
+				for (var i = 0; i < regions.length; i++) {
+					var region = regions[i];
+					region.linkedRegions = [];
+					for (var j in region.doorIds) {
+						for (var k = 0; k < regions.length; k++) {
+							if (k !== i) {	
+								var region2 = regions[k];
+								for (var e in region2.doorIds) {
+									if (e === j) {
+										region.linkedRegions.push({ doorId: e, region: region2 });
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+			} else {
+				var region = { doorIds: {}, sectorIds: {}, linkedRegions: [] };
+				for (var i in sectorDict) {
+					region.sectorIds[i] = true;
+				}
+				regions.push(region);
+			}
+
+			console.log(regions);
+			return regions;
+		}
+
+		function getCurrentRegion(pos2d) {
+			pos2d.y -= 300;
+
+			for (var i = 0; i < regions.length; i++) {
+				var region = regions[i];
+				for (var j in region.sectorIds) {
+					var sector = sectorDict[j].sector;
+					if (GS.PolygonHelper.sectorContainsPoint(sector, pos2d)) {
+						return region;
+					}
+				}
+			}
+			return null;
+		}
+
 		// --------------------------
 
 		var Game = function() {
@@ -149,7 +305,7 @@
 
 				var mapLoader = new GS.MapLoader();
 				mapLoader.mapPath = "../game/assets/maps/";
-				mapLoader.load("airstrip1", "airstrip1.js", function(data) {
+				mapLoader.load(mapName, mapName + ".js", function(data) {
 					map = mapLoader.parse(data);
 					init();
 					GS.Base.prototype.load.apply(that);
