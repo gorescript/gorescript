@@ -232,6 +232,7 @@ GS.PlayerView.prototype = {
 		var tween = new TWEEN.Tween(this.weapon.mesh.position).to(this.weapon.position, this.tweens.show.duration);
 		tween.easing(this.tweens.show.easing);
 		tween.onComplete(function() {
+			tween.onComplete(null);
 			that.weaponReady = true;
 			if (callback !== undefined) {
 				callback();
@@ -247,6 +248,7 @@ GS.PlayerView.prototype = {
 		var tween = new TWEEN.Tween(this.weapon.mesh.position).to(this.weapon.startPosition, this.tweens.hide.duration);
 		tween.easing(this.tweens.hide.easing);
 		tween.onComplete(function() {
+			tween.onComplete(null);
 			that.weapon.mesh.visible = false;
 			if (callback !== undefined) {
 				callback();
