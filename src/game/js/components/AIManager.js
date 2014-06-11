@@ -12,7 +12,8 @@ GS.AIManager.prototype = {
 
 		this.initZones();
 		this.constructSectorGraph(sectorLinks);
-		this.assignMonstersToSectors();
+		this.constructRegions();
+		this.assignMonstersToRegions();
 		this.initGridObjectLibrary();
 		this.initScripts();
 	},
@@ -33,8 +34,8 @@ GS.AIManager.prototype = {
 			var s1 = this.getSectorById(sectorLinks[i]);
 			var s2 = this.getSectorById(sectorLinks[i + 1]);
 
-			this.sectorDict[s1.id] = { index: -1, sector: s1 };
-			this.sectorDict[s2.id] = { index: -1, sector: s2 };
+			this.sectorDict[s1.id] = { index: -1, sector: s1, center: GS.PolygonHelper.getSectorCentroid(s1) };
+			this.sectorDict[s2.id] = { index: -1, sector: s2, center: GS.PolygonHelper.getSectorCentroid(s2) };
 
 			this.sectorGraph.addEdge(s1, s2);
 		}
@@ -48,14 +49,111 @@ GS.AIManager.prototype = {
 		this.sectorGraph.computeVertexNeighborSets();
 	},
 
-	assignMonstersToSectors: function() {
+	constructRegions: function() {
+		var toVisit = [];
+		var doorCount = 0;
+		var seeds = {};
+		for (var i in this.sectorDict) {
+			if (this.sectorDict[i].sector.door) {
+				var neighbors = this.sectorGraph.neighborSets[this.sectorDict[i].index].elements;
+				for (var j = 0; j < neighbors.length; j++) {
+					var id = neighbors[j].id;
+					toVisit.push({ id: id, seed: id });
+					seeds[id] = { doorIds: {}, sectorIds: {} };
+				}
+				doorCount++;
+			}
+		}
+
+		regions = [];
+		if (doorCount > 0) {
+			var visited = {};
+			while (toVisit.length > 0) {
+				var current = toVisit.pop();
+				var id = current.id;
+				var seedId = current.seed;
+
+				if (this.sectorDict[id].sector.door) {
+					seeds[seedId].doorIds[id] = true;
+				}
+				if (visited[id]) {
+					continue;
+				}					
+
+				visited[id] = true;
+				seeds[seedId].sectorIds[id] = true;
+
+				if (this.sectorDict[id].sector.door) {
+					continue;
+				}
+
+				var neighbors = this.sectorGraph.neighborSets[this.sectorDict[id].index].elements;
+				for (var i = 0; i < neighbors.length; i++) {
+					var info = this.sectorDict[neighbors[i].id];
+					var id = info.sector.id;
+					toVisit.push({ id: id, seed: seedId });
+				}
+			}
+
+			// var totalCount = Object.keys(this.sectorDict).length;
+			// var visitedCount = Object.keys(visited).length;
+			// console.log("total sectors", totalCount);
+			// console.log("visited", visitedCount);
+			// console.log("doors", doorCount);
+			// console.log("coverage " + ((visitedCount / totalCount) * 100).toFixed(2) + "%");
+
+			// var seedCoverage = 0;
+			// for (var i in seeds) {
+			// 	var sectorIds = seeds[i].sectorIds;
+			// 	seedCoverage += Object.keys(sectorIds).length;
+			// }
+			// console.log("seed coverage " + ((seedCoverage / visitedCount) * 100).toFixed(2) + "%");
+
+			for (var i in seeds) {
+				var sectorIds = seeds[i].sectorIds;
+				if (Object.keys(sectorIds).length > 0) {
+					regions.push({ doorIds: seeds[i].doorIds, sectorIds: sectorIds, inactiveMonsters: {} });
+				}
+			}
+
+			for (var i = 0; i < regions.length; i++) {
+				var region = regions[i];
+				region.linkedRegions = [];
+				for (var j in region.doorIds) {
+					for (var k = 0; k < regions.length; k++) {
+						if (k !== i) {	
+							var region2 = regions[k];
+							for (var e in region2.doorIds) {
+								if (e === j) {
+									region.linkedRegions.push({ doorId: e, region: region2 });
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		} else {
+			var region = { doorIds: {}, sectorIds: {}, linkedRegions: [], inactiveMonsters: {} };
+			for (var i in sectorDict) {
+				region.sectorIds[i] = true;
+			}
+			regions.push(region);
+		}
+
+		// console.log(regions);
+		this.regions = regions;
+	},
+
+	assignMonstersToRegions: function() {
+		var that = this;
 		this.grid.forEachUniqueGridObject([GS.Monster], function(monster) {
 			if (monster.startingSector !== undefined) {
-				var sector = monster.startingSector;
-				if (sector.inactiveMonsters === undefined) {
-					sector.inactiveMonsters = {};
+				var region = that.getRegionFromSector(monster.startingSector);
+				if (region === undefined) {
+					throw "sector not in region";
 				}
-				sector.inactiveMonsters[monster.id] = monster;
+				region.inactiveMonsters[monster.id] = monster;
 			} else {
 				throw "monster " + monster.id + " has no starting sector";
 			}
@@ -155,47 +253,30 @@ GS.AIManager.prototype = {
 	}(),
 
 	activateNearbyMonsters: function(player) {
-		if (Object.keys(this.sectorDict).length == 0) {
-			return;
-		}
-
 		var sector = player.getSector();
 		if (sector !== undefined) {
-			var visitedIds = {};
-			var toVisit = [sector];
-			var neighbors, index;
+			var region = this.getRegionFromSector(sector);
+			this.wakeUpMonsters(region);
 
-			while (toVisit.length > 0) {
-				var currentSector = toVisit.pop();
-				visitedIds[currentSector.id] = true;
+			for (var i = 0; i < region.linkedRegions.length; i++) {
+				var linked = region.linkedRegions[i];
+				var sector = this.sectorDict[linked.doorId].sector;
 
-				if (currentSector.inactiveMonsters !== undefined) {
-					this.wakeUpMonstersInSector(currentSector);
-				}
-
-				if (currentSector.door === true && currentSector.doorGridObject.state == GS.DoorStates.Closed) {
-					continue;
-				}
-
-				index = this.sectorDict[currentSector.id].index;
-				neighbors = this.sectorGraph.neighborSets[index].elements;
-				for (var i = 0; i < neighbors.length; i++) {
-					if (!(neighbors[i].id in visitedIds)) {
-						toVisit.push(neighbors[i]);
-					}
+				if (sector.doorGridObject.state !== GS.DoorStates.Closed) {
+					this.wakeUpMonsters(linked.region);
 				}
 			}
 		}
 	},
 
-	wakeUpMonstersInSector: function(sector) {
-		var keys = Object.keys(sector.inactiveMonsters);
+	wakeUpMonsters: function(region) {
+		var keys = Object.keys(region.inactiveMonsters);
 		if (keys.length > 0) {
 			for (var i = 0; i < keys.length; i++) {
 				var key = keys[i];
-				var monster = sector.inactiveMonsters[key];
+				var monster = region.inactiveMonsters[key];
 				monster.activate();
-				delete sector.inactiveMonsters[key];
+				delete region.inactiveMonsters[key];
 			}
 		}
 	},
@@ -209,5 +290,15 @@ GS.AIManager.prototype = {
 		}
 
 		throw "sector " + id + " not found";
+	},
+
+	getRegionFromSector: function(sector) {
+		for (var i = 0; i < this.regions.length; i++) {
+			var region = this.regions[i];
+			if (sector.id in region.sectorIds) {
+				return region;
+			}
+		}
+		return undefined;
 	},
 };
