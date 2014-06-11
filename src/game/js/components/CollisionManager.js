@@ -482,7 +482,7 @@ GS.CollisionManager.prototype = {
 					result.normal.copy(triangleResult.normal);
 					result.distance = dist;
 					result.gridObject = triangleResult.gridObject;	
-				};
+				}
 			}
 		}
 	}(),
@@ -513,7 +513,7 @@ GS.CollisionManager.prototype = {
 						result.pos.copy(collisionPoint);
 						result.distance = dist;
 						result.gridObject = gridObject;	
-					};
+					}
 				}
 			});
 		}

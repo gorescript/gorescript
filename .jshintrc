@@ -1,0 +1,15 @@
+{
+	"browser": true,
+	"devel": true,
+	"jquery": true,
+	"sub": true,	
+	"asi": true,
+	"shadow": true,
+	
+	"globals": { 
+		"THREE": true,
+		"self": true,
+		"cancelAnimationFrame": true,
+		"requestAnimationFrame": true
+	}
+}

@@ -223,7 +223,7 @@ GS.GraphicsManager.prototype = {
 	},
 
 	get fxaaEnabled() {
-		return this.effectFXAA.enabled = value;
+		return this.effectFXAA.enabled;
 	},
 
 	set vignetteEnabled(value) {
@@ -233,7 +233,7 @@ GS.GraphicsManager.prototype = {
 	},
 
 	get vignetteEnabled() {
-		return this.effectVignette.enabled = value;
+		return this.effectVignette.enabled;
 	},
 
 	set monochromeEnabled(value) {
@@ -243,7 +243,7 @@ GS.GraphicsManager.prototype = {
 	},
 
 	get monochromeEnabled() {
-		return this.effectMonochrome.enabled = value;
+		return this.effectMonochrome.enabled;
 	},
 
 	set noiseEnabled(value) {
@@ -253,7 +253,7 @@ GS.GraphicsManager.prototype = {
 	},
 
 	get noiseEnabled() {
-		return this.effectNoise.enabled = value;
+		return this.effectNoise.enabled;
 	},
 
 	set halfSizeEnabled(value) {		

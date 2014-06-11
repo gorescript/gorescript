@@ -256,7 +256,7 @@
 		return function(oldPos, newPos, line) {
 			var result = {
 				foundCollision: false,
-				pos: new THREE.Vector2,
+				pos: new THREE.Vector2(),
 				distance: 0,
 				normal: new THREE.Vector2(),
 			};
