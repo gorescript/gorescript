@@ -164,11 +164,4 @@ GS.LightingView.prototype = {
 			}
 		}
 	},
-
-	dispose: function() {
-		this.grid = undefined;
-		this.player = undefined;
-		this.playerScene = undefined;
-		this.worldScene = undefined;
-	},
 };

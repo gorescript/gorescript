@@ -210,14 +210,4 @@ GS.AIManager.prototype = {
 
 		throw "sector " + id + " not found";
 	},
-
-	dispose: function() {
-		this.script = undefined;
-		this.map = undefined;
-		this.grid = undefined;
-		this.gridObjectLibrary = undefined;
-		this.sectorDict = undefined;
-		this.sectorGraph = undefined;
-		this.zones = undefined;
-	},
 };

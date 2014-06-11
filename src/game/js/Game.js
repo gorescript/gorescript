@@ -1,11 +1,12 @@
 GS.GameVersion = "alpha - build 2";
 
 GS.GameStates = {
-	PreLoad: 0,
-	Loading: 1,
-	PostLoad: 2,
-	Play: 3,
-	Menu: 4,
+	Dispose: 0,
+	PreLoad: 1,
+	Loading: 2,
+	PostLoad: 3,
+	Play: 4,
+	Menu: 5,
 };
 
 GS.Game = function() {
@@ -55,7 +56,8 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.initAssetLoader();
 
 		this.keys = {
-			Escape: 27,
+			Enter: 13,
+			Escape: 27,			
 		};
 
 		GS.Base.prototype.init.call(this);
@@ -64,55 +66,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.graphicsManager.init();
 	},
 
-	registerConsoleCommands: function() {
-		var that = this;
-
-		if (this.firstTime && !GS.isIFrame) {
-			console.log([
-				"",
-				"gorescript - pre-alpha - http://timeinvariant.com",
-				"",
-				"the following commands are available:",
-				"",
-				"god - usage: 'god' - toggle god mode",
-				"fly - usage: 'fly' - toggle fly mode",
-				"noclip - usage: 'noclip' - toggle noclip mode",
-				"giveall - usage: 'giveall' - give all weapons and max ammo",
-				"debug - usage: 'debug' - toggle top right corner messages",
-				"",
-			].join("\n"));
-		}
-
-		window.newGame = function() {
-			if (that.uiManager.menuActive) {
-				that.closeMenu();
-			}
-
-			that.mapName = "airstrip1"; 
-			that.nextState = GS.GameStates.PreLoad; 
-		};
-
-		window.load = function(mapName) { 
-			if (that.uiManager.menuActive) {
-				that.closeMenu();
-			}
-
-			that.mapName = mapName; 
-			that.nextState = GS.GameStates.PreLoad; 
-		};
-
-		window.__defineGetter__("debug", function() {
-			that.debugMode = !that.debugMode; 
-			GS.DebugUI.visible = that.debugMode; 
-			return that.debugMode; 
-		});
-	},
-
 	preLoad: function() {
-		var that = this;
-
-		this.dispose();
-		this.registerConsoleCommands();
 		this.uiManager.reset();
 		
 		this.loadingUI.percentLoaded = 0;
@@ -173,6 +127,10 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.openMenu();
 		}
 
+		if (this.grid.player.dead && !GS.InputHelper.keysPressed && GS.InputHelper.isKeyDown(this.keys.Enter)) {
+			this.restartLevel();
+		}
+
 		this.grid.update();
 		this.uiManager.update();
 
@@ -226,6 +184,28 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		}
 	},
 
+	restartLevel: function() {
+		this.nextState = GS.GameStates.Dispose;
+	},
+
+	loadLevel: function(name) { 
+		if (this.uiManager.menuActive) {
+			this.closeMenu();
+		}
+
+		this.mapName = mapName; 
+		this.nextState = GS.GameStates.Dispose; 
+	},
+
+	newGame: function() {
+		if (this.uiManager.menuActive) {
+			this.closeMenu();
+		}
+
+		this.mapName = "airstrip1"; 
+		this.nextState = GS.GameStates.Dispose; 
+	},
+
 	initComponents: function(assets) {
 		var that = this;
 		var map = this.assetLoader.mapLoader.parse(assets[GS.AssetTypes.Map][this.mapName]);
@@ -247,6 +227,12 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	},
 
 	update: function() {
+		if (this.state == GS.GameStates.Dispose) {
+			if (!this.updated) {
+				this.updated = true;
+				this.dispose();
+			}
+		} else
 		if (this.state == GS.GameStates.PreLoad) {
 			if (!this.updated) {
 				this.updated = true;
@@ -330,22 +316,26 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		}
 	},
 
+	disposeEnd: function() {
+		TWEEN.removeAll();
+		this.grid = undefined;
+		this.graphicsManager.reset();
+		this.scene = undefined;
+		this.uiManager.dispose();
+
+		this.nextState = GS.GameStates.PreLoad;
+	},
+
 	dispose: function() {
-		delete window.load;
-		delete window.debug;
-		delete window.newGame;
+		var that = this;
 
 		if (this.grid !== undefined) {
-			this.grid.dispose();
+			this.grid.player.controls.dispose(function() {
+				that.disposeEnd();
+			});
+		} else {
+			this.disposeEnd();
 		}
-		this.grid = undefined;
-
-		TWEEN.removeAll();
-
-		this.graphicsManager.reset();
-
-		this.scene = undefined;
-		this.state = 4;
 	},
 });
 

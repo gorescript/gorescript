@@ -522,38 +522,4 @@ GS.Grid.prototype = {
 		var content = zip.generate();
 		location.href = "data:application/zip;base64," + content;
 	},
-
-	dispose: function() {
-		var that = this;
-
-		this.player.dispose();
-		this.player = undefined;
-
-		for (var i = 0; i < this.height; i++) {
-			for (var j = 0; j < this.width; j++) {
-				var cell = this.cells[i][j];
-
-				for (var k = 0; k < cell.children.length; k++) {
-					cell.children[k] = undefined;
-				}
-
-				this.cells[i][j] = undefined;
-			}
-		}
-		this.cells = undefined;
-
-		this.scene = undefined;
-		this.entityMeshes = undefined;
-		this.map = undefined;
-
-		this.aiManager.dispose();
-		this.aiManager = undefined;
-		this.collisionManager.dispose();
-		this.collisionManager = undefined;
-		this.lightingView.dispose();
-		this.lightingView = undefined;
-		this.particleView.dispose();
-		this.particleView = undefined;
-		this.soundManager = undefined;
-	},
 };

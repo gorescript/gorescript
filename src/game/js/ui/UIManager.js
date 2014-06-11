@@ -139,6 +139,10 @@ GS.UIManager.prototype = {
 	},
 
 	dispose: function() {
-		this.cvs.dispose();
+		this.grid = undefined;
+		this.powerBars = undefined;
+		this.crosshair = undefined;
+		this.notifications = undefined;
+		this.components = [];
 	},
 };

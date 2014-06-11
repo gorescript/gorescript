@@ -82,17 +82,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 		this.weaponName = "pistol";
 		this.playerView.changeToWeapon("pistol");
 
-		this.addCheatFunctions();
-
 		// window.giveall;
-	},
-
-	addCheatFunctions: function() {
-		var that = this;
-		window.__defineGetter__("giveall", function() { that.giveAll(); });
-		window.__defineGetter__("fly", function(value) { that.fly(value); return that.flyEnabled; });
-		window.__defineGetter__("noclip", function(value) { that.noClip(value); return that.noClipEnabled; });
-		window.__defineGetter__("god", function(value) { that.god(value); return that.godEnabled; });
 	},
 
 	giveAll: function() {
@@ -181,7 +171,6 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 	onDeath: function() {
 		this.dead = true;
 		this.grid.soundManager.playSound("player_death");
-		GS.DebugUI.addTempLine("ESC to open menu and restart");
 
 		if (this.weapon !== undefined) {
 			this.playerView.onDeath();
@@ -425,20 +414,5 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 		}
 
 		this.updateBoundingBox();
-	},
-
-	dispose: function() {
-		delete window.giveall;
-		delete window.fly;
-		delete window.noclip;
-		delete window.god;
-
-		this.linkedGridCells = undefined;
-		this.controls.dispose();
-		this.controls = undefined;
-		this.playerView.dispose();
-		this.playerView = undefined;
-
-		this.grid = undefined;
 	},
 });

@@ -299,15 +299,6 @@ GS.PlayerView.prototype = {
 			this.dispatchEvent({ type: "screenOverlayColorChange", color: this.screenOverlayColor });
 		}
 	},
-
-	dispose: function() {
-		this.tweens = undefined;
-		this.lightingView = undefined;
-		this.player = undefined;
-		this.scene = undefined;
-
-		this._listeners = undefined;
-	},
 };
 
 THREE.EventDispatcher.prototype.apply(GS.PlayerView.prototype);

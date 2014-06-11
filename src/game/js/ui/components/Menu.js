@@ -55,7 +55,7 @@ GS.UIComponents.Menu.prototype = {
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 60, 65);
 
 		this.btnNewGame = this.topPanel.addButton("new game");
-		this.btnNewGame.onClick = function() { window.newGame(); };
+		this.btnNewGame.onClick = function() { GAME.newGame(); };
 
 		this.btnSaveGame = this.topPanel.addButton("save game");
 		this.btnSaveGame.disabled = true;

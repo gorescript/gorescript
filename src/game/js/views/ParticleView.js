@@ -115,7 +115,6 @@ GS.ParticleView.prototype = {
 			position: new THREE.Vector3(),
 			linkedGridCells: null,
 		};
-
 		var position2d = new THREE.Vector2();
 
 		return function(particle) {
@@ -131,6 +130,9 @@ GS.ParticleView.prototype = {
 				if (sector !== undefined) {
 					particle.floorImpactY = sector.floorTopY;
 				}
+
+				fauxGridObject.grid = null;
+				fauxGridObject.linkedGridCells = null;
 			}
 		}
 	}(),
@@ -198,12 +200,5 @@ GS.ParticleView.prototype = {
 			this.materials[id] = new THREE.MeshBasicMaterial({ color: color });
 		}
 		return this.materials[id];
-	},
-
-	dispose: function() {
-		this.grid = undefined;
-		this.particles = undefined;
-		this.scene = undefined;
-		this.root = undefined;
 	},
 };

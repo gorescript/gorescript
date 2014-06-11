@@ -19,11 +19,6 @@ GS.FPSControls = function(camera) {
 	this.viewOffsetY = 0;
 	this.eyeOffsetY = 3.5;
 
-	var that = this;
-	this.onMouseMoveFunc = function(e) {
-		that.onMouseMove(e);
-	};
-
 	this.keys = { 
 		StrafeLeft: 65, // A 
 		MoveForward: 87, // W
@@ -98,7 +93,6 @@ GS.FPSControls.prototype = {
 	},
 
 	enable: function() {
-		var that = this;		
 		if (!this.pointerLockEnabled) {
 			this.canvas.requestPointerLock = this.canvas.requestPointerLock || 
 				this.canvas.mozRequestPointerLock || this.canvas.webkitRequestPointerLock;
@@ -108,10 +102,46 @@ GS.FPSControls.prototype = {
 
 	disable: function() {
 		if (this.pointerLockEnabled) {
-			this.canvas.exitPointerLock = this.canvas.exitPointerLock || 
-				this.canvas.mozExitPointerLock || this.canvas.webkitExitPointerLock;
-			this.canvas.exitPointerLock();
+			document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock || document.webkitExitPointerLock;
+			document.exitPointerLock();			
 		}
+	},
+
+	onPointerLockChange: function(e) {
+		var that = this;
+
+		var isCanvas = document.pointerLockElement === this.canvas || document.mozPointerLockElement === this.canvas ||
+			document.webkitPointerLockElement === this.canvas;
+
+		if (isCanvas) {
+			this.pointerLockEnabled = true;
+			$(document).on("mousemove.fpsControls", function(e) { that.onMouseMove(e.originalEvent); });
+			this.dispatchEvent({ type: "pointerLockEnabled" });
+		} else {
+			this.pointerLockEnabled = false;
+			$(document).off("mousemove.fpsControls");
+
+			if (this.disposeCallback !== undefined) {
+				this.detachEvents();
+				this.disposeCallback();
+			} else {
+				this.dispatchEvent({ type: "pointerLockDisabled" });
+			}
+		}
+	},
+
+	onPointerLockError: function() {
+	},
+
+	onMouseMove: function(e) {
+		if (!this.enabled) {
+			return
+		}
+
+		var mx = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
+		var my = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
+
+		this.setViewAngles(this.xAngle + mx * this.lookSpeed, this.yAngle + my * this.lookSpeed);
 	},
 
 	setViewOffsetY: function(y) {
@@ -188,34 +218,6 @@ GS.FPSControls.prototype = {
 		this.look.addVectors(this.camera.position, this.forwardLookVector);
 		this.camera.lookAt(this.look);
 	},
-
-	onPointerLockChange: function(e) {
-		if (document.pointerLockElement === this.canvas ||
-			document.mozPointerLockElement === this.canvas ||
-			document.webkitPointerLockElement === this.canvas) {
-			this.pointerLockEnabled = true;
-			document.addEventListener("mousemove", this.onMouseMoveFunc, false);
-			this.dispatchEvent({ type: "pointerLockEnabled" });
-		} else {
-			this.pointerLockEnabled = false;
-			document.removeEventListener("mousemove", this.onMouseMoveFunc, false);
-			this.dispatchEvent({ type: "pointerLockDisabled" });
-		}
-	},
-
-	onPointerLockError: function() {
-	},
-
-	onMouseMove: function(e) {
-		if (!this.enabled) {
-			return
-		}
-
-		var mx = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
-		var my = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
-
-		this.setViewAngles(this.xAngle + mx * this.lookSpeed, this.yAngle + my * this.lookSpeed);
-	},
 	
 	setViewAngles: function() {
 		var right = new THREE.Vector3();
@@ -250,10 +252,18 @@ GS.FPSControls.prototype = {
 		}
 	}(),
 
-	dispose: function() {
-		this.onHandleCollisions = undefined;
+	dispose: function(callback) {
+		if (this.pointerLockEnabled) {
+			this.disposeCallback = callback;
+		}
 
-		this.detachEvents();
+		this.onHandleCollisions = undefined;
+		this.disable();
+
+		if (!this.pointerLockEnabled) {
+			this.detachEvents();
+			callback();
+		}
 	},
 };
 

@@ -557,8 +557,4 @@ GS.CollisionManager.prototype = {
 			}
 		});
 	},
-
-	dispose: function() {
-		this.grid = undefined;
-	},
 };

@@ -6,8 +6,9 @@ GS.UIComponents.Notifications = function(vectorCanvas, assets, player) {
 	this.fontSize = 40;
 	this.boxCornerRadius = 10;
 
-	this.useText = "[E] use";
+	this.useText = "[E] to use";
 	this.pointerLockText = "right-click to enable pointer lock";
+	this.restartText = "[ENTER] to restart level";
 
 	this.usePopup = {
 		offset: new THREE.Vector2(0, 100),
@@ -23,6 +24,13 @@ GS.UIComponents.Notifications = function(vectorCanvas, assets, player) {
 		textOffset: new THREE.Vector2(0, 0),
 	};
 
+	this.restartPopup = {
+		offset: new THREE.Vector2(0, 100),
+		pos: new THREE.Vector2(0.5, 0.5),
+		size: new THREE.Vector2(0, 60),
+		textOffset: new THREE.Vector2(0, 0),
+	};
+
 	this.calculateSizes();
 
 	this.visible = true;
@@ -32,6 +40,9 @@ GS.UIComponents.Notifications = function(vectorCanvas, assets, player) {
 
 	this.oldShowPointerLockPopup = false;
 	this.showPointerLockPopup = false;
+
+	this.oldShowRestartPopup = false;
+	this.showRestartPopup = false;
 };
 
 GS.UIComponents.Notifications.prototype = {
@@ -47,14 +58,23 @@ GS.UIComponents.Notifications.prototype = {
 			this.oldShowUsePopup = this.showUsePopup;
 		}
 
-		this.showPointerLockPopup = (!this.player.inMenu && !this.player.controls.pointerLockEnabled);
+		this.showPointerLockPopup = !this.player.controls.pointerLockEnabled;
 		if (this.showPointerLockPopup != this.oldShowPointerLockPopup) {
 			this.needsRedraw = true;
 			this.oldShowPointerLockPopup = this.showPointerLockPopup;
 		}
+
+		this.showRestartPopup = this.player.dead;
+		if (this.showRestartPopup != this.oldShowRestartPopup) {
+			this.needsRedraw = true;
+			this.oldShowRestartPopup = this.showRestartPopup;
+		}
 	},
 
 	draw: function() {
+		if (this.showRestartPopup) {
+			this.drawPopup(this.restartText, this.restartPopup);
+		} else
 		if (this.showPointerLockPopup) {
 			this.drawPopup(this.pointerLockText, this.pointerLockPopup);
 		} else
@@ -70,9 +90,10 @@ GS.UIComponents.Notifications.prototype = {
 			GS.UIColors.foreground, this.fontSize, "middle", "center", GS.UIFont);
 	},
 
-	calculateSizes: function() {
+	calculateSizes: function() {		
 		this.calculatePopupSize(this.useText, this.usePopup);
 		this.calculatePopupSize(this.pointerLockText, this.pointerLockPopup);
+		this.calculatePopupSize(this.restartText, this.restartPopup);
 	},
 
 	calculatePopupSize: function(text, popup, textWidth) {
