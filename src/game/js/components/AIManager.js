@@ -65,7 +65,7 @@ GS.AIManager.prototype = {
 			}
 		}
 
-		regions = [];
+		var regions = [];
 		if (doorCount > 0) {
 			var visited = {};
 			while (toVisit.length > 0) {
