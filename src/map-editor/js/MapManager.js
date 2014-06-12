@@ -581,12 +581,13 @@ GS.MapManager.prototype = {
 			var ntt = entities[i];
 
 			var selectedValue = (selected !== undefined) ? selected[ntt.id] : undefined;
-			this.drawEntity(ntt.pos, ntt.type, GS.MapEntities[ntt.type].name, selectedValue);
+			this.drawEntity(ntt, selectedValue);
 		}
 		ctx.restore();
 	},
 
-	drawEntity: function(pos, type, name, selected) {
+	drawEntity: function(ntt, selected) {
+		var name = GS.MapEntities[ntt.type].name;		
 		var backColor = (selected !== undefined) ? "#0000ff": "#ff0000";
 		var textColor = "#ffffff";
 		this.ctx.save();
@@ -594,12 +595,28 @@ GS.MapManager.prototype = {
 		var entityOffset = 4 * this.zoom.value;
 
 		var size = this.entitySize * this.zoom.value;
-		var start = this.convertToScreenCoords(pos.clone());
+		var start = this.convertToScreenCoords(ntt.pos.clone());
 		var end = start.clone().add(new THREE.Vector2(size, size));
-		var center = start.clone().add(new THREE.Vector2(size / 2, size / 2));
+		var center = start.clone().add(new THREE.Vector2(size / 2, size / 2));		
 		var maxWidth = Math.floor((end.x - start.x) * 0.75);
 
+		if (GS.MapEntities[ntt.type].type === "Monster") {
+			var normalEnd = new THREE.Vector2(
+				size * Math.sin(Math.PI / 180 * (180 - ntt.rotation)), 
+				size * Math.cos(Math.PI / 180 * (180 - ntt.rotation))
+			).add(center);
+
+			this.ctx.strokeStyle = "#000";
+			this.ctx.lineWidth = 3;
+			this.ctx.beginPath();
+			this.ctx.moveTo(center.x, center.y);
+			this.ctx.lineTo(normalEnd.x, normalEnd.y);
+			this.ctx.closePath();
+			this.ctx.stroke();
+		}
+
 		this.ctx.fillStyle = backColor;
+		this.ctx.lineWidth = 1;
 		this.ctx.beginPath();
 		this.ctx.moveTo(start.x, start.y);
 		this.ctx.lineTo(end.x, start.y);
@@ -618,7 +635,7 @@ GS.MapManager.prototype = {
 		this.ctx.textAlign = "center";
 		this.ctx.textBaseline = "middle";
 
-		var charWidth = this.ctx.measureText(type).width;
+		var charWidth = this.ctx.measureText(ntt.type).width;
 		var numChars = Math.max(1, Math.floor(maxWidth / charWidth));
 		name = name.substr(0, numChars);
 		this.ctx.fillText(name, center.x, center.y);
@@ -860,6 +877,7 @@ GS.MapManager.prototype = {
 			var ntt = entities[i];
 			ntt.y = ntt.y || 0;
 			ntt.isStatic = (ntt.isStatic !== undefined) ? ntt.isStatic : false;
+			ntt.rotation = ntt.rotation || 0;
 		}
 	},
 

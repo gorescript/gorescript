@@ -1,10 +1,17 @@
+GS.MonsterStates = {
+	Scripted: 0,
+	Inactive: 1,
+	Awake: 2,
+	Active: 3,
+};
+
 GS.Monster = function(grid, layer, sourceObj) {
 	GS.GridObject.apply(this, arguments);
 
 	this.monsterType = GS.MapEntities[sourceObj.type].name;
 	$.extend(true, this, GS.Monsters[this.monsterType]);
 
-	this.xAngle = 0;
+	this.xAngle = THREE.Math.degToRad(360 - sourceObj.rotation);
 	this.direction = new THREE.Vector3();
 
 	this.view = {
@@ -19,8 +26,7 @@ GS.Monster = function(grid, layer, sourceObj) {
 	this.dead = false;
 	this.health = this.maxHealth;
 	this.scatterCooldown = 0;
-	this.activateByScript = false;
-	this.activated = false;
+	this.state = GS.MonsterStates.Inactive;
 	this.moving = true;
 	this.inPain = false;
 
@@ -46,9 +52,14 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 	update: function() {
 		this.animationView.update();
 
-		if (this.activated && !this.dead) {
-			this.updateMove();
-			this.updateAttack();
+		if (!this.dead) {
+			if (this.state === GS.MonsterStates.Awake) {
+				this.updateScan();
+			} else
+			if (this.state === GS.MonsterStates.Active) {
+				this.updateMove();
+				this.updateAttack();
+			}
 		}
 
 		this.updateLightLevel();
@@ -62,6 +73,19 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 		this.view.mesh.position.copy(this.position);
 		this.view.mesh.position.y += this.animationView.positionYOffset;
 		this.view.mesh.rotation.y = this.xAngle + this.rotationOffset + this.animationView.rotationYOffset;
+	},
+
+	updateScan: function() {
+		var target = this.grid.player;
+
+		if (this.inMeleeRange(target.position)) {
+			this.activate();
+			return;
+		}
+
+		if (this.isFacing(target.position)) {
+			this.activate();
+		}
 	},
 
 	updateMove: function() {
@@ -118,8 +142,7 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 				this.meleeAttackCooldown--;
 			} else {
 				if (!target.dead && !this.inPain) {
-					var distanceToTarget = this.position.distanceTo(target.position);
-					if (distanceToTarget < this.meleeRange && this.isFacing(target.position) &&
+					if (this.inMeleeRange(target.position) && this.isFacing(target.position) &&
 						this.grid.collisionManager.checkMonsterLineOfSight(this, target, this.meleeRange)) {
 
 						this.grid.soundManager.playSound("monster_bite");
@@ -130,6 +153,10 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 				}
 			}
 		}
+	},
+
+	inMeleeRange: function(pos) {
+		return this.position.distanceTo(pos) < this.meleeRange;
 	},
 
 	isFacing: function() {
@@ -190,19 +217,36 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 		}
 	}(),
 
-	activate: function(script) {
-		if (script !== true && this.activateByScript) {
+	wakeUp: function(script) {
+		if (this.state === GS.MonsterStates.Awake) {
 			return;
 		}
 
-		this.activated = true;
+		if (script !== true && this.state === GS.MonsterStates.Scripted) {
+			return;
+		}
+
+		this.state = GS.MonsterStates.Awake;
+		this.animationView.setLoop("inactive");
+	},
+
+	activate: function(script) {
+		if (this.state === GS.MonsterStates.Active) {
+			return;
+		}
+
+		if (script !== true && this.state === GS.MonsterStates.Scripted) {
+			return;
+		}
+
+		this.state = GS.MonsterStates.Active;
 		this.animationView.setLoop("walk");
 		this.grid.soundManager.playSound("monster_roar");
 	},
 
 	onHit: function(damage) {
-		if (!this.activated) {
-			this.activate();
+		if (this.state !== GS.MonsterStates.Active) {
+			this.activate(true);
 		}
 
 		if (Math.random() <= this.painChance) {

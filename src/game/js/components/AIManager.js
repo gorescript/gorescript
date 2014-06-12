@@ -112,7 +112,7 @@ GS.AIManager.prototype = {
 			for (var i in seeds) {
 				var sectorIds = seeds[i].sectorIds;
 				if (Object.keys(sectorIds).length > 0) {
-					regions.push({ doorIds: seeds[i].doorIds, sectorIds: sectorIds, inactiveMonsters: {} });
+					regions.push({ doorIds: seeds[i].doorIds, sectorIds: sectorIds, monsters: [] });
 				}
 			}
 
@@ -134,7 +134,7 @@ GS.AIManager.prototype = {
 				}
 			}
 		} else {
-			var region = { doorIds: {}, sectorIds: {}, linkedRegions: [], inactiveMonsters: {} };
+			var region = { doorIds: {}, sectorIds: {}, linkedRegions: [], monsters: [] };
 			for (var i in sectorDict) {
 				region.sectorIds[i] = true;
 			}
@@ -153,7 +153,7 @@ GS.AIManager.prototype = {
 				if (region === undefined) {
 					throw "sector not in region";
 				}
-				region.inactiveMonsters[monster.id] = monster;
+				region.monsters.push(monster);
 			} else {
 				throw "monster " + monster.id + " has no starting sector";
 			}
@@ -214,6 +214,10 @@ GS.AIManager.prototype = {
 			this.checkZones(player, oldPos, newPos);
 		}
 
+		this.wakeUpNearbyMonsters(player);
+	},
+
+	onPlayerShoot: function(player) {
 		this.activateNearbyMonsters(player);
 	},
 
@@ -252,33 +256,53 @@ GS.AIManager.prototype = {
 		}
 	}(),
 
+	wakeUpNearbyMonsters: function(player) {
+		var that = this;
+		this.propagateRegions(player, function(region) { that.wakeUpMonsters(region); });
+	},
+
 	activateNearbyMonsters: function(player) {
+		var that = this;
+		this.propagateRegions(player, function(region) { that.activateMonsters(region); });
+	},
+
+	propagateRegions: function(player, callback) {
 		var sector = player.getSector();
 		if (sector !== undefined) {
 			var region = this.getRegionFromSector(sector);
-			this.wakeUpMonsters(region);
+			callback(region);
 
 			for (var i = 0; i < region.linkedRegions.length; i++) {
 				var linked = region.linkedRegions[i];
 				var sector = this.sectorDict[linked.doorId].sector;
 
 				if (sector.doorGridObject.state !== GS.DoorStates.Closed) {
-					this.wakeUpMonsters(linked.region);
+					callback(linked.region);
 				}
 			}
 		}
 	},
 
 	wakeUpMonsters: function(region) {
-		var keys = Object.keys(region.inactiveMonsters);
-		if (keys.length > 0) {
-			for (var i = 0; i < keys.length; i++) {
-				var key = keys[i];
-				var monster = region.inactiveMonsters[key];
-				monster.activate();
-				delete region.inactiveMonsters[key];
-			}
+		if (region.awake) {
+			return;
 		}
+
+		for (var i = 0; i < region.monsters.length; i++) {
+			region.monsters[i].wakeUp();
+		}
+		region.awake = true;
+	},
+
+	activateMonsters: function(region) {
+		if (region.active) {
+			return;
+		}
+
+		for (var i = 0; i < region.monsters.length; i++) {
+			region.monsters[i].activate();
+		}
+		region.active = true;
 	},
 
 	getSectorById: function(id) {

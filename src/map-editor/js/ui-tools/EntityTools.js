@@ -59,13 +59,13 @@ GS.EntityTools.prototype = GS.inherit(GS.LayerObjectTools, {
 		var v = new THREE.Vector2(mx, my);
 		this.mapManager.convertToGridCellCoords(v);
 
-		this.mapManager.drawEntity(v, this.entity, GS.MapEntities[this.entity].name);
+		this.mapManager.drawEntity({ pos: v, type: this.entity });
 
 		if (GS.InputHelper.leftMouseDown && !this.mousePressed) {
 			if (this.inCanvas(mx, my)) {
 				var containsEntity = this.mapManager.isEntityAt(v);
 				if (!containsEntity) {
-					var ntt = this.mapManager.constructLayerObject(this.layer, { pos: v, type: this.entity });
+					var ntt = this.mapManager.constructLayerObject(this.layer, { pos: v, type: this.entity, rotation: 0 });
 					this.mapManager.addLayerObject(this.layer, ntt);
 					this.actionLog.push(this.getAddAction(ntt.id));
 				}
@@ -91,19 +91,25 @@ GS.EntityTools.prototype = GS.inherit(GS.LayerObjectTools, {
 
 			var $txtId = $("#ntt-selected-id");
 			var $txtY = $("#ntt-selected-y");
+			var $txtRotation = $("#ntt-selected-rotation");
 			var $chkStatic = $("#chk-ntt-selected-static");
 
 			if (count == 1) {
 				ntt = selected[0];
 
 				var isStatic = (ntt.isStatic !== undefined) ? ntt.isStatic : false;
+				var showRotation = (GS.MapEntities[ntt.type].type === "Monster");
 
 				$txtId.text(ntt.id);
 				$txtY.val(ntt.y || 0);
+				$txtRotation.val(ntt.rotation || 0);
+				$txtRotation.prop("disabled", !showRotation);
 				$chkStatic.prop("checked", isStatic);
 			} else {
 				$txtId.text("multiple");
 				$txtY.val("");
+				$txtRotation.val("");
+				$txtRotation.prop("disabled", false);
 				$chkStatic.prop("checked", false);
 			}
 
@@ -113,6 +119,19 @@ GS.EntityTools.prototype = GS.inherit(GS.LayerObjectTools, {
 				for (var i = 0; i < selected.length; i++) {
 					selected[i].y = isNaN(n) ? 0 : n; 
 				}
+			});
+
+			$txtRotation.off("change.detail");
+			$txtRotation.on("change.detail", function() { 
+				var n = parseInt($(this).val());
+				if (isNaN(n)) {
+					n = 0;
+				}
+				n = n % 360;
+				for (var i = 0; i < selected.length; i++) {
+					selected[i].rotation = n;
+				}
+				$txtRotation.val(n);
 			});
 
 			$chkStatic.off("change.detail");

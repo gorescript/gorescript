@@ -328,6 +328,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 	},
 
 	shootStart: function() {
+		this.grid.aiManager.onPlayerShoot(this);
 	},
 
 	shootEnd: function() {
