@@ -1,7 +1,7 @@
 gorescript
 ==========
 
-The goal of this project is to build **a Doom-like game complete with its own asset creation toolchain**.
+The goal of this project is to build **a Doom-like game from scratch**, complete with its **own asset creation toolchain**.
 
 Besides the game itself, it features:
 
