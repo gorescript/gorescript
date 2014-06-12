@@ -1,5 +1,8 @@
 GS.MapScript = function(gridObjectLibrary) {
 	this.lib = gridObjectLibrary;
+	
+	this.secretsFound = 0;
+	this.maxSecrets = 0;
 };
 
 GS.MapScript.prototype = {
@@ -20,7 +23,15 @@ GS.MapScript.prototype = {
 	onItemPickup: function(item) {
 	},
 
+	onPlayerOpenDoor: function(door) {
+	},
+
 	onSwitchStateChange: function(switchObj) {
+	},
+
+	foundSecret: function() {
+		this.secretsFound++;
+		GS.DebugUI.addTempLine("secret found");
 	},
 
 	getGridObjectsById: function(type, idArray) {

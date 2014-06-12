@@ -111,6 +111,7 @@ GS.Door.prototype = GS.inherit(GS.GridObject, {
 		if (this.state == GS.DoorStates.Closed) {
 			this.state = GS.DoorStates.Opening;
 			this.grid.soundManager.playSound("door_open");
+			this.grid.aiManager.onPlayerOpenDoor(this);
 		}
 	},
 

@@ -221,6 +221,12 @@ GS.AIManager.prototype = {
 		this.activateNearbyMonsters(player);
 	},
 
+	onPlayerOpenDoor: function(door) {
+		if (this.script !== undefined) {
+			this.script.onPlayerOpenDoor(door);
+		}
+	},
+
 	onPlayerItemPickup: function(player, item) {
 		if (this.script !== undefined) {
 			this.script.onItemPickup(item);
