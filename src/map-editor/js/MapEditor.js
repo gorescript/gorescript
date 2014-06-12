@@ -256,6 +256,13 @@ GS.MapEditor.prototype = {
 			var map = that.mapManager.getMap();
 			that.saveMap(map);
 		});
+
+		$("input[type=text]").keydown(function(e) {
+			if (e.which === 13) {
+				e.preventDefault();
+				$(this).trigger("change");
+			}
+		});
 	},
 
 	validateMapName: function(name) {
