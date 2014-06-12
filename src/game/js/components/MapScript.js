@@ -1,6 +1,9 @@
 GS.MapScript = function(gridObjectLibrary) {
 	this.lib = gridObjectLibrary;
 	
+	this.mapName = "map name";
+	this.mapWon = false;	
+	
 	this.secretsFound = 0;
 	this.maxSecrets = 0;
 };

@@ -1,6 +1,17 @@
 GS.AIManager = function(grid) {
 	this.grid = grid;
-	this.map = grid.map;	
+	this.map = grid.map;
+	this.mapWon = false;
+
+	this.monstersKilled = 0;
+	this.maxMonsters = 0;
+	this.itemsPickedUp = 0;
+	this.maxItems = 0;
+
+	this.lastFrameTime = performance.now();
+	this.timeSpent = 0;
+	this.minutes = 0;
+	this.seconds = 0;
 };
 
 GS.AIManager.prototype = {
@@ -200,13 +211,52 @@ GS.AIManager.prototype = {
 		if (this.map.hasScript === true) {
 			this.script = new GS.MapScripts[this.map.name](this.gridObjectLibrary);
 			this.script.init();
+
+			var entities = this.grid.map.layerObjects[GS.MapLayers.Entity];
+			for (var i = 0; i < entities.length; i++) {
+				var entity = entities[i];
+				var type = GS.MapEntities[entity.type].type;
+				if (type === "Monster") {
+					this.maxMonsters++;
+				} else
+				if (type === "Item") {
+					this.maxItems++;
+				}
+			}
 		}
 	},
 
 	update: function() {
 		if (this.script !== undefined) {
 			this.script.update();
+
+			if (this.script.mapWon && !this.mapWon) {
+				this.mapWon = true;
+			}
 		}
+
+		if (!this.mapWon) {
+			this.updateTime();
+		}
+	},
+
+	updateTime: function() {
+		if (!this.grid.player.inMenu) {
+			this.timeSpent += performance.now() - this.lastFrameTime;
+			this.minutes = Math.floor(Math.floor(this.timeSpent) / 60000);
+			this.seconds = Math.floor(Math.floor(this.timeSpent) / 1000 - this.minutes * 60);
+		}
+		this.lastFrameTime = performance.now();
+
+		// GS.DebugUI.setStaticLine("time spent", GS.pad(this.minutes, 2) + ":" + GS.pad(this.seconds, 2));
+	},
+
+	resume: function() {
+		this.lastFrameTime = performance.now();
+	},
+
+	onMonsterDeath: function() {
+		this.monstersKilled++;
 	},
 
 	onPlayerMove: function(player, oldPos, newPos) {
@@ -228,6 +278,8 @@ GS.AIManager.prototype = {
 	},
 
 	onPlayerItemPickup: function(player, item) {
+		this.itemsPickedUp++;
+
 		if (this.script !== undefined) {
 			this.script.onItemPickup(item);
 		}

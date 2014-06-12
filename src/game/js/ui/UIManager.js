@@ -51,6 +51,10 @@ GS.UIManager.prototype = {
 			this.notifications = new GS.UIComponents.Notifications(this.vectorCanvas, this.assets, this.grid.player);
 			this.notifications.init();
 			this.components.push(this.notifications);
+
+			this.winScreen = new GS.UIComponents.WinScreen(this.vectorCanvas, this.assets, this.grid.player);
+			this.winScreen.init();
+			this.components.push(this.winScreen);
 		}
 
 		if (this.menu === undefined) {
@@ -83,7 +87,23 @@ GS.UIManager.prototype = {
 	},
 
 	draw: function() {
-		if (!this.menuActive) {
+		if (this.menuActive) {
+			this.cvs.clear();
+
+			if (this.menuOnly) {
+				this.vectorCanvas.drawImage(this.menuBackOffset, this.menuBackPos, this.assets.images.menu_back, this.menuBackSize, false);
+			}
+			this.menu.draw();
+
+			this.cvs.flip();
+		} else 
+		if (this.winScreen.visible) {
+			this.cvs.clear();
+
+			this.winScreen.draw();
+
+			this.cvs.flip();
+		} else {
 			if (!this.hidden && this.checkIfRedraw()) {
 				this.cvs.clear();
 
@@ -96,16 +116,6 @@ GS.UIManager.prototype = {
 
 				this.cvs.flip();
 			}
-		} else {
-			this.cvs.clear();
-
-			if (this.menuOnly) {
-				this.vectorCanvas.drawImage(this.menuBackOffset, this.menuBackPos, this.assets.images.menu_back, this.menuBackSize, false);
-			}
-
-			this.menu.draw();
-
-			this.cvs.flip();
 		}
 	},
 
@@ -142,6 +152,7 @@ GS.UIManager.prototype = {
 		this.powerBars = undefined;
 		this.crosshair = undefined;
 		this.notifications = undefined;
+		this.winScreen = undefined;
 		this.components = [];
 	},
 };

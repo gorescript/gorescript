@@ -130,11 +130,17 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.restartLevel();
 		}
 
-		this.grid.update();
-		this.uiManager.update();
+		if (this.grid.aiManager.mapWon && !GS.InputHelper.keysPressed && GS.InputHelper.isKeyDown(this.keys.Enter)) {
+			this.restartLevel();
+		}
 
-		TWEEN.update();
+		if (!this.grid.aiManager.mapWon) {
+			this.grid.update();
+			TWEEN.update();
+		}		
 		GS.DebugUI.update();
+
+		this.uiManager.update();
 	},
 
 	menu: function() {
@@ -171,6 +177,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.grid.player.inMenu = false;
 			this.grid.player.controls.attachEvents();
 			this.grid.player.controls.enable();
+			this.grid.aiManager.resume();
 		}
 
 		this.graphicsManager.monochromeEnabled = false;

@@ -265,6 +265,7 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 	onDeath: function() {
 		this.dead = true;
 		this.grid.soundManager.playSound("monster_death");
+		this.grid.aiManager.onMonsterDeath();
 		this.animationView.setLoop("death");
 		this.updateMesh();
 	},
