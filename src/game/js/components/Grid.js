@@ -52,7 +52,6 @@ GS.Grid.prototype = {
 	update: function() {
 		var that = this;
 
-		this.tvStation.update();
 		this.particleView.update();
 		this.lightingView.update();
 		this.aiManager.update();

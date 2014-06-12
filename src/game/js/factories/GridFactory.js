@@ -37,7 +37,6 @@ GS.GridFactory.prototype = {
 		grid.map = map;
 		grid.soundManager = this.soundManager;
 
-		this.addTVStationToGrid(grid);
 		this.assignMapEntitiesToGrid(grid);
 		this.addPlayerToGrid(grid);
 
@@ -63,12 +62,7 @@ GS.GridFactory.prototype = {
 		grid.player.view.debugMesh = this.viewFactory.getDebugMesh(position, grid.player.size);
 	},
 
-	addTVStationToGrid: function(grid) {
-		grid.tvStation = this.viewFactory.getTVStation();
-	},
-
 	assignMapEntitiesToGrid: function(grid) {
-		var lightMapObjects = [];
 		var sectorDict = {};
 
 		var sectors = grid.map.layerObjects[GS.MapLayers.Sector];
@@ -85,14 +79,12 @@ GS.GridFactory.prototype = {
 					var floor = new GS.Concrete(grid, GS.MapLayers.Sector, sector);
 					this.viewFactory.applySectorView(floor, false);
 					floor.assignToCells(gridLocation);
-					lightMapObjects.push(floor);
 				}			
 
 				if (hasCeiling) {
 					var ceiling = new GS.Concrete(grid, GS.MapLayers.Sector, sector);
 					this.viewFactory.applySectorView(ceiling, true);
 					ceiling.assignToCells(gridLocation);
-					lightMapObjects.push(ceiling);
 				}
 			}
 
@@ -118,8 +110,6 @@ GS.GridFactory.prototype = {
 				gridObject.sector = sectorDict[seg.sectorId];
 				this.viewFactory.applySegmentView(gridObject);
 				gridObject.assignToCells(gridLocation);
-
-				lightMapObjects.push(gridObject);
 			} else
 			if (seg.type === GS.SegmentTypes.TVScreen) {
 				this.addTVScreen(grid, gridLocation, seg);
@@ -153,10 +143,6 @@ GS.GridFactory.prototype = {
 			this.viewFactory.applyEntityView(gridObject);
 			gridObject.assignToCells(gridLocation);
 			gridObject.startingSector = gridObject.getSector();
-		}
-
-		if (grid.map.lightMapEnabled) {
-			this.viewFactory.applyLightMap(grid.map, lightMapObjects);
 		}
 	},
 

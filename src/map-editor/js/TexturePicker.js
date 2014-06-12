@@ -94,15 +94,15 @@ GS.TexturePopup = {
 
 	getHtml: function() {
 		var texPath = "../game/assets/textures/";
-		var html = ["<div id='texture-popup' class='mfp-hide'>"];
+		var html = ["<div id='texture-popup' class='mfp-hide' style='background-color: #808080;'>"];
 
 		var textures = GS.Assets[GS.AssetTypes.Texture];
 		for (var i in textures) {
 			var tex = textures[i];
-			if (tex.type === GS.TextureTypes.Map) {
+			if (tex.type === GS.TextureTypes.Map || (tex.type === GS.TextureTypes.TVScreen && tex.showInMapEditor)) {
 				html.push("<label class='map-texture-label' for='tex-id-" + i + "'>");
 					html.push("<input type='radio' class='map-texture-radio' id='tex-id-" + i + "' name='map-texture-label' value='" + i + "'>");
-					html.push("<img class='map-texture-img' name='" + i + "' src='" + texPath + tex.filename + "'>");
+					html.push("<img class='map-texture-img' name='" + i + "' src='" + texPath + tex.filename + "' title='" + i + "'>");
 				html.push("</label>");
 			}
 		}

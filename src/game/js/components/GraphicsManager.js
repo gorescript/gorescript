@@ -127,7 +127,6 @@ GS.GraphicsManager.prototype = {
 	},
 
 	draw: function() {
-		this.grid.tvStation.draw();
 		this.render();
 
 		if (this.ssaoEnabled) {

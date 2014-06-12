@@ -31,11 +31,11 @@ GS.ViewFactory.prototype = {
 			if (tex.type === GS.TextureTypes.Map) {
 				this.wrap(this.textures[i]);
 				this.materials[i] = new THREE.MeshPhongMaterial({ map: this.textures[i] });
+			} else
+			if (tex.type === GS.TextureTypes.TVScreen) {
+				this.textures[i].flipY = false;
 			}
 		}
-
-		this.textures.switch_on.flipY = false;
-		this.textures.switch_off.flipY = false;
 
 		var entities = this.map.layerObjects[GS.MapLayers.Entity];
 		var entityMaterials = {};
@@ -55,12 +55,6 @@ GS.ViewFactory.prototype = {
 			this.wrap(this.textures[i]);
 			this.materials[i] = new GS.MeshPhongGlowMaterial(this.textures[i], this.textures[i + "_glow"]);
 		}
-	},
-
-	getTVStation: function() {
-		var tv = new GS.TVStation(this.textures, this.anisotropy);
-		tv.init();
-		return tv;
 	},
 
 	getSkyboxMesh: function() {
@@ -552,6 +546,14 @@ GS.ViewFactory.prototype = {
 
 	applyTVScreenView: function(tvScreen) {
 		tvScreen.view.mesh = this.getTVScreenMesh(tvScreen);
+
+		tvScreen.view.mesh.material = new THREE.MeshBasicMaterial({ 
+			map: this.textures[tvScreen.segment.texId],
+			depthWrite: false,
+			polygonOffset: true,
+			polygonOffsetFactor: -4,
+			transparent: true,
+		});
 	},
 
 	applySwitchView: function(switchObj) {
@@ -642,48 +644,6 @@ GS.ViewFactory.prototype = {
 		debugMesh.userData.isTriangleMesh = true;
 		debugMesh.matrixAutoUpdate = false;
 		return debugMesh;
-	},	
-
-	applyLightMap: function(map, gridObjects) {
-		// convert from OBJ UV lines of the form "vt u v"
-
-		var lines = map.lightMapData.split("\n");
-		var uv = [];
-		for (var i = 0; i < lines.length; i++) {
-			if (lines[i] != "") {
-				var line = lines[i].split(" ");
-				var x = parseFloat(line[1]);
-				var y = parseFloat(line[2]);
-				uv.push({ x: x, y: y });
-			}
-		}
-
-		var applyLightMapUvsToMesh = function(mesh) {
-			var uvs = [];
-			for (var j = 0; j < mesh.geometry.faces.length; j++) {
-				uvs.push([
-					new THREE.Vector2(uv[k].x, uv[k].y),
-					new THREE.Vector2(uv[k + 1].x, uv[k + 1].y),
-					new THREE.Vector2(uv[k + 2].x, uv[k + 2].y),
-				]);
-				k += 3;
-			}
-			mesh.geometry.faceVertexUvs.push(uvs);
-			mesh.geometry.buffersNeedUpdate = true;
-			mesh.geometry.uvsNeedUpdate = true;
-		};
-		
-		var k = 0;
-		for (var i = 0; i < gridObjects.length; i++) {
-			var mesh = gridObjects[i].view.mesh;
-			if (mesh.children.length > 0) {
-				for (var j = 0; j < mesh.children.length; j++) {
-					applyLightMapUvsToMesh(mesh.children[j]);
-				}
-			} else {
-				applyLightMapUvsToMesh(mesh);
-			}
-		}
 	},
 };
 

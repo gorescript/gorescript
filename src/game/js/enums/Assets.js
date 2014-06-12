@@ -32,7 +32,7 @@ GS.Assets[GS.AssetTypes.Texture] = {
 	"cyan": 				{ filename: "cyan.png", 					type: GS.TextureTypes.Map },
 	"brown": 				{ filename: "brown.png", 					type: GS.TextureTypes.Map },
 
-	"tv": 					{ filename: "tv.png", 						type: GS.TextureTypes.TVScreen },
+	"exit": 				{ filename: "exit.png",						type: GS.TextureTypes.TVScreen, showInMapEditor: true },
 	"switch_off": 			{ filename: "switch_off.png",				type: GS.TextureTypes.TVScreen },
 	"switch_on": 			{ filename: "switch_on.png",				type: GS.TextureTypes.TVScreen },
 

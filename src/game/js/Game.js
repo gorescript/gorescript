@@ -205,7 +205,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		var that = this;
 		var map = this.assetLoader.mapLoader.parse(assets[GS.AssetTypes.Map][this.mapName]);
 
-		var viewFactory = new GS.ViewFactory(this.renderer, map, assets, this.tvStation);
+		var viewFactory = new GS.ViewFactory(this.renderer, map, assets);
 		viewFactory.init();		
 		var gridFactory = new GS.GridFactory(viewFactory, this.soundManager, this.renderer, this.scene, this.camera);
 		this.grid = gridFactory.getGrid(map);
