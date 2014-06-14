@@ -48,6 +48,8 @@ GS.Assets[GS.AssetTypes.Texture] = {
 	"hyper_blaster_glow": 	{ filename: "hyper_blaster_glow.png", 		type: GS.TextureTypes.Entity },
 	"nom": 					{ filename: "nom.png", 						type: GS.TextureTypes.Entity },
 	"nom_glow": 			{ filename: "nom_glow.png", 				type: GS.TextureTypes.Entity },
+	"eye": 					{ filename: "eye.png", 					type: GS.TextureTypes.Entity },
+	"eye_glow": 			{ filename: "eye_glow.png", 				type: GS.TextureTypes.Entity },
 };
 
 GS.Assets[GS.AssetTypes.CubeTexture] = {
@@ -78,6 +80,15 @@ GS.Assets[GS.AssetTypes.Mesh] = {
 	"nom_death1": 			{ filename: "nom_death1.js" },
 	"nom_death2": 			{ filename: "nom_death2.js" },
 	"nom_death3": 			{ filename: "nom_death3.js" },
+
+	"eye_walk0": 			{ filename: "eye_walk0.js" },
+	"eye_walk1": 			{ filename: "eye_walk1.js" },
+	"eye_walk2": 			{ filename: "eye_walk2.js" },
+	"eye_walk3": 			{ filename: "eye_walk3.js" },
+	"eye_death0": 			{ filename: "eye_death0.js" },
+	"eye_death1": 			{ filename: "eye_death1.js" },
+	"eye_death2": 			{ filename: "eye_death2.js" },
+	"eye_death3": 			{ filename: "eye_death3.js" },
 };
 
 GS.Assets[GS.AssetTypes.Sound] = {

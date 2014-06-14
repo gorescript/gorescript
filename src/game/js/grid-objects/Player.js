@@ -16,6 +16,7 @@ GS.Player = function(grid, camera, playerView) {
 
 	this.size = new THREE.Vector3(3, 7, 3);
 	this.useRange = this.size.x + 15;
+	this.bloodColor = new THREE.Color().setRGB(1, 0, 0).getHex();
 	this.direction = new THREE.Vector3();
 
 	this.view = {

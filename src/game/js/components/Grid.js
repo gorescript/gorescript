@@ -167,10 +167,10 @@ GS.Grid.prototype = {
 		}
 	},
 
-	addMonsterImpactParticles: function(position, n) {
+	addEntityImpactParticles: function(position, color, n) {
 		n = n || 3;
 		for (var i = 0; i < n; i++) {
-			var particle = this.particleView.addParticle(1, 1, 1, 0xff0000, GS.ParticleMovementTypes.Gushing, position);
+			var particle = this.particleView.addParticle(1, 1, 1, color, GS.ParticleMovementTypes.Gushing, position);
 			particle.mesh.position.copy(position);
 		}
 	},

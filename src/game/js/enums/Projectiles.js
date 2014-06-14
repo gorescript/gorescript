@@ -2,6 +2,8 @@ GS.Projectiles = {
 	pistol_bolt: {
 		hitSound: "hyper_blaster_hit",
 		size: new THREE.Vector3(1, 1, 1),
+		visualSize: new THREE.Vector3(1, 1, 3),
+		rotating: false,
 		speed: 5,
 		maxDistance: 500,
 		color: new THREE.Color().setRGB(1, 1, 1).getHex(),
@@ -10,7 +12,19 @@ GS.Projectiles = {
 	hyper_blaster_bolt: {
 		hitSound: "hyper_blaster_hit",
 		size: new THREE.Vector3(1, 1, 1),
+		visualSize: new THREE.Vector3(1, 1, 3),
+		rotating: false,
 		speed: 5,
+		maxDistance: 500,
+		color: new THREE.Color().setRGB(1, 1, 1).getHex(),
+		damage: 10,
+	},
+	eye_bolt: {
+		hitSound: "hyper_blaster_hit",
+		size: new THREE.Vector3(2, 2, 2),
+		visualSize: new THREE.Vector3(3, 3, 3),
+		rotating: true,
+		speed: 2,
 		maxDistance: 500,
 		color: new THREE.Color().setRGB(1, 1, 1).getHex(),
 		damage: 10,

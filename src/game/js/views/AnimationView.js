@@ -6,7 +6,7 @@ GS.AnimationView = function(gridObject) {
 			delay: 30,
 		},
 		walk: {
-			delay: 5,
+			delay: gridObject.walkDelay,
 		},
 		death: {
 			delay: 30,
@@ -14,6 +14,7 @@ GS.AnimationView = function(gridObject) {
 		},
 	};
 
+	this.floats = gridObject.floats;
 	this.floatYDelta = 0.5;
 	this.floatAngle = 0;
 	this.floatSpeed = 0.175;
@@ -69,7 +70,7 @@ GS.AnimationView.prototype = {
 		}
 
 		if (!this.gridObject.dead) {
-			if (this.gridObject.moving) {
+			if (this.gridObject.moving && this.floats) {
 				this.floatAngle += this.floatSpeed;
 			}
 			

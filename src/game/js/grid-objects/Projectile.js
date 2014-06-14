@@ -27,7 +27,7 @@ GS.Projectile.prototype = GS.inherit(GS.GridObject, {
 
 		this.updateBoundingBox();
 
-		this.particle = this.grid.particleView.addParticle(1, 1, 3, this.color);
+		this.particle = this.grid.particleView.addParticle(this.visualSize.x, this.visualSize.y, this.visualSize.z, this.color);
 
 		this.view.mesh = this.particle.mesh;
 		this.view.mesh.lookAt(this.direction);
@@ -49,6 +49,11 @@ GS.Projectile.prototype = GS.inherit(GS.GridObject, {
 		this.grid.collisionManager.collideProjectile(this, this.position, newPos);
 
 		this.view.mesh.position.copy(this.position);
+
+		if (this.rotating) {
+			this.view.mesh.rotation.x += 0.1;
+			this.view.mesh.rotation.y += 0.1;
+		}
 
 		if (this.steps > this.maxSteps || this.linkedGridCells.length == 0) {
 			this.remove();

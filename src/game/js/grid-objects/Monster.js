@@ -33,6 +33,7 @@ GS.Monster = function(grid, layer, sourceObj) {
 	this.changeTargetMaxCooldown = GS.msToFrames(500);
 	this.changeTargetCooldown = 1;
 	this.meleeAttackCooldown = 0;
+	this.rangedAttackCooldown = 0;
 };
 
 GS.Monster.prototype = GS.inherit(GS.GridObject, {
@@ -110,8 +111,8 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 						targetPos.copy(target.position);
 
 						var distanceToTarget = this.position.distanceTo(targetPos);
-						if (distanceToTarget > 20) {
-							aux.set(Math.random() - 0.5, 0, Math.random() - 0.5).normalize().multiplyScalar(20);
+						if (distanceToTarget > this.targetChaseRange) {
+							aux.set(Math.random() - 0.5, 0, Math.random() - 0.5).normalize().multiplyScalar(this.targetChaseRange);
 							targetPos.add(aux);
 						}
 
@@ -148,7 +149,24 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 						this.grid.soundManager.playSound("monster_bite");
 						this.meleeAttackCooldown = this.meleeAttackMaxCooldown;
 						target.onHit(this.meleeDamage);
-						this.grid.addMonsterImpactParticles(target.position);
+						this.grid.addEntityImpactParticles(target.position, target.bloodColor);
+					}
+				}
+			}
+		} else 
+		if (this.attackType === GS.MonsterAttackTypes.Ranged) {
+			if (this.rangedAttackCooldown > 0) {
+				this.rangedAttackCooldown--;
+			} else {
+				if (!target.dead && !this.inPain) {
+					if (this.isFacing(target.position) && 
+						this.grid.collisionManager.checkMonsterLineOfSight(this, target, this.rangedAttackRange)) {
+
+						var direction = target.position.clone().sub(this.position).normalize();
+						this.grid.soundManager.playSound("hyper_blaster_fire");
+
+						this.rangedAttackCooldown = this.rangedAttackMaxCooldown;
+						this.grid.addProjectile(this, this.rangedAttackProjectile, this.position.clone(), direction);
 					}
 				}
 			}
@@ -157,6 +175,10 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 
 	inMeleeRange: function(pos) {
 		return this.position.distanceTo(pos) < this.meleeRange;
+	},
+
+	inRangedAttackRange: function(pos) {
+		return this.position.distanceTo(pos) < this.rangedAttackRange;
 	},
 
 	isFacing: function() {

@@ -39,4 +39,12 @@ GS.MapEntities = {
 			death: 4,
 		},
 	},
+	"E": {
+		name: "eye",
+		type: "Monster",
+		animations: {
+			walk: 4,
+			death: 4,
+		},
+	},
 };

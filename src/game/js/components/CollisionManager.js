@@ -403,7 +403,8 @@ GS.CollisionManager.prototype = {
 	}(),
 
 	collideProjectile: function() {
-		var points = [ new THREE.Vector2(), new THREE.Vector2(), new THREE.Vector2(), new THREE.Vector2() ];		
+		var points = [ new THREE.Vector2(), new THREE.Vector2(), new THREE.Vector2(), new THREE.Vector2() ];
+		var normal = new THREE.Vector3();
 
 		return function(projectile, oldPos, newPos) {
 			var lsp = projectile.view.collisionData.ellipsoid;
@@ -435,8 +436,13 @@ GS.CollisionManager.prototype = {
 					result.gridObject.onHit();
 				} else 
 				if (result.type === GS.CollisionTypes.Entity) {
-					this.grid.addMonsterImpactParticles(result.pos);
-					result.gridObject.onHit(projectile.damage);
+					if (result.gridObject.constructor === projectile.sourceGridObject.constructor) {
+						normal.copy(result.pos).sub(projectile.position).normalize();
+						this.grid.addEnvironmentImpactParticles(result.pos, normal, projectile.color);
+					} else {
+						this.grid.addEntityImpactParticles(result.pos, result.gridObject.bloodColor);
+						result.gridObject.onHit(projectile.damage);
+					}
 				}
 				
 				projectile.updateCollisionData(result.pos);
@@ -490,7 +496,7 @@ GS.CollisionManager.prototype = {
 	collideProjectileEntities: function() {
 		var minPos = new THREE.Vector3();
 		var collisionPoint = new THREE.Vector3();
-		var types = [GS.Monster];
+		var types = [GS.Monster, GS.Player];
 
 		return function(projectile, gridLocation, oldPos, newPos, result) {
 			var that = this;
@@ -498,8 +504,8 @@ GS.CollisionManager.prototype = {
 			var gridObjectBox;
 			var cells = this.grid.getCellsFromGridLocation(gridLocation);
 
-			this.grid.forEachUniqueGridObjectInCells(cells, types, function(gridObject) {
-				if (gridObject.dead) {
+			this.grid.forEachUniqueGridObjectInCells(cells, types, function(gridObject) {				
+				if (gridObject.dead || projectile.sourceGridObject === gridObject) {
 					return;
 				}
 
@@ -552,7 +558,7 @@ GS.CollisionManager.prototype = {
 				result.gridObject.onHit();
 			} else
 			if (result.type === GS.CollisionTypes.Entity) {
-				that.grid.addMonsterImpactParticles(result.pos);
+				that.grid.addEntityImpactParticles(result.pos, result.gridObject.bloodColor);
 				result.gridObject.onHit(weapon.damage);
 			}
 		});
