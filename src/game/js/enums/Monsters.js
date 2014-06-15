@@ -17,7 +17,6 @@ GS.Monsters = {
 		meleeAttackMaxCooldown: GS.msToFrames(500),
 		meleeRange: 15,
 		walkDelay: 5,
-		floats: true,
 		bloodColor: new THREE.Color().setRGB(1, 0, 0).getHex(),
 	},
 	eye: {
@@ -34,9 +33,9 @@ GS.Monsters = {
 		rangedAttackCooldownRandomModifier: GS.msToFrames(1000),
 		rangedAttackRange: 200,
 		rangedAttackProjectile: "eye_bolt",
+		rangedAttackChargeMaxCooldown: GS.msToFrames(500),
 		preferredMaxDistance: 100,
 		walkDelay: 15,
-		floats: true,
 		bloodColor: new THREE.Color().setRGB(0, 1, 1).getHex(),
 	},
 };

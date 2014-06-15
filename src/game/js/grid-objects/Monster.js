@@ -27,13 +27,15 @@ GS.Monster = function(grid, layer, sourceObj) {
 	this.health = this.maxHealth;
 	this.scatterCooldown = 0;
 	this.state = GS.MonsterStates.Inactive;
-	this.moving = true;
+	this.moving = false;
 	this.inPain = false;
 
 	this.changeTargetMaxCooldown = GS.msToFrames(500);
 	this.changeTargetCooldown = 1;
 	this.meleeAttackCooldown = 0;
 	this.rangedAttackCooldown = Math.floor(Math.random() * this.rangedAttackCooldownRandomModifier);
+	this.rangedAttackChargeCooldown = 0;
+	this.chargingUpRangedAttack = false;
 };
 
 GS.Monster.prototype = GS.inherit(GS.GridObject, {
@@ -59,7 +61,13 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 			} else
 			if (this.state === GS.MonsterStates.Active) {
 				this.updateMove();
-				this.updateAttack();
+
+				if (this.attackType === GS.MonsterAttackTypes.Melee) {
+					this.updateAttackMelee();
+				} else
+				if (this.attackType === GS.MonsterAttackTypes.Ranged) {
+					this.updateAttackRanged();
+				}
 			}
 		}
 
@@ -86,104 +94,181 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 
 		if (this.isFacing(target.position)) {
 			this.activate();
+			return;
 		}
+
+		this.updateMesh();
 	},
 
 	updateMove: function() {
-		var newPos = new THREE.Vector3();
-		var aux = new THREE.Vector3();
-		var targetPos = new THREE.Vector3();
+		var target = this.grid.player;
 
-		return function() {
-			var target = this.grid.player;
-
+		if (!this.chargingUpRangedAttack) {
 			if (this.scatterCooldown > 0) {
 				this.scatterCooldown--;
 			} else {
 				if (target.dead) {
 					this.scatter();
 				} else
-				if (this.changeTargetCooldown > 0) {
-					this.changeTargetCooldown--;
-
-					if (this.changeTargetCooldown === 0) {
-						this.changeTargetCooldown = this.changeTargetMaxCooldown;
-						targetPos.copy(target.position);
-
-						if (this.attackType === GS.MonsterAttackTypes.Melee) {
-							var distanceToTarget = this.position.distanceTo(targetPos);
-							if (distanceToTarget > 20) {
-								aux.set(Math.random() - 0.5, 0, Math.random() - 0.5).normalize().multiplyScalar(20);
-								targetPos.add(aux);
-							}
-						} else 
-						if (this.attackType === GS.MonsterAttackTypes.Ranged) {
-							targetPos.copy(target.position);
-							var distanceToTarget = this.position.distanceTo(targetPos);
-							if (distanceToTarget > 30 && distanceToTarget < this.preferredMaxDistance) {
-								targetPos.copy(this.position);
-								aux.set(Math.random() - 0.5, 0, Math.random() - 0.5).normalize().multiplyScalar(20);
-								targetPos.add(aux);
-							}
-						}
-
-						this.direction.copy(targetPos).sub(this.position);
-						this.direction.y = 0;
-						this.direction.normalize();
-						this.calculateRotation();
-					}
+				if (this.attackType === GS.MonsterAttackTypes.Melee) {
+					this.updateMoveMelee();
+				} else
+				if (this.attackType === GS.MonsterAttackTypes.Ranged) {
+					this.updateMoveRanged();
 				}
 			}
 
 			if (!this.inPain) {
-				aux.copy(this.direction).multiplyScalar(this.speed);
-				newPos.copy(this.position).add(aux);
-
-				this.grid.collisionManager.collideMonster(this, this.position, newPos);
+				this.move();
 			} else {
 				this.updateMesh();
+			}
+		} else {
+			this.calculateDirection(target.position);
+			this.calculateRotation();
+			this.updateMesh();
+		}
+	},
+
+	updateMoveMelee: function() {
+		var aux = new THREE.Vector3();
+		var targetPos = new THREE.Vector3();
+
+		return function() {
+			var target = this.grid.player;
+
+			if (this.changeTargetCooldown > 0) {
+				this.changeTargetCooldown--;
+
+				if (this.changeTargetCooldown === 0) {
+					this.changeTargetCooldown = this.changeTargetMaxCooldown;
+					targetPos.copy(target.position);
+
+					var distanceToTarget = this.position.distanceTo(targetPos);
+					if (distanceToTarget > 20) {
+						aux.set(Math.random() - 0.5, 0, Math.random() - 0.5).normalize().multiplyScalar(20);
+						targetPos.add(aux);
+					}
+
+					this.calculateDirection(targetPos);
+					this.calculateRotation();
+				}
 			}
 		}
 	}(),
 
-	updateAttack: function() {
+	updateMoveRanged: function() {		
+		var aux = new THREE.Vector3();
+		var targetPos = new THREE.Vector3();
+
+		return function() {
+			var target = this.grid.player;
+
+			if (this.changeTargetCooldown > 0) {
+				this.changeTargetCooldown--;
+
+				if (this.changeTargetCooldown === 0) {
+					this.changeTargetCooldown = this.changeTargetMaxCooldown;
+
+					targetPos.copy(target.position);
+					var distanceToTarget = this.position.distanceTo(targetPos);
+					if (distanceToTarget > 30 && distanceToTarget < this.preferredMaxDistance) {
+						targetPos.copy(this.position);
+						aux.set(Math.random() - 0.5, 0, Math.random() - 0.5).normalize().multiplyScalar(20);
+						targetPos.add(aux);
+					}
+
+					this.calculateDirection(targetPos);
+					this.calculateRotation();
+				}
+			}			
+		}
+	}(),
+
+	move: function() {
+		var newPos = new THREE.Vector3();
+
+		return function() {
+			this.moving = true;
+			newPos.copy(this.direction).multiplyScalar(this.speed).add(this.position);
+			this.grid.collisionManager.collideMonster(this, this.position, newPos);
+		}
+	}(),
+
+	updateAttackMelee: function() {
 		var target = this.grid.player;
 
-		if (this.attackType === GS.MonsterAttackTypes.Melee) {
-			if (this.meleeAttackCooldown > 0) {
-				this.meleeAttackCooldown--;
-			} else {
-				if (!target.dead && !this.inPain) {
-					if (this.inMeleeRange(target.position) && this.isFacing(target.position) &&
-						this.grid.collisionManager.checkMonsterLineOfSight(this, target, this.meleeRange)) {
+		if (this.meleeAttackCooldown > 0) {
+			this.meleeAttackCooldown--;
+		} else {
+			if (!target.dead && !this.inPain) {
+				if (this.inMeleeRange(target.position) && this.isFacing(target.position) &&
+					this.grid.collisionManager.checkMonsterLineOfSight(this, target, this.meleeRange)) {
 
-						this.grid.soundManager.playSound("monster_bite");
-						this.meleeAttackCooldown = this.meleeAttackMaxCooldown;
-						target.onHit(this.meleeDamage);
-						this.grid.addEntityImpactParticles(target.position, target.bloodColor);
-					}
-				}
-			}
-		} else 
-		if (this.attackType === GS.MonsterAttackTypes.Ranged) {
-			if (this.rangedAttackCooldown > 0) {
-				this.rangedAttackCooldown--;
-			} else {
-				if (!target.dead && !this.inPain) {
-					if (this.isFacing(target.position) && 
-						this.grid.collisionManager.checkMonsterLineOfSight(this, target, this.rangedAttackRange)) {
-
-						var direction = target.position.clone().sub(this.position).normalize();
-						this.grid.soundManager.playSound("hyper_blaster_fire");
-
-						this.rangedAttackCooldown = this.rangedAttackMaxCooldown + 
-							Math.floor(Math.random() * this.rangedAttackCooldownRandomModifier);
-
-						this.grid.addProjectile(this, this.rangedAttackProjectile, this.position.clone(), direction);
-					}
+					this.meleeAttack();
 				}
 			}
 		}
+	},
+
+	meleeAttack: function() {
+		var target = this.grid.player;
+
+		this.grid.soundManager.playSound("monster_bite");
+		this.meleeAttackCooldown = this.meleeAttackMaxCooldown;
+		target.onHit(this.meleeDamage);
+		this.grid.addEntityImpactParticles(target.position, target.bloodColor);
+	},
+
+	updateAttackRanged: function() {
+		var target = this.grid.player;
+
+		if (this.rangedAttackCooldown > 0) {
+			this.rangedAttackCooldown--;
+		} else {
+			if (!target.dead && !this.inPain) {
+				if (this.rangedAttackChargeCooldown > 0) {
+					this.rangedAttackChargeCooldown--;
+
+					if (this.rangedAttackChargeCooldown === 0) {
+						this.rangedAttack();
+					}
+				} else
+				if (this.isFacing(target.position) && 
+					this.grid.collisionManager.checkMonsterLineOfSight(this, target, this.rangedAttackRange)) {
+
+					this.chargeUpRangedAttack();
+				}
+			}
+		}
+	},
+
+	chargeUpRangedAttack: function() {
+		this.moving = false;
+		this.chargingUpRangedAttack = true;
+		this.rangedAttackChargeCooldown = this.rangedAttackChargeMaxCooldown;
+		this.animationView.setLoop("attack");
+	},
+
+	cancelRangedAttack: function() {
+		this.chargingUpRangedAttack = false;
+		this.rangedAttackChargeCooldown = 0;
+		this.animationView.setLoop("walk");
+	},
+
+	rangedAttack: function() {
+		this.moving = false;
+		var target = this.grid.player;
+
+		this.chargingUpRangedAttack = false;	
+		this.animationView.setLoop("walk");
+		
+		this.grid.soundManager.playSound("hyper_blaster_fire");
+
+		this.rangedAttackCooldown = this.rangedAttackMaxCooldown + 
+			Math.floor(Math.random() * this.rangedAttackCooldownRandomModifier);
+
+		this.grid.addProjectile(this, this.rangedAttackProjectile, this.position.clone(), this.direction.clone());
 	},
 
 	inMeleeRange: function(pos) {
@@ -226,6 +311,12 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 
 			this.scatterCooldown = 30;
 		}
+	},
+
+	calculateDirection: function(targetPos) {
+		this.direction.copy(targetPos).sub(this.position);
+		this.direction.y = 0;
+		this.direction.normalize();
 	},
 
 	calculateRotation: function() {
@@ -284,8 +375,14 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 			this.activate(true);
 		}
 
-		if (Math.random() <= this.painChance) {
+		if (Math.random() <= this.painChance) {			
 			this.inPain = true;
+			this.moving = false;
+
+			if (this.attackType === GS.MonsterAttackTypes.Ranged) {
+				this.cancelRangedAttack();
+			}
+
 			this.animationView.pain();
 			this.grid.soundManager.playSound("monster_pain");
 		}
@@ -298,10 +395,10 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 	},
 
 	onDeath: function() {
+		this.moving = false;
+
 		var target = this.grid.player;
-		this.direction.copy(target.position).sub(this.position);
-		this.direction.y = 0;
-		this.direction.normalize();
+		this.calculateDirection(target.position);
 		this.calculateRotation();
 
 		this.dead = true;

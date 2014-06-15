@@ -45,6 +45,7 @@ GS.MapEntities = {
 		animations: {
 			walk: 4,
 			death: 4,
+			attack: 2,
 		},
 	},
 };

@@ -2,6 +2,9 @@ GS.AnimationView = function(gridObject) {
 	this.gridObject = gridObject;
 
 	this.loops = {
+		attack: {
+			delay: 10,
+		},
 		inactive: {
 			delay: 30,
 		},
@@ -14,10 +17,10 @@ GS.AnimationView = function(gridObject) {
 		},
 	};
 
-	this.floats = gridObject.floats;
 	this.floatYDelta = 0.5;
 	this.floatAngle = 0;
 	this.floatSpeed = 0.175;
+	this.inactiveFloatSpeed = 0.0875;
 	this.painMaxAngle = Math.PI / 2;
 	this.painAngle = 0;
 	this.painSpeed = 0.05;
@@ -70,8 +73,11 @@ GS.AnimationView.prototype = {
 		}
 
 		if (!this.gridObject.dead) {
-			if (this.gridObject.moving && this.floats) {
+			if (this.gridObject.moving) {
 				this.floatAngle += this.floatSpeed;
+			} else
+			if (loop === this.loops.inactive) {
+				this.floatAngle += this.inactiveFloatSpeed;
 			}
 			
 			this.positionYOffset = this.floatYDelta * Math.sin(this.floatAngle);
