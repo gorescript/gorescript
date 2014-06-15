@@ -49,7 +49,6 @@ GS.Door.prototype = GS.inherit(GS.GridObject, {
 					if (this.cooldown <= 0) {
 						this.cooldown = this.maxCooldown;
 						this.state = GS.DoorStates.Closing;
-						this.usable = false;
 						this.grid.soundManager.playSound("door_close");
 					}
 				} else {
@@ -66,7 +65,6 @@ GS.Door.prototype = GS.inherit(GS.GridObject, {
 				if (this.position.y >= this.openY) {
 					this.position.y = this.openY;
 					this.state = GS.DoorStates.Open;
-					this.usable = false;
 				}
 				break;
 
@@ -77,13 +75,14 @@ GS.Door.prototype = GS.inherit(GS.GridObject, {
 					if (this.position.y <= this.closedY) {
 						this.position.y = this.closedY;
 						this.state = GS.DoorStates.Closed;
-						this.usable = true;
 					}
 				} else {
 					this.state = GS.DoorStates.Opening;
 				}
 				break;
 		}
+
+		this.usable = (this.state === GS.DoorStates.Closed);
 
 		if (velocity.y !== 0) {
 			this.updateBoundingBox();
