@@ -186,6 +186,27 @@ GS.VoxelMeshManager.prototype = {
 		this.updateMesh();
 	},
 
+	flipVertically: function() {
+		var that = this;
+		var flippedMesh = {};
+
+		var halfSize = new THREE.Vector3(0.5, 0.5, 0.5);
+
+		Object.keys(this.voxelMesh).forEach(function(key) {
+			var voxel = that.voxelMesh[key];
+			var p = that.getXYZ(key);
+			var pHex = that.padXYZ(p.x, p.y, p.z);
+			var mpHex = that.padXYZ(p.x, that.size - p.y - 1, p.z);
+
+			flippedMesh[mpHex] = voxel;
+			voxel.pos.y = that.size - voxel.pos.y - 1;
+			voxel.box3.set(voxel.pos.clone().sub(halfSize), voxel.pos.clone().add(halfSize));
+		});
+
+		this.voxelMesh = flippedMesh;
+		this.updateMesh();
+	},
+
 	melt: function(floorHeight) {
 		floorHeight = floorHeight || 0;
 

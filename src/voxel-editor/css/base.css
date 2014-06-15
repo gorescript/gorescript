@@ -33,6 +33,7 @@ canvas { position: fixed; cursor: default; }
 
 .no-stretch-width { width: auto !important; }
 .one-third-width { width: 32.5% !important; }
+.one-half-width { width: 49.25% !important; }
 .no-fixed-height { height: auto; }
 .no-padding { padding: 0; }
 .centered { text-align: center; }

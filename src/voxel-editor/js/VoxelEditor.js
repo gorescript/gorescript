@@ -133,6 +133,10 @@ GS.VoxelEditor.prototype = {
 			that.voxelMeshManager.flipHorizontally();
 		});
 
+		$("#button-flip-v").click(function() {
+			that.voxelMeshManager.flipVertically();
+		});
+
 		$("#melt-floor-height").change(function() {
 			var n = parseInt($(this).val());
 			n = isNaN(n) ? 0 : n;
