@@ -17,7 +17,8 @@ GS.Game = function() {
 	this.state = GS.GameStates.PreLoad;
 	this.nextState = null;
 	this.updated = false;
-	this.firstTime = true;
+	this.firstLoad = true;
+	this.firstPlay = true;
 	
 	this.antialias = false;
 	this.clearColor = 0x336699;
@@ -102,11 +103,11 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	},
 
 	postLoad: function() {
-		if (this.firstTime) {
+		if (this.firstLoad) {
 			this.loadingUI.spinnerOnly = true;
 			this.uiManager.initComponents(this.assetLoader.assets);
 			this.openMenu();
-			this.firstTime = false;
+			this.firstLoad = false;
 		} else {			
 			this.initComponents(this.assetLoader.assets);			
 			this.uiManager.initComponents(this.assetLoader.assets, this.grid);
@@ -116,6 +117,11 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 			this.nextState = GS.GameStates.Play;
 			this.musicManager.playTrack("simple_action_beat");
+
+			if (this.firstPlay) {
+				GS.DebugUI.addTempLine("if you encounter frame rate issues, check out the options menu");
+				this.firstPlay = false;
+			}
 		}
 	},
 

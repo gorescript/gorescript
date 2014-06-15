@@ -27,6 +27,6 @@ GS.Projectiles = {
 		speed: 2,
 		maxDistance: 500,
 		color: new THREE.Color().setRGB(1, 1, 1).getHex(),
-		damage: 10,
+		damage: 20,
 	},
 };

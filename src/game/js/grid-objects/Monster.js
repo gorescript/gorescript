@@ -33,7 +33,7 @@ GS.Monster = function(grid, layer, sourceObj) {
 	this.changeTargetMaxCooldown = GS.msToFrames(500);
 	this.changeTargetCooldown = 1;
 	this.meleeAttackCooldown = 0;
-	this.rangedAttackCooldown = 0;
+	this.rangedAttackCooldown = Math.floor(Math.random() * this.rangedAttackCooldownRandomModifier);
 };
 
 GS.Monster.prototype = GS.inherit(GS.GridObject, {
@@ -110,10 +110,21 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 						this.changeTargetCooldown = this.changeTargetMaxCooldown;
 						targetPos.copy(target.position);
 
-						var distanceToTarget = this.position.distanceTo(targetPos);
-						if (distanceToTarget > this.targetChaseRange) {
-							aux.set(Math.random() - 0.5, 0, Math.random() - 0.5).normalize().multiplyScalar(this.targetChaseRange);
-							targetPos.add(aux);
+						if (this.attackType === GS.MonsterAttackTypes.Melee) {
+							var distanceToTarget = this.position.distanceTo(targetPos);
+							if (distanceToTarget > 20) {
+								aux.set(Math.random() - 0.5, 0, Math.random() - 0.5).normalize().multiplyScalar(20);
+								targetPos.add(aux);
+							}
+						} else 
+						if (this.attackType === GS.MonsterAttackTypes.Ranged) {
+							targetPos.copy(target.position);
+							var distanceToTarget = this.position.distanceTo(targetPos);
+							if (distanceToTarget > 30 && distanceToTarget < this.preferredMaxDistance) {
+								targetPos.copy(this.position);
+								aux.set(Math.random() - 0.5, 0, Math.random() - 0.5).normalize().multiplyScalar(20);
+								targetPos.add(aux);
+							}
 						}
 
 						this.direction.copy(targetPos).sub(this.position);
@@ -165,7 +176,9 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 						var direction = target.position.clone().sub(this.position).normalize();
 						this.grid.soundManager.playSound("hyper_blaster_fire");
 
-						this.rangedAttackCooldown = this.rangedAttackMaxCooldown;
+						this.rangedAttackCooldown = this.rangedAttackMaxCooldown + 
+							Math.floor(Math.random() * this.rangedAttackCooldownRandomModifier);
+
 						this.grid.addProjectile(this, this.rangedAttackProjectile, this.position.clone(), direction);
 					}
 				}
@@ -285,6 +298,12 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 	},
 
 	onDeath: function() {
+		var target = this.grid.player;
+		this.direction.copy(target.position).sub(this.position);
+		this.direction.y = 0;
+		this.direction.normalize();
+		this.calculateRotation();
+
 		this.dead = true;
 		this.grid.soundManager.playSound("monster_death");
 		this.grid.aiManager.onMonsterDeath();
