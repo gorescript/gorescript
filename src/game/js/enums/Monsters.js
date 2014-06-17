@@ -46,8 +46,8 @@ GS.Monsters = {
 		bloodColor: new THREE.Color().setRGB(0, 1, 1).getHex(),
 
 		roarSound: "monster_roar",
-		rangedAttackSound: "hyper_blaster_fire",
+		rangedAttackChargeUpSound: "eye_charging",
 		painSound: "monster_pain",
-		deathSound: "eye_death",
+		deathSound: "monster_death",
 	},
 };

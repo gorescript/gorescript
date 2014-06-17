@@ -53,16 +53,13 @@ GS.UIComponents.Menu.prototype = {
 		var that = this;
 
 		this.topPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
-			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 60, 65);
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 72, 80);
 
 		this.btnNewGame = this.topPanel.addButton("new game");
 		this.btnNewGame.onClick = function() { GAME.newGame(); };
 
-		this.btnSaveGame = this.topPanel.addButton("save game");
-		this.btnSaveGame.disabled = true;
-
-		this.btnLoadGame = this.topPanel.addButton("load game");
-		this.btnLoadGame.disabled = true;
+		this.btnLevelSelect = this.topPanel.addButton("level select");
+		this.btnLevelSelect.disabled = true;
 
 		this.btnOptions = this.topPanel.addButton("options");
 		this.btnOptions.onClick = function() { that.activePanel = that.optionsPanel; };

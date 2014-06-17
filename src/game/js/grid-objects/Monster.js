@@ -244,6 +244,7 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 	},
 
 	chargeUpRangedAttack: function() {
+		this.grid.soundManager.playSound(this.rangedAttackChargeUpSound);
 		this.moving = false;
 		this.chargingUpRangedAttack = true;
 		this.rangedAttackChargeCooldown = this.rangedAttackChargeMaxCooldown;
@@ -261,9 +262,7 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 		var target = this.grid.player;
 
 		this.chargingUpRangedAttack = false;	
-		this.animationView.setLoop("walk");
-
-		this.grid.soundManager.playSound(this.rangedAttackSound);
+		this.animationView.setLoop("walk");		
 
 		this.rangedAttackCooldown = this.rangedAttackMaxCooldown + 
 			Math.floor(Math.random() * this.rangedAttackCooldownRandomModifier);
