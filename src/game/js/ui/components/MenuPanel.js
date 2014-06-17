@@ -63,6 +63,37 @@ GS.UIComponents.MenuPanel.prototype = {
 		};
 	},
 
+	addDoubleLabel: function(text1, text2) {
+		var offset = this.getRowOffset();
+
+		var label1Offset = offset.clone();
+		label1Offset.x += this.size.x * 0.5 - 30;
+		label1Offset.y += this.rowHeight * 0.5;
+
+		var label1 = new GS.UIComponents.MenuLabel(this.cvs, text1, label1Offset, this.pos);
+		label1.fontSize = this.fontSize;
+		label1.textAlign = "right";
+
+		this.children.push(label1);
+
+		var label2Offset = offset.clone();
+		label2Offset.x += this.size.x * 0.5 + 30;
+		label2Offset.y += this.rowHeight * 0.5;
+
+		var label2 = new GS.UIComponents.MenuLabel(this.cvs, text2, label2Offset, this.pos);
+		label2.fontSize = this.fontSize;
+		label2.textAlign = "left";
+
+		this.children.push(label2);
+
+		this.rowCount++;
+
+		return {
+			label1: label1,
+			label2: label2,
+		};
+	},
+
 	addNumberPicker: function(text, value, min, max, step, onChange) {
 		var offset = this.getRowOffset();
 		var labelOffset = offset.clone();
