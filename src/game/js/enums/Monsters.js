@@ -10,6 +10,7 @@ GS.Monsters = {
 		offset: new THREE.Vector3(16 * 0.45 * 0.5, 16 * 0.5 + 0.03, 16 * 0.45 * 0.5),
 		speed: 0.75,
 		rotationOffset: Math.PI,
+
 		painChance: 0.25,
 		attackType: GS.MonsterAttackTypes.Melee,
 		maxHealth: 160,
@@ -18,6 +19,11 @@ GS.Monsters = {
 		meleeRange: 15,
 		walkDelay: 5,
 		bloodColor: new THREE.Color().setRGB(1, 0, 0).getHex(),
+
+		roarSound: "monster_roar",
+		meleeAttackSound: "monster_bite",
+		painSound: "monster_pain",
+		deathSound: "monster_death",
 	},
 	eye: {
 		size: new THREE.Vector3(16 * 0.35, 16 * 0.5,  16 * 0.35),
@@ -25,8 +31,9 @@ GS.Monsters = {
 		offset: new THREE.Vector3(16 * 0.35 * 0.5, 16 * 0.5 + 0.03, 16 * 0.35 * 0.5),
 		speed: 0.25,
 		rotationOffset: Math.PI,
+
 		painChance: 0.75,
-		attackType: GS.MonsterAttackTypes.Ranged,		
+		attackType: GS.MonsterAttackTypes.Ranged,
 		maxHealth: 50,
 		meleeRange: 15,
 		rangedAttackMaxCooldown: GS.msToFrames(1500),
@@ -37,5 +44,10 @@ GS.Monsters = {
 		preferredMaxDistance: 100,
 		walkDelay: 15,
 		bloodColor: new THREE.Color().setRGB(0, 1, 1).getHex(),
+
+		roarSound: "monster_roar",
+		rangedAttackSound: "hyper_blaster_fire",
+		painSound: "monster_pain",
+		deathSound: "eye_death",
 	},
 };

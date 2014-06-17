@@ -262,8 +262,8 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 
 		this.chargingUpRangedAttack = false;	
 		this.animationView.setLoop("walk");
-		
-		this.grid.soundManager.playSound("hyper_blaster_fire");
+
+		this.grid.soundManager.playSound(this.rangedAttackSound);
 
 		this.rangedAttackCooldown = this.rangedAttackMaxCooldown + 
 			Math.floor(Math.random() * this.rangedAttackCooldownRandomModifier);
@@ -367,7 +367,7 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 
 		this.state = GS.MonsterStates.Active;
 		this.animationView.setLoop("walk");
-		this.grid.soundManager.playSound("monster_roar");
+		this.grid.soundManager.playSound(this.roarSound);
 	},
 
 	onHit: function(damage) {
@@ -384,7 +384,7 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 			}
 
 			this.animationView.pain();
-			this.grid.soundManager.playSound("monster_pain");
+			this.grid.soundManager.playSound(this.painSound);
 		}
 
 		this.health -= damage;
@@ -402,7 +402,7 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 		this.calculateRotation();
 
 		this.dead = true;
-		this.grid.soundManager.playSound("monster_death");
+		this.grid.soundManager.playSound(this.deathSound);
 		this.grid.aiManager.onMonsterDeath();
 		this.animationView.setLoop("death");
 		this.updateMesh();

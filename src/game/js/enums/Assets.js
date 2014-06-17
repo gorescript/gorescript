@@ -104,12 +104,14 @@ GS.Assets[GS.AssetTypes.Sound] = {
 	"monster_roar": 		{ filename: "monster_roar.ogg",				allowMultipleAtOnce: true },
 	"monster_bite": 		{ filename: "monster_bite.ogg",				allowMultipleAtOnce: true },
 	"monster_death": 		{ filename: "monster_death.ogg",			allowMultipleAtOnce: true },
+	"eye_death": 			{ filename: "eye_death.ogg",				allowMultipleAtOnce: true },
 	"pickup_ammo": 			{ filename: "pickup_ammo.ogg",				allowMultipleAtOnce: true },
 	"pickup_item": 			{ filename: "pickup_item.ogg",				allowMultipleAtOnce: true },
 	"pickup_weapon": 		{ filename: "pickup_weapon.ogg",			allowMultipleAtOnce: true },
 	"shotgun_fire": 		{ filename: "shotgun_fire.ogg",				allowMultipleAtOnce: true },
 	"player_death": 		{ filename: "player_death.ogg",				allowMultipleAtOnce: true },
 	"switch_on": 			{ filename: "switch_on.ogg",				allowMultipleAtOnce: true },
+	"none": 				{ filename: "none.ogg",						allowMultipleAtOnce: true },
 };
 
 GS.Assets[GS.AssetTypes.MusicTrack] = {
