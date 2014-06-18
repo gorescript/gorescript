@@ -22,8 +22,9 @@ GS.CustomFontFile = "capsuula.woff";
 GS.Assets = {};
 
 GS.Assets[GS.AssetTypes.Texture] = {
-	"floor": 				{ filename: "floor.png", 					type: GS.TextureTypes.Map },
-	"ceil": 				{ filename: "ceil.png", 					type: GS.TextureTypes.Map },
+	"cyan_wall":			{ filename: "cyan_wall.png",				type: GS.TextureTypes.Map },
+	"red_wall": 			{ filename: "red_wall.png", 				type: GS.TextureTypes.Map },
+	"blue_metal": 			{ filename: "blue_metal.png", 				type: GS.TextureTypes.Map },
 	"wall": 				{ filename: "wall.png", 					type: GS.TextureTypes.Map },
 	"metal": 				{ filename: "metal.png", 					type: GS.TextureTypes.Map },
 	"light": 				{ filename: "light.png", 					type: GS.TextureTypes.Map },
@@ -120,8 +121,10 @@ GS.Assets[GS.AssetTypes.MusicTrack] = {
 
 GS.Assets[GS.AssetTypes.Map] = {
 	"airstrip1": 			{ filename: "airstrip1.js" },
+	"sacrosanct":			{ filename: "sacrosanct.js" },
 };
 
 GS.Assets[GS.AssetTypes.Script] = {
 	"airstrip1": 			{ filename: "airstrip1.js" },
+	"sacrosanct":			{ filename: "sacrosanct.js" },
 };

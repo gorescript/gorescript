@@ -24,7 +24,7 @@ GS.Game = function() {
 	this.clearColor = 0x336699;
 	this.cameraFov = GS.Settings.fov;
 
-	this.mapName = "airstrip1";
+	this.noMenu = true;
 	this.useAssetsZip = false;
 
 	if (GS.BuildOverride === true) {
@@ -108,7 +108,11 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.uiManager.initComponents(this.assetLoader.assets);
 			this.openMenu();
 			this.firstLoad = false;
-		} else {			
+
+			if (this.noMenu) {
+				this.newGame();
+			}
+		} else {
 			this.initComponents(this.assetLoader.assets);			
 			this.uiManager.initComponents(this.assetLoader.assets, this.grid);
 			this.uiManager.useIngameMenu();
@@ -210,7 +214,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.closeMenu();
 		}
 
-		this.mapName = "airstrip1"; 
+		this.mapName = "sacrosanct"; 
 		this.nextState = GS.GameStates.Dispose; 
 	},
 

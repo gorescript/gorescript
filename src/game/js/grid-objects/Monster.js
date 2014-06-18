@@ -258,17 +258,22 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 	},
 
 	rangedAttack: function() {
-		this.moving = false;
-		var target = this.grid.player;
+		var direction = new THREE.Vector3();
 
-		this.chargingUpRangedAttack = false;	
-		this.animationView.setLoop("walk");		
+		return function() {
+			this.moving = false;
+			var target = this.grid.player;
 
-		this.rangedAttackCooldown = this.rangedAttackMaxCooldown + 
-			Math.floor(Math.random() * this.rangedAttackCooldownRandomModifier);
+			this.chargingUpRangedAttack = false;
+			this.animationView.setLoop("walk");
 
-		this.grid.addProjectile(this, this.rangedAttackProjectile, this.position.clone(), this.direction.clone());
-	},
+			this.rangedAttackCooldown = this.rangedAttackMaxCooldown + 
+				Math.floor(Math.random() * this.rangedAttackCooldownRandomModifier);
+
+			direction.copy(target.position).sub(this.position).normalize();
+			this.grid.addProjectile(this, this.rangedAttackProjectile, this.position.clone(), direction.clone());
+		}
+	}(),
 
 	inMeleeRange: function(pos) {
 		return this.position.distanceTo(pos) < this.meleeRange;

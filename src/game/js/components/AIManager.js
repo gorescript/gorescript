@@ -146,7 +146,7 @@ GS.AIManager.prototype = {
 			}
 		} else {
 			var region = { doorIds: {}, sectorIds: {}, linkedRegions: [], monsters: [] };
-			for (var i in sectorDict) {
+			for (var i in this.sectorDict) {
 				region.sectorIds[i] = true;
 			}
 			regions.push(region);

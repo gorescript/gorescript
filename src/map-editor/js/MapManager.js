@@ -838,8 +838,8 @@ GS.MapManager.prototype = {
 		sector.doorMaxHeight = (sector.doorMaxHeight !== undefined) ? sector.doorMaxHeight : 16;
 		sector.elevator = (sector.elevator !== undefined) ? sector.elevator : false;
 		sector.elevatorMaxHeight = (sector.elevatorMaxHeight !== undefined) ? sector.elevatorMaxHeight : 16;
-		sector.floorTexId = sector.floorTexId || "floor";
-		sector.ceilTexId = sector.ceilTexId || "ceil";
+		sector.floorTexId = sector.floorTexId || "wall";
+		sector.ceilTexId = sector.ceilTexId || "wall";
 		sector.sideTexId = sector.sideTexId || "wall";
 		sector.lightLevel = (sector.lightLevel !== undefined) ? sector.lightLevel : 5;
 		sector.lightColor = (sector.lightColor !== undefined) ? sector.lightColor : 0xffffff;
