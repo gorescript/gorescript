@@ -18,7 +18,7 @@ GS.Weapons = {
 		hitscan: true,
 		spread: {
 			shots: 8,
-			angleOffset: 6,
+			angleOffset: 5,
 		},
 		damage: 10,
 		impactParticleColor: new THREE.Color().setRGB(1, 1, 1).getHex(),

@@ -179,19 +179,12 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 	},
 
 	onItemCollision: function(item) {
-		var name = GS.MapEntities[item.sourceObj.type].name;		
+		var name = GS.MapEntities[item.sourceObj.type].name;
 
-		var isWeapon = this.pickupWeapon(name);
-		var isAmmo = this.pickupAmmo(name);
-		var isMedkit = this.pickupMedkit(name);
-
-		if (!isWeapon && !isAmmo) {
-			this.grid.soundManager.playSound("pickup_item");			
+		if (this.pickupWeapon(name) || this.pickupAmmo(name) || this.pickupMedkit(name)) {
+			item.remove();
+			this.playerView.onItemPickup();
 		}
-
-		item.remove();
-
-		this.playerView.onItemPickup();		
 	},
 
 	pickupWeapon: function(name) {
@@ -226,34 +219,43 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 
 	pickupAmmo: function(name) {
 		var that = this;
+		var once = false;
+
 		if (name == "ammo") {
 			Object.keys(this.availableWeapons).forEach(function(key) {
 				var weapon = that.availableWeapons[key];
 
-				if (!weapon.infiniteAmmo) {
+				if (!weapon.infiniteAmmo && weapon.ammo < weapon.ammoMax) {
 					weapon.ammo += weapon.ammoClip;
 					if (weapon.ammo > weapon.ammoMax) {
 						weapon.ammo = weapon.ammoMax;
 					}
 
 					GS.DebugUI.addTempLine("picked up " + weapon.ammoClip + " " + weapon.name + " ammo");
+					once = true;
 				}
 			});
-			this.grid.soundManager.playSound("pickup_ammo");
-			return true;
+
+			if (once) {
+				this.grid.soundManager.playSound("pickup_ammo");
+				return true;
+			}
 		}
+
 		return false;
 	},
 
 	pickupMedkit: function(name) {
 		var that = this;
-		if (name == "medkit") {
+		if (name == "medkit" && this.health < 100) {
 			GS.DebugUI.addTempLine("picked up medkit");
 
 			this.health += 25;
 			if (this.health > 100) {
 				this.health = 100;
 			}
+
+			this.grid.soundManager.playSound("pickup_item");
 			return true;
 		}
 		return false;
