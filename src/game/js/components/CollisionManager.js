@@ -119,8 +119,7 @@ GS.CollisionManager.prototype = {
 		var that = this;
 		this.grid.forEachUniqueGridObjectInCells(player.linkedGridCells, [GS.Item], function(item) {
 			if (player.view.collisionData.boundingBox.isIntersectionBox(item.view.collisionData.boundingBox)) {
-				player.onItemCollision(item);
-				that.grid.aiManager.onPlayerItemPickup(player, item);
+				player.onItemCollision(item);				
 			}
 		});
 	},

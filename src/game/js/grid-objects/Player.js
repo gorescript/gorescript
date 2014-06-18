@@ -182,6 +182,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 		var name = GS.MapEntities[item.sourceObj.type].name;
 
 		if (this.pickupWeapon(name) || this.pickupAmmo(name) || this.pickupMedkit(name)) {
+			this.grid.aiManager.onPlayerItemPickup(this, item);
 			item.remove();
 			this.playerView.onItemPickup();
 		}

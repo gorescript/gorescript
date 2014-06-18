@@ -25,4 +25,10 @@ GS.Switch.prototype = GS.inherit(GS.GridObject, {
 		this.grid.aiManager.onSwitchStateChange(this);
 		this.grid.soundManager.playSound("switch_on");
 	},
+
+	block: function() {
+		this.on = true;
+		this.view.mesh.material.map = this.view.textureOn;
+		this.usable = false;
+	},
 });

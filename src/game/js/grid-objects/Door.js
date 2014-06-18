@@ -82,7 +82,7 @@ GS.Door.prototype = GS.inherit(GS.GridObject, {
 				break;
 		}
 
-		this.usable = (this.state === GS.DoorStates.Closed);
+		this.usable = (this.state === GS.DoorStates.Closed && this._automatic === true);
 
 		if (velocity.y !== 0) {
 			this.updateBoundingBox();
