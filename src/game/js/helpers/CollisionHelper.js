@@ -116,7 +116,7 @@ GS.CollisionHelper = {
 			p.nearestDistance = 0;
 
 			triangleIterator(function(gridObject, t0, t1, t2, triangleOffset) {
-				GAME.grid.totalCollisionTriangles++;
+				GAME.grid.totalSphereTriangleChecks++;
 				
 				v0.copy(t0).divide(p.ellipsoidSpace);
 				v1.copy(t1).divide(p.ellipsoidSpace);

@@ -85,6 +85,7 @@ GS.CollisionManager.prototype = {
 				foundCollision = false;
 
 				lineSegmentIterator(function(seg) {
+					GAME.grid.totalBoxSegmentChecks++;
 					var result = box.isIntersectionLineSwept(oldPos, newPos0, seg);
 
 					if (result.foundCollision) {
@@ -319,6 +320,7 @@ GS.CollisionManager.prototype = {
 				sector = gridObject.sector;
 			}
 
+			GAME.grid.totalBoxSectorChecks++;
 			if (GS.PolygonHelper.intersectionSectorBox(sector, box)) {
 				var floorHeight = sector.floorTopY;
 				if (floorHeight > result.floorHeight) {

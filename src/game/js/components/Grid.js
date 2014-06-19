@@ -56,7 +56,9 @@ GS.Grid.prototype = {
 		this.lightingView.update();
 		this.aiManager.update();
 
-		this.totalCollisionTriangles = 0;
+		this.totalSphereTriangleChecks = 0;
+		this.totalBoxSectorChecks = 0;
+		this.totalBoxSegmentChecks = 0;
 
 		var projectileCount = 0;
 		var itemCount = 0;
@@ -79,7 +81,9 @@ GS.Grid.prototype = {
 		var rotationMatrix = new THREE.Matrix4().extractRotation(this.player.camera.matrixWorld);
 		this.skybox.camera.rotation.setFromRotationMatrix(rotationMatrix, this.skybox.camera.rotation.order);
 
-		// GS.DebugUI.trackNumericValue("total collision triangles", this.totalCollisionTriangles);
+		// GS.DebugUI.trackNumericValue("total box sector checks", this.totalBoxSectorChecks);
+		// GS.DebugUI.trackNumericValue("total box segment checks", this.totalBoxSegmentChecks);
+		// GS.DebugUI.trackNumericValue("total sphere triangle checks", this.totalSphereTriangleChecks);
 	},
 
 	addConcreteMeshesToScene: function() {
