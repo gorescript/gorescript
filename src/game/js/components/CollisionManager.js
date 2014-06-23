@@ -253,54 +253,57 @@ GS.CollisionManager.prototype = {
 		}
 	}(),
 
-	handleConcreteCollisions: function(gridLocation, oldPos, newPos, size) {
-		var oldPos2d = oldPos.toVector2();
-		var newPos2d = newPos.toVector2();
-		var size2d = size.toVector2();
+	handleConcreteCollisions: function() {
+		var oldPos2d = new THREE.Vector2();
+		var newPos2d = new THREE.Vector2();
+		var size2d = new THREE.Vector2();
 
-		var box = new THREE.Box2(oldPos2d.clone().sub(size2d), oldPos2d.clone().add(size2d));
-		var boxNew = new THREE.Box2(newPos2d.clone().sub(size2d), newPos2d.clone().add(size2d));
+		var box = new THREE.Box2();
+		var boxNew = new THREE.Box2();
 
-		var cells = this.grid.getCellsFromGridLocation(gridLocation);
+		return function(gridLocation, oldPos, newPos, size) {
+			oldPos.toVector2(oldPos2d);
+			newPos.toVector2(newPos2d);
+			size.toVector2(size2d);
 
-		var oldSector = this.getSectorHeights(cells, box);
-		var newSector = this.getSectorHeights(cells, boxNew);
+			box.min.copy(oldPos2d).sub(size2d);
+			box.max.copy(oldPos2d).add(size2d);
+			boxNew.min.copy(newPos2d).sub(size2d);
+			boxNew.max.copy(newPos2d).add(size2d);
 
-		if (newPos.y - size.y > oldSector.floorHeight) {
-			newPos.y -= 0.5;
-			if (newPos.y - size.y < oldSector.floorHeight) {
-				newPos.y = oldSector.floorHeight + size.y;
+			var cells = this.grid.getCellsFromGridLocation(gridLocation);
+			var newSector = this.getSectorHeights(cells, boxNew);
+
+			var condition = function() { return true; };
+			if (newSector !== undefined) {
+				var currentHeight = newPos.y - size.y;
+				var newHeight = newSector.floorHeight;
+
+				if (Math.abs(newSector.ceilHeight - newSector.floorHeight) >= size.y * 2) {
+					newPos.y = newHeight + size.y;
+					var minHeight = newPos.y - size.y + 0.03;
+					var maxHeight = newPos.y + size.y + 0.03;
+
+					condition = function(seg) {
+						return (seg.bottomY >= minHeight && seg.bottomY <= maxHeight ||
+							seg.topY >= minHeight && seg.topY <= maxHeight ||
+							seg.bottomY < minHeight && seg.topY > maxHeight);
+					};
+				}
+
+				var segmentIterator = this.grid.getSegmentIterator(gridLocation, condition);
+				this.slidingBoxLineCollision(oldPos2d, newPos2d, box, segmentIterator);
+
+				newPos.x = newPos2d.x;
+				newPos.z = newPos2d.y;
+			} else {
+				newPos.copy(oldPos);
 			}
 		}
-
-		var condition = function() { return true; };
-		if (newSector !== undefined) {
-			var currentHeight = newPos.y - size.y;
-			var newHeight = newSector.floorHeight;
-
-			if (Math.abs(newHeight - currentHeight) <= 6 &&
-				Math.abs(newSector.ceilHeight - newSector.floorHeight) >= size.y * 2) {
-				newPos.y = newHeight + size.y;
-				var minHeight = newPos.y - size.y + 0.03;
-				var maxHeight = newPos.y + size.y + 0.03;
-
-				condition = function(seg) {
-					return (seg.bottomY >= minHeight && seg.bottomY <= maxHeight ||
-						seg.topY >= minHeight && seg.topY <= maxHeight ||
-						seg.bottomY < minHeight && seg.topY > maxHeight);
-				};
-			}
-		}
-
-		var segmentIterator = this.grid.getSegmentIterator(gridLocation, condition);
-		this.slidingBoxLineCollision(oldPos2d, newPos2d, box, segmentIterator);
-
-		newPos.x = newPos2d.x;
-		newPos.z = newPos2d.y;
-	},
+	}(),
 
 	getSectorHeights: function(cells, box) {
-		var foundSector = false;
+		var heights = [];
 
 		var result = {
 			floorHeight: -Infinity,
@@ -308,7 +311,6 @@ GS.CollisionManager.prototype = {
 		};
 
 		var sector = undefined;
-
 		this.grid.forEachUniqueGridObjectInCells(cells, [GS.Concrete, GS.Elevator], function(gridObject) {
 			if (gridObject instanceof GS.Concrete) {
 				if (gridObject.type === GS.MapLayers.Sector) {
@@ -323,16 +325,29 @@ GS.CollisionManager.prototype = {
 			GAME.grid.totalBoxSectorChecks++;
 			if (GS.PolygonHelper.intersectionSectorBox(sector, box)) {
 				var floorHeight = sector.floorTopY;
-				if (floorHeight > result.floorHeight) {
-					foundSector = true;
+				if (floorHeight > result.floorHeight) {					
 					result.floorHeight = floorHeight;
 					result.ceilHeight = (sector.ceiling === true) ? sector.ceilBottomY : Infinity;
 				}
+				heights.push(floorHeight);
 			}
 		});
 
-		if (foundSector) {
-			return result;
+		if (heights.length > 0) {
+			heights.sort();
+
+			var maxDistance = 0;
+			var distance;
+			for (var i = 0; i < heights.length - 1; i++) {
+				distance = heights[i + 1] - heights[i];
+				if (distance > maxDistance) {
+					maxDistance = distance;
+				}
+			}
+
+			if (maxDistance <= 6) {
+				return result;
+			}
 		}
 
 		return undefined;
