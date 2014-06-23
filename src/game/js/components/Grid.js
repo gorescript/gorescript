@@ -16,9 +16,6 @@ GS.Grid.prototype = {
 	constructor: GS.Grid,
 
 	init: function() {
-		this.addConcreteMeshesToScene();
-		this.addEntityMeshesToScene();
-
 		this.particleView = new GS.ParticleView(this);
 		this.particleView.init();
 
@@ -34,6 +31,9 @@ GS.Grid.prototype = {
 
 		this.aiManager = new GS.AIManager(this);
 		this.aiManager.init();
+
+		this.addConcreteMeshesToScene();
+		this.addEntityMeshesToScene();
 
 		if (this.debugCellLines) {
 			this.addDebugCellLines();
@@ -94,8 +94,12 @@ GS.Grid.prototype = {
 			}
 
 			gridObject.view.mesh.userData.gridObject = gridObject;
-			that.concreteMeshes.children.push(gridObject.view.mesh);
 		});
+
+		var regions = this.aiManager.regions;
+		for (var i = 0; i < regions.length; i++) {
+			this.concreteMeshes.children.push(regions[i].rootMesh);
+		}
 
 		this.scene.add(this.concreteMeshes);
 	},

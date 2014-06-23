@@ -2,6 +2,7 @@ GS.GraphicsManager = function(renderer, camera) {
 	this.renderer = renderer;
 	this.camera = camera;
 
+	this.noPostProcessing = false;
 	this.noiseTextureSize = 256;
 };
 
@@ -93,6 +94,20 @@ GS.GraphicsManager.prototype = {
 		this.composer.addPass(effectCopy);
 	},
 
+	renderToScreen: function() {
+		this.renderer.autoClear = false;
+
+		this.renderer.clear(true, true, false);
+
+		this.renderer.render(this.grid.skybox.scene, this.grid.skybox.camera);
+		this.renderer.render(this.scene, this.camera);
+
+		this.renderer.clear(false, true, false);
+
+		var playerView = this.grid.player.playerView;
+		this.renderer.render(playerView.scene, playerView.camera);
+	},
+
 	render: function() {
 		var renderTarget = this.composer.renderTarget2;
 		this.renderer.autoClear = false;
@@ -127,13 +142,17 @@ GS.GraphicsManager.prototype = {
 	},
 
 	draw: function() {
-		this.render();
+		if (this.noPostProcessing) {
+			this.renderToScreen();
+		} else {			
+			this.render();
 
-		if (this.ssaoEnabled) {
-			this.renderDepthTarget();
+			if (this.ssaoEnabled) {
+				this.renderDepthTarget();
+			}
+
+			this.composer.render();
 		}
-
-		this.composer.render();
 	},
 
 	onResize: function() {

@@ -32,6 +32,7 @@ GS.Game = function() {
 	}
 	
 	this.showFPS = GS.Settings.showFPS;
+	this.showPerformanceDebugMeters = false;
 };
 
 GS.Game.prototype = GS.inherit(GS.Base, {
@@ -123,7 +124,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.musicManager.playTrack("simple_action_beat");
 
 			if (this.firstPlay) {
-				GS.DebugUI.addTempLine("if you encounter frame rate issues, check out the options menu");
 				this.firstPlay = false;
 			}
 		}
@@ -229,6 +229,8 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 		this.soundManager.initSounds(assets[GS.AssetTypes.Sound]);
 		this.musicManager.initTracks(assets[GS.AssetTypes.MusicTrack]);
+
+		this.grid.update();
 		this.graphicsManager.setGrid(this.grid);
 		
 		this.grid.player.controls.addEventListener("pointerLockDisabled", function() { that.openMenu(); });
@@ -237,6 +239,10 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	},
 
 	update: function() {
+		if (this.showPerformanceDebugMeters) {
+			var time = window.performance.now();
+		}
+
 		if (this.state == GS.GameStates.Dispose) {
 			if (!this.updated) {
 				this.updated = true;
@@ -279,9 +285,18 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 				this.updated = false;
 			}
 		}
+		
+		if (this.showPerformanceDebugMeters) {
+			this.updateTime = (window.performance.now() - time).toFixed(2);
+			GS.DebugUI.trackNumericValue("updateTime", this.updateTime);
+		}
 	},
 
 	draw: function() {
+		if (this.showPerformanceDebugMeters) {
+			var time = window.performance.now();
+		}
+
 		if (this.state == GS.GameStates.PreLoad) {
 			this.loadingUI.draw();
 		} else 
@@ -297,6 +312,11 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			}
 
 			this.uiManager.draw();
+		}
+
+		if (this.showPerformanceDebugMeters) {
+			this.drawTime = (window.performance.now() - time).toFixed(2);
+			GS.DebugUI.trackNumericValue("drawTime", this.drawTime);
 		}
 	},
 
