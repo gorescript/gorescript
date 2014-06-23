@@ -32,7 +32,8 @@
 		var cvs;
 
 		var ledges = [
-			{ start: 0, end: 32, height: 48 },
+			{ start: 0, end: 28, height: 52 },
+			{ start: 28, end: 32, height: 48 },
 			{ start: 32, end: 36, height: 44 },
 			{ start: 36, end: 40, height: 40 },
 			{ start: 40, end: 70, height: 36 },
@@ -40,7 +41,7 @@
 		];
 
 		var player = {
-			pos: 54, size: 8, ledge: 3
+			pos: 54, size: 8, ledge: 4
 		};
 
 		var zoom = window.innerHeight / 100;
@@ -71,6 +72,9 @@
 		}
 
 		function move(dx) {
+			move2(dx);
+			return;
+
 			var newPos = player.pos + dx;
 
 			var startX = newPos - player.size;
@@ -92,9 +96,53 @@
 				}
 			}
 
-			if (maxLedge > -1) {				
+			if (maxLedge > -1) {
 				player.pos = newPos;
 				player.ledge = maxLedge;
+			}
+		}
+
+		function move2(dx) {
+			var newPos = player.pos + dx;
+
+			var startX = newPos - player.size;
+			var endX = newPos + player.size;
+
+			var heights = [];
+
+			var maxHeight = -Infinity;
+			var maxLedge = -1;
+
+			for (var i = 0; i < ledges.length; i++) {
+				var ledge = ledges[i];
+
+				if (startX <= ledge.end && endX >= ledge.start) {
+					if (ledge.height > maxHeight) {
+						maxHeight = ledge.height;
+						maxLedge = i;
+					}
+					heights.push(ledge.height);
+				}
+			}
+
+			if (maxLedge > -1) {
+				heights.sort();
+
+				var maxDistance = 0;
+				var distance;
+				for (var i = 0; i < heights.length - 1; i++) {
+					distance = heights[i + 1] - heights[i];
+					if (distance > maxDistance) {
+						maxDistance = distance;
+					}
+				}
+
+				if (maxDistance <= 6) {
+					player.pos = newPos;
+					player.ledge = maxLedge;
+				} else {
+					GS.DebugUI.setStaticLine("heights", heights.join(" "));
+				}	
 			}
 		}
 
@@ -112,9 +160,13 @@
 				var ledge = ledges[i];
 
 				var start = new THREE.Vector2(ledge.start * zoom, (100 - ledge.height) * zoom);
-				var end = new THREE.Vector2(ledge.end * zoom, (100 - ledge.height) * zoom);
+				var end = new THREE.Vector2(ledge.end * zoom, (100 - ledge.height) * zoom);				
 
 				cvs.line(start, end, "#fff", 3);
+
+				var center = start.clone().add(end).multiplyScalar(0.5);
+				center.y += 10;
+				cvs.text(center, ledge.height, "#fff", 16, "top", "center");
 
 				if (i + 1 < ledges.length) {
 					ledge = ledges[i + 1];
