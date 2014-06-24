@@ -229,7 +229,7 @@ GS.UIComponents.Menu.prototype = {
 		this.levelSelectPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 60, 140);
 
-		this.btnLevel1 = this.levelSelectPanel.addImageButton("standard horseshoe", this.assets.images.thumb_airstrip1);
+		this.btnLevel1 = this.levelSelectPanel.addImageButton("airstrip one", this.assets.images.thumb_airstrip1);
 		this.btnLevel1.onClick = function() { GAME.loadLevel("airstrip1"); }
 		this.btnLevel2 = this.levelSelectPanel.addImageButton("sacrosanct", this.assets.images.thumb_sacrosanct);
 		this.btnLevel2.onClick = function() { GAME.loadLevel("sacrosanct"); }
