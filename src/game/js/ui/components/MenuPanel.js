@@ -8,7 +8,7 @@ GS.UIComponents.MenuPanel = function(vectorCanvas, offset, pos, size, fontSize, 
 	this.pos = pos;
 	this.size = size;
 	this.rowHeight = rowHeight || 40;
-	this.rowCount = 0;
+	this.rowOffset = 0;
 };
 
 GS.UIComponents.MenuPanel.prototype = {
@@ -26,7 +26,7 @@ GS.UIComponents.MenuPanel.prototype = {
 
 		this.children.push(button);
 
-		this.rowCount++;
+		this.rowOffset += this.rowHeight;
 
 		return button;
 	},
@@ -55,7 +55,7 @@ GS.UIComponents.MenuPanel.prototype = {
 
 		this.children.push(button);
 
-		this.rowCount++;
+		this.rowOffset += this.rowHeight;
 
 		return {
 			label: label,
@@ -86,7 +86,7 @@ GS.UIComponents.MenuPanel.prototype = {
 
 		this.children.push(label2);
 
-		this.rowCount++;
+		this.rowOffset += this.rowHeight;
 
 		return {
 			label1: label1,
@@ -114,7 +114,7 @@ GS.UIComponents.MenuPanel.prototype = {
 
 		this.children.push(numberPicker);
 
-		this.rowCount++;
+		this.rowOffset += this.rowHeight;
 
 		return {
 			label: label,
@@ -122,13 +122,26 @@ GS.UIComponents.MenuPanel.prototype = {
 		};
 	},
 
+	addImageButton: function(text, image, onClick) {
+		var offset = this.getRowOffset();
+		var imageButtonOffset = offset.clone();
+		var imageButtonSize = new THREE.Vector2(this.size.x, this.rowHeight);
+		var imageButton = new GS.UIComponents.MenuImageButton(this.cvs, imageButtonOffset, this.pos, 
+			imageButtonSize, this.fontSize, text, image, onClick);
+
+		this.children.push(imageButton);
+		this.rowOffset += this.rowHeight;
+
+		return imageButton;
+	},
+
 	addEmptyRow: function() {
-		this.rowCount++;
+		this.rowOffset += this.rowHeight;
 	},
 
 	getRowOffset: function() {
 		var offset = this.offset.clone();
-		offset.y += this.rowCount * this.rowHeight;
+		offset.y += this.rowOffset;
 
 		if (Math.abs(offset.y - this.offset.y) > this.size.y) {
 			throw "menu panel exceeds height";

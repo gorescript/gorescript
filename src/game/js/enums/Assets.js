@@ -61,6 +61,8 @@ GS.Assets[GS.AssetTypes.UIWidget] = {
 	"hud": 					{ filename: "hud.png" },
 	"logo": 				{ filename: "logo.png" },
 	"menu_back":			{ filename: "menu_back.png" },
+	"thumb_airstrip1":		{ filename: "thumb_airstrip1.png" },
+	"thumb_sacrosanct":		{ filename: "thumb_sacrosanct.png" },
 };
 
 GS.Assets[GS.AssetTypes.Mesh] = {

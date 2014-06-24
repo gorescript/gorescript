@@ -44,6 +44,7 @@ GS.UIComponents.Menu.prototype = {
 		this.initControlsPanel();
 		this.initCreditsPanel();
 		this.initCheatsPanel();
+		this.initLevelSelectPanel();
 		this.initFooter();
 
 		this.activePanel = this.topPanel;
@@ -59,7 +60,7 @@ GS.UIComponents.Menu.prototype = {
 		this.btnNewGame.onClick = function() { GAME.newGame(); };
 
 		this.btnLevelSelect = this.topPanel.addButton("level select");
-		this.btnLevelSelect.disabled = true;
+		this.btnLevelSelect.onClick = function() { that.activePanel = that.levelSelectPanel; };
 
 		this.btnOptions = this.topPanel.addButton("options");
 		this.btnOptions.onClick = function() { that.activePanel = that.optionsPanel; };
@@ -220,6 +221,26 @@ GS.UIComponents.Menu.prototype = {
 
 		this.btnCheatsBack = this.cheatsPanel.addButton("back");
 		this.btnCheatsBack.onClick = function() { that.activePanel = that.optionsPanel; };
+	},
+
+	initLevelSelectPanel: function() {
+		var that = this;
+
+		this.levelSelectPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 60, 140);
+
+		this.btnLevel1 = this.levelSelectPanel.addImageButton("standard horseshoe", this.assets.images.thumb_airstrip1);
+		this.btnLevel1.onClick = function() { GAME.loadLevel("airstrip1"); }
+		this.btnLevel2 = this.levelSelectPanel.addImageButton("sacrosanct", this.assets.images.thumb_sacrosanct);
+		this.btnLevel2.onClick = function() { GAME.loadLevel("sacrosanct"); }
+
+		this.levelSelectPanel.fontSize = 40;
+		this.levelSelectPanel.rowHeight = 43;
+
+		this.levelSelectPanel.addEmptyRow();
+
+		this.btnLevelSelectBack = this.levelSelectPanel.addButton("back");
+		this.btnLevelSelectBack.onClick = function() { that.activePanel = that.topPanel; };
 	},
 
 	initControlsPanel: function() {
