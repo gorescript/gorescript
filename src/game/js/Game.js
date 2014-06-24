@@ -24,7 +24,7 @@ GS.Game = function() {
 	this.clearColor = 0x336699;
 	this.cameraFov = GS.Settings.fov;
 
-	this.noMenu = true;
+	this.noMenu = false;
 	this.useAssetsZip = false;
 
 	if (GS.BuildOverride === true) {
@@ -141,7 +141,10 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		}
 
 		if (this.grid.aiManager.mapWon && !GS.InputHelper.keysPressed && GS.InputHelper.isKeyDown(this.keys.Enter)) {
-			this.restartLevel();
+			if (this.grid.aiManager.script.nextMap !== undefined) {
+				this.playerPersistencePackage = this.grid.player.getPersistencePackage();
+				this.loadLevel(this.grid.aiManager.script.nextMap);
+			}
 		}
 
 		if (!this.grid.aiManager.mapWon) {
@@ -200,12 +203,12 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.nextState = GS.GameStates.Dispose;
 	},
 
-	loadLevel: function(name) { 
+	loadLevel: function(name) {
 		if (this.uiManager.menuActive) {
 			this.closeMenu();
 		}
 
-		this.mapName = mapName; 
+		this.mapName = name;
 		this.nextState = GS.GameStates.Dispose; 
 	},
 
@@ -214,7 +217,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.closeMenu();
 		}
 
-		this.mapName = "sacrosanct"; 
+		this.mapName = "airstrip1"; 
 		this.nextState = GS.GameStates.Dispose; 
 	},
 
@@ -229,6 +232,11 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 		this.soundManager.initSounds(assets[GS.AssetTypes.Sound]);
 		this.musicManager.initTracks(assets[GS.AssetTypes.MusicTrack]);
+
+		if (this.playerPersistencePackage !== undefined) {
+			this.grid.player.applyPersistencePackage(this.playerPersistencePackage);
+			this.playerPersistencePackage = undefined;
+		}
 
 		this.grid.update();
 		this.graphicsManager.setGrid(this.grid);

@@ -81,9 +81,36 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 
 		this.weapon = this.availableWeapons.pistol;
 		this.weaponName = "pistol";
-		this.playerView.changeToWeapon("pistol");
+		this.playerView.changeToWeaponInstant("pistol");
+	},
 
-		// window.giveall;
+	getPersistencePackage: function() {
+		var pkg = {
+			health: this.health,
+			weapons: {},
+			currentWeapon: this.weaponName,
+		};
+
+		for (var i in this.availableWeapons) {
+			pkg.weapons[i] = {};
+			pkg.weapons[i].pickedUp = this.availableWeapons[i].pickedUp;
+			pkg.weapons[i].ammo = this.availableWeapons[i].ammo;			
+		}
+
+		return pkg;
+	},
+
+	applyPersistencePackage: function(pkg) {
+		this.health = pkg.health;
+
+		for (var i in this.availableWeapons) {
+			this.availableWeapons[i].pickedUp = pkg.weapons[i].pickedUp;
+			this.availableWeapons[i].ammo = pkg.weapons[i].ammo;
+		}
+
+		this.weapon = this.availableWeapons[pkg.currentWeapon];
+		this.weaponName = pkg.currentWeapon;
+		this.playerView.changeToWeaponInstant(pkg.currentWeapon);
 	},
 
 	giveAll: function() {

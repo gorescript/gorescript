@@ -10,6 +10,7 @@ GS.UIComponents.WinScreen = function(vectorCanvas, assets, player) {
 	this.aiManager = player.grid.aiManager;
 
 	this.mapName = "map name";
+	this.hasNextMap = false;
 
 	this.monstersKilled = 0;
 	this.maxMonsters = 0;
@@ -50,6 +51,7 @@ GS.UIComponents.WinScreen.prototype = {
 		var script = this.aiManager.script;
 
 		this.mapName = script.mapName;
+		this.hasNextMap = script.nextMap !== undefined;
 		this.monstersKilled = this.aiManager.monstersKilled;
 		this.maxMonsters = this.aiManager.maxMonsters;
 		this.itemsPickedUp = this.aiManager.itemsPickedUp;
@@ -73,10 +75,12 @@ GS.UIComponents.WinScreen.prototype = {
 
 		this.drawField("time spent", this.minutes + ":" + this.seconds, 6);
 
-		this.drawMessage("this concludes the current release", 8);
-		this.drawMessage("come back later for more content", 9);
-
-		this.drawMessage("[ENTER] to continue", 11);
+		if (this.hasNextMap) {
+			this.drawMessage("[ENTER] to continue to the next level", 11);
+		} else {
+			this.drawMessage("congrats!", 10);
+			this.drawMessage("this concludes the current release", 11);
+		}
 	},
 
 	drawField: function() {

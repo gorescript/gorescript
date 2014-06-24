@@ -297,7 +297,7 @@ GS.UIComponents.Menu.prototype = {
 		this.label1.fontSize = 30;		
 		this.children.push(this.label1);
 
-		this.label2 = new GS.UIComponents.MenuLabel(this.cvs, "timeinvariant.com/gorescript",
+		this.label2 = new GS.UIComponents.MenuLabel(this.cvs, "timeinvariant.com",
 			new THREE.Vector2(-12, -25), new THREE.Vector2(1, 1));
 		this.label2.textAlign = "right";
 		this.label2.fontSize = 30;		

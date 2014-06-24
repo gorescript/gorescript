@@ -207,6 +207,19 @@ GS.PlayerView.prototype = {
 		this.muzzleCooldown = this.weapon.muzzleDuration;
 	},
 
+	changeToWeaponInstant: function(name) {
+		this.resetWeaponThrottle();
+
+		if (this.weapon !== undefined) {
+			this.weapon.mesh.visible = false;
+		}
+
+		this.weaponReady = true;
+		this.weapon = this.weapons[name];
+		this.weapon.mesh.visible = true;
+		this.weapon.mesh.position.copy(this.weapon.startPosition);
+	},
+
 	changeToWeapon: function(name) {
 		var that = this;
 
