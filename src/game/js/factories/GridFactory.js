@@ -150,6 +150,7 @@ GS.GridFactory.prototype = {
 		var door = new GS.Door(grid, sector);
 		this.viewFactory.applyDoorView(door);
 		door.assignToCells(gridLocation);
+		sector.doorOpenedEver = false;
 	},
 
 	addElevator: function(grid, gridLocation, sector) {

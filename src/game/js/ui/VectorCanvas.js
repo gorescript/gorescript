@@ -25,6 +25,18 @@ GS.VectorCanvas.prototype = {
 		}
 	},
 
+	fixedLine: function() {
+		var v0 = new THREE.Vector2();
+		var v1 = new THREE.Vector2();
+
+		return function(pos, p0, p1, color, lineWidth) {
+			this.convertToScreenCoords(pos, v0, p0);
+			this.convertToScreenCoords(pos, v1, p1);
+
+			this.cvs.line(v0, v1, color, lineWidth);
+		}
+	}(),
+
 	line: function() {
 		var v0 = new THREE.Vector2();
 		var v1 = new THREE.Vector2();

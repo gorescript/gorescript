@@ -19,6 +19,7 @@ GS.Game = function() {
 	this.updated = false;
 	this.firstLoad = true;
 	this.firstPlay = true;
+	this.mapWon = false;
 	
 	this.antialias = false;
 	this.clearColor = 0x336699;
@@ -58,7 +59,8 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 		this.keys = {
 			Enter: 13,
-			Escape: 27,			
+			Escape: 27,
+			Tab: 9,
 		};
 
 		GS.Base.prototype.init.call(this);
@@ -122,6 +124,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 			this.nextState = GS.GameStates.Play;
 			this.musicManager.playTrack("simple_action_beat");
+			this.graphicsManager.monochromeEnabled = false;
 
 			if (this.firstPlay) {
 				this.firstPlay = false;
@@ -136,6 +139,12 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.openMenu();
 		}
 
+		if (!this.grid.aiManager.mapWon && !GS.InputHelper.keysPressed && GS.InputHelper.isKeyDown(this.keys.Tab)) {
+			this.uiManager.automap.visible = !this.uiManager.automap.visible;
+			this.uiManager.overrideRedraw = true;
+			this.graphicsManager.monochromeEnabled = this.uiManager.automap.visible;
+		}
+
 		if (this.grid.player.dead && !GS.InputHelper.keysPressed && GS.InputHelper.isKeyDown(this.keys.Enter)) {
 			this.restartLevel();
 		}
@@ -147,13 +156,22 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			}
 		}
 
+		if (!this.mapWon && this.grid.aiManager.mapWon) {
+			this.mapWon = true;
+			this.onMapWon();
+		}
+
 		if (!this.grid.aiManager.mapWon) {
 			this.grid.update();
 			TWEEN.update();
-		}		
+		}
 		GS.DebugUI.update();
 
 		this.uiManager.update();
+	},
+
+	onMapWon: function() {
+		this.graphicsManager.monochromeEnabled = false;
 	},
 
 	menu: function() {
@@ -191,12 +209,16 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.grid.player.controls.attachEvents();
 			this.grid.player.controls.enable();
 			this.grid.aiManager.resume();
+
+			if (this.mapWon || !this.uiManager.automap.visible) {
+				this.graphicsManager.monochromeEnabled = false;
+			}
+		} else {
+			this.graphicsManager.monochromeEnabled = false;
 		}
 
-		this.graphicsManager.monochromeEnabled = false;
 		this.uiManager.menuActive = false;
-
-		GS.DebugUI.visible = true;
+		GS.DebugUI.visible = GS.Settings.showHUD;
 	},
 
 	restartLevel: function() {
@@ -224,6 +246,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	initComponents: function(assets) {
 		var that = this;
 		var map = this.assetLoader.mapLoader.parse(assets[GS.AssetTypes.Map][this.mapName]);
+		this.mapWon = false;
 
 		var viewFactory = new GS.ViewFactory(this.renderer, map, assets);
 		viewFactory.init();		

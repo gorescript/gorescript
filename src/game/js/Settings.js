@@ -16,6 +16,9 @@ GS.Settings = function() {
 		viewBob: true,
 		weaponBob: true,
 
+		showHUD: true,
+		showWeapon: true,
+
 		soundMin: 0,
 		soundMax: 10,
 		sound: 5,
@@ -33,7 +36,12 @@ GS.Settings = function() {
 		loadSettings: function() {
 			var jsonStr = localStorage["gs-settings"];
 			if (jsonStr !== undefined) {
-				settings = JSON.parse(jsonStr);
+				var loadedSettings = JSON.parse(jsonStr);
+				for (var i in loadedSettings) {
+					if (i in settings) {
+						settings[i] = loadedSettings[i];
+					}
+				}
 			}
 		},
 
@@ -228,6 +236,27 @@ GS.Settings = function() {
 
 		get mouse() {
 			return settings.mouse;
+		},
+
+		set showHUD(value) {
+			settings.showHUD = (value === true);
+			this.saveSettings();
+			GAME.uiManager.showHUD = settings.showHUD;
+			GAME.uiManager.overrideRedraw = true;
+		},
+
+		get showHUD() {
+			return settings.showHUD;
+		},
+
+		set showWeapon(value) {
+			settings.showWeapon = (value === true);
+			this.saveSettings();
+			GAME.graphicsManager.showWeapon = settings.showWeapon;
+		},
+
+		get showWeapon() {
+			return settings.showWeapon;
 		},
 	}
 }();

@@ -12,6 +12,8 @@ GS.AIManager = function(grid) {
 	this.timeSpent = 0;
 	this.minutes = 0;
 	this.seconds = 0;
+
+	this.regionsDiscovered = {};
 };
 
 GS.AIManager.prototype = {
@@ -405,6 +407,7 @@ GS.AIManager.prototype = {
 					continue;
 				}
 				visited[region.id] = true;
+				this.regionsDiscovered[region.id] = region;
 
 				callback(region);
 				for (var i = 0; i < region.linkedRegions.length; i++) {

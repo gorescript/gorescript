@@ -77,6 +77,7 @@ GS.Door.prototype = GS.inherit(GS.GridObject, {
 						this.state = GS.DoorStates.Closed;
 					}
 				} else {
+					this.sector.doorOpenedEver = true;
 					this.state = GS.DoorStates.Opening;
 				}
 				break;
@@ -108,6 +109,7 @@ GS.Door.prototype = GS.inherit(GS.GridObject, {
 
 	onUse: function() {
 		if (this.state == GS.DoorStates.Closed) {
+			this.sector.doorOpenedEver = true;
 			this.state = GS.DoorStates.Opening;
 			this.grid.soundManager.playSound("door_open");
 			this.grid.aiManager.onPlayerOpenDoor(this);
@@ -115,6 +117,7 @@ GS.Door.prototype = GS.inherit(GS.GridObject, {
 	},
 
 	open: function() {
+		this.sector.doorOpenedEver = true;
 		this.state = GS.DoorStates.Opening;
 		this.grid.soundManager.playSound("door_open");
 

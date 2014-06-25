@@ -178,6 +178,16 @@ GS.UIComponents.Menu.prototype = {
 
 		this.gameplayPanel.addEmptyRow();
 
+		this.btnToggleShowHUD = this.gameplayPanel.addToggleButton("show HUD");
+		this.btnToggleShowHUD.button.currentStateIndex = (GS.Settings.showHUD === true) ? 0 : 1;
+		this.btnToggleShowHUD.button.onClick = function(e) { GS.Settings.showHUD = (e.state === "on"); };
+
+		this.btnToggleShowWeapon = this.gameplayPanel.addToggleButton("show weapon");
+		this.btnToggleShowWeapon.button.currentStateIndex = (GS.Settings.showWeapon === true) ? 0 : 1;
+		this.btnToggleShowWeapon.button.onClick = function(e) { GS.Settings.showWeapon = (e.state === "on"); };
+
+		this.gameplayPanel.addEmptyRow();
+
 		this.btnGameplayBack = this.gameplayPanel.addButton("back");
 		this.btnGameplayBack.onClick = function() { that.activePanel = that.optionsPanel; };
 	},
@@ -247,7 +257,7 @@ GS.UIComponents.Menu.prototype = {
 		var that = this;
 
 		this.controlsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
-			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 32, 35);
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 30, 33);
 
 		this.numberPickerMouse = this.controlsPanel.addNumberPicker("mouse sensitivity", 
 			GS.Settings.mouse, GS.Settings.mouseMin, GS.Settings.mouseMax, 1);
@@ -265,7 +275,7 @@ GS.UIComponents.Menu.prototype = {
 		this.btnToggleStrafeRight.button.disabled = true;
 		this.btnToggleUse = this.controlsPanel.addToggleButton("use", ["E"]);
 		this.btnToggleUse.button.disabled = true;
-		this.btnToggleShoot = this.controlsPanel.addToggleButton("shoot", ["left mouse"]);
+		this.btnToggleShoot = this.controlsPanel.addToggleButton("shoot", ["mouse left"]);
 		this.btnToggleShoot.button.disabled = true;
 		this.btnTogglePistol = this.controlsPanel.addToggleButton("pistol", ["2"]);
 		this.btnTogglePistol.button.disabled = true;
@@ -273,6 +283,8 @@ GS.UIComponents.Menu.prototype = {
 		this.btnToggleShotgun.button.disabled = true;
 		this.btnToggleHyperBlaster = this.controlsPanel.addToggleButton("hyperblaster", ["4"]);
 		this.btnToggleHyperBlaster.button.disabled = true;
+		this.btnToggleAutomap = this.controlsPanel.addToggleButton("automap", ["TAB"]);
+		this.btnToggleAutomap.button.disabled = true;
 		this.btnToggleMenu = this.controlsPanel.addToggleButton("menu", ["ESC"]);
 		this.btnToggleMenu.button.disabled = true;
 

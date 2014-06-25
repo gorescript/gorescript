@@ -8,6 +8,8 @@ GS.UIManager = function() {
 	this.menuBackOffset = new THREE.Vector2(0, 0);
 	this.menuBackPos = new THREE.Vector2(0, 0);
 	this.menuBackSize = new THREE.Vector2(1, 1);
+
+	this.showHUD = GS.Settings.showHUD;
 };
 
 GS.UIManager.prototype = {
@@ -55,6 +57,10 @@ GS.UIManager.prototype = {
 			this.winScreen = new GS.UIComponents.WinScreen(this.vectorCanvas, this.assets, this.grid.player);
 			this.winScreen.init();
 			this.components.push(this.winScreen);
+
+			this.automap = new GS.UIComponents.Automap(this.vectorCanvas, this.assets, this.grid.player);
+			this.automap.init();
+			this.components.push(this.automap);
 		}
 
 		if (this.menu === undefined) {
@@ -99,18 +105,30 @@ GS.UIManager.prototype = {
 		} else 
 		if (this.winScreen.visible) {
 			this.cvs.clear();
-
 			this.winScreen.draw();
-
 			this.cvs.flip();
+		} else
+		if (this.automap.visible) {
+			if (this.overrideRedraw || this.automap.needsRedraw) {
+				if (this.overrideRedraw) {
+					this.overrideRedraw = false;
+				}
+
+				this.cvs.clear();
+				this.automap.draw();
+				this.automap.needsRedraw = false;
+				this.cvs.flip();
+			}
 		} else {
 			if (!this.hidden && this.checkIfRedraw()) {
 				this.cvs.clear();
 
-				for (var i = 0; i < this.components.length; i++) {
-					if (this.components[i].visible) {
-						this.components[i].draw();
-						this.components[i].needsRedraw = false;
+				if (this.showHUD) {
+					for (var i = 0; i < this.components.length; i++) {
+						if (this.components[i].visible) {
+							this.components[i].draw();
+							this.components[i].needsRedraw = false;
+						}
 					}
 				}
 

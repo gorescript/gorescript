@@ -4,6 +4,8 @@ GS.GraphicsManager = function(renderer, camera) {
 
 	this.noPostProcessing = false;
 	this.noiseTextureSize = 256;
+
+	this.showWeapon = GS.Settings.showWeapon;
 };
 
 GS.GraphicsManager.prototype = {
@@ -76,7 +78,6 @@ GS.GraphicsManager.prototype = {
 		this.effectNoise.uniforms["tNoise"].value = this.getNoiseTexture(this.noiseTextureSize);
 		this.effectNoise.uniforms["ratio"].value.set(window.innerWidth / this.noiseTextureSize, window.innerHeight / this.noiseTextureSize);
 
-
 		this.effectMonochrome = new THREE.ShaderPass(THREE.LuminosityShader);
 
 		var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
@@ -119,8 +120,10 @@ GS.GraphicsManager.prototype = {
 
 		this.renderer.clearTarget(renderTarget, false, true, false);
 
-		var playerView = this.grid.player.playerView;
-		this.renderer.render(playerView.scene, playerView.camera, renderTarget);
+		if (this.showWeapon) {
+			var playerView = this.grid.player.playerView;
+			this.renderer.render(playerView.scene, playerView.camera, renderTarget);
+		}
 	},
 
 	renderDepthTarget: function() {
@@ -135,10 +138,12 @@ GS.GraphicsManager.prototype = {
 
 		this.renderer.clearTarget(renderTarget, false, true, false);
 
-		var playerView = this.grid.player.playerView;
-		playerView.scene.overrideMaterial = this.depthMaterial;
-		this.renderer.render(playerView.scene, playerView.camera, renderTarget);
-		playerView.scene.overrideMaterial = null;
+		if (this.showWeapon) {
+			var playerView = this.grid.player.playerView;
+			playerView.scene.overrideMaterial = this.depthMaterial;
+			this.renderer.render(playerView.scene, playerView.camera, renderTarget);
+			playerView.scene.overrideMaterial = null;
+		}
 	},
 
 	draw: function() {
