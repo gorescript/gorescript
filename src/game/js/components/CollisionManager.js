@@ -339,7 +339,7 @@ GS.CollisionManager.prototype = {
 			var maxDistance = 0;
 			var distance;
 			for (var i = 0; i < heights.length - 1; i++) {
-				distance = heights[i + 1] - heights[i];
+				distance = Math.abs(heights[i + 1] - heights[i]);
 				if (distance > maxDistance) {
 					maxDistance = distance;
 				}

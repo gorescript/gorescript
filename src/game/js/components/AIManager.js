@@ -410,12 +410,14 @@ GS.AIManager.prototype = {
 				this.regionsDiscovered[region.id] = region;
 
 				callback(region);
-				for (var i = 0; i < region.linkedRegions.length; i++) {
-					var linked = region.linkedRegions[i];
-					var sector = this.sectorDict[linked.doorId].sector;
+				if (region.linkedRegions !== undefined) {
+					for (var i = 0; i < region.linkedRegions.length; i++) {
+						var linked = region.linkedRegions[i];
+						var sector = this.sectorDict[linked.doorId].sector;
 
-					if (sector.doorGridObject.state !== GS.DoorStates.Closed) {
-						toVisit.push(linked.region);
+						if (sector.doorGridObject.state !== GS.DoorStates.Closed) {
+							toVisit.push(linked.region);
+						}
 					}
 				}
 			}

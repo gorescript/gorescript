@@ -124,6 +124,13 @@ GS.Door.prototype = GS.inherit(GS.GridObject, {
 		return this;
 	},
 
+	openSilent: function() {
+		this.sector.doorOpenedEver = true;
+		this.state = GS.DoorStates.Opening;
+
+		return this;
+	},
+
 	close: function() {
 		this.state = GS.DoorStates.Closing;
 		this.grid.soundManager.playSound("door_close");

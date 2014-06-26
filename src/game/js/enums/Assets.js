@@ -24,7 +24,8 @@ GS.Assets = {};
 GS.Assets[GS.AssetTypes.Texture] = {
 	"cyan_wall":			{ filename: "cyan_wall.png",				type: GS.TextureTypes.Map },
 	"red_wall": 			{ filename: "red_wall.png", 				type: GS.TextureTypes.Map },
-	"blue_metal": 			{ filename: "blue_metal.png", 				type: GS.TextureTypes.Map },
+	"blue_metal": 			{ filename: "blue_metal.png", 				type: GS.TextureTypes.Map },	
+	"white": 				{ filename: "white.png",	 				type: GS.TextureTypes.Map },
 	"wall": 				{ filename: "wall.png", 					type: GS.TextureTypes.Map },
 	"metal": 				{ filename: "metal.png", 					type: GS.TextureTypes.Map },
 	"light": 				{ filename: "light.png", 					type: GS.TextureTypes.Map },
@@ -62,6 +63,7 @@ GS.Assets[GS.AssetTypes.UIWidget] = {
 	"logo": 				{ filename: "logo.png" },
 	"menu_back":			{ filename: "menu_back.png" },
 	"thumb_airstrip1":		{ filename: "thumb_airstrip1.png" },
+	"thumb_drencrom":		{ filename: "thumb_drencrom.png" },
 	"thumb_sacrosanct":		{ filename: "thumb_sacrosanct.png" },
 };
 
@@ -123,10 +125,12 @@ GS.Assets[GS.AssetTypes.MusicTrack] = {
 
 GS.Assets[GS.AssetTypes.Map] = {
 	"airstrip1": 			{ filename: "airstrip1.js" },
+	"drencrom":				{ filename: "drencrom.js" },
 	"sacrosanct":			{ filename: "sacrosanct.js" },
 };
 
 GS.Assets[GS.AssetTypes.Script] = {
 	"airstrip1": 			{ filename: "airstrip1.js" },
+	"drencrom":				{ filename: "drencrom.js" },
 	"sacrosanct":			{ filename: "sacrosanct.js" },
 };

@@ -24,6 +24,7 @@ GS.Game = function() {
 	this.antialias = false;
 	this.clearColor = 0x336699;
 	this.cameraFov = GS.Settings.fov;
+	this.cameraFar = 1500;
 
 	this.noMenu = false;
 	this.useAssetsZip = false;
