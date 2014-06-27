@@ -20,6 +20,7 @@ GS.Game = function() {
 	this.firstLoad = true;
 	this.firstPlay = true;
 	this.mapWon = false;
+	this.restartedLevel = false;
 	
 	this.antialias = false;
 	this.clearColor = 0x336699;
@@ -123,9 +124,13 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 			// GAME.grid.exportMapToOBJ();
 
-			this.nextState = GS.GameStates.Play;
-			this.musicManager.playTrack("simple_action_beat");
+			this.nextState = GS.GameStates.Play;			
 			this.graphicsManager.monochromeEnabled = false;
+
+			if (this.grid.aiManager.script !== undefined && !this.restartedLevel) {
+				this.musicManager.playTrack(this.grid.aiManager.script.musicTrack);
+			}
+			this.restartedLevel = false;
 
 			if (this.firstPlay) {
 				this.firstPlay = false;
@@ -224,6 +229,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 	restartLevel: function() {
 		this.nextState = GS.GameStates.Dispose;
+		this.restartedLevel = true;
 	},
 
 	loadLevel: function(name) {

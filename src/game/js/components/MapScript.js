@@ -7,6 +7,7 @@ GS.MapScript = function(gridObjectLibrary) {
 	
 	this.secretsFound = 0;
 	this.maxSecrets = 0;
+	this.musicTrack = "simple_action_beat";
 };
 
 GS.MapScript.prototype = {

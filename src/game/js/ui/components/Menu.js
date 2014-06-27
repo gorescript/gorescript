@@ -300,13 +300,18 @@ GS.UIComponents.Menu.prototype = {
 		var that = this;
 
 		this.creditsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
-			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 32, 35);
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 30, 33);
 
-		this.dblLabelCredits1 = this.creditsPanel.addDoubleLabel("code, art", "sergiu valentin bucur");
+		this.dblLabelCredits1 = this.creditsPanel.addDoubleLabel("code, \"art\"", "sergiu valentin bucur");
 
 		this.creditsPanel.addEmptyRow();
 
-		this.dblLabelCredits3 = this.creditsPanel.addDoubleLabel("sounds, music", "freesound.org");
+		this.dblLabelCredits23 = this.creditsPanel.addDoubleLabel("music", "DST");
+		this.dblLabelCredits24 = this.creditsPanel.addDoubleLabel("", "3uhox");
+
+		this.creditsPanel.addEmptyRow();
+
+		this.dblLabelCredits3 = this.creditsPanel.addDoubleLabel("sound effects", "freesound.org");
 		this.dblLabelCredits4 = this.creditsPanel.addDoubleLabel("", "opengameart.org");
 
 		this.creditsPanel.addEmptyRow();

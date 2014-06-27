@@ -121,6 +121,8 @@ GS.Assets[GS.AssetTypes.Sound] = {
 
 GS.Assets[GS.AssetTypes.MusicTrack] = {
 	"simple_action_beat": 	{ filename: "simple_action_beat.ogg" },
+	"tower_defense_theme": 	{ filename: "tower_defense_theme.ogg" },
+	"angry_robot_3": 		{ filename: "angry_robot_3.ogg" },
 };
 
 GS.Assets[GS.AssetTypes.Map] = {
