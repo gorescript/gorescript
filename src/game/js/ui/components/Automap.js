@@ -28,7 +28,10 @@ GS.UIComponents.Automap = function(vectorCanvas, assets, player) {
 	this.oldPlayerDirection = this.player.direction.toVector2();
 	this.currentPlayerDirection = this.player.direction.toVector2();
 
-	this.zoom = 2.5;
+	this.zoomSpeed = 0.25;
+	this.minZoom = 0.5;
+	this.maxZoom = 4;
+	this.zoom = 2;
 
 	this.visible = false;
 };
@@ -56,6 +59,18 @@ GS.UIComponents.Automap.prototype = {
 		if (!this.currentPlayerDirection.equalsEpsilon(this.oldPlayerDirection)) {
 			this.needsRedraw = true;
 			this.oldPlayerDirection.copy(this.currentPlayerDirection);
+		}
+
+		while (GS.InputHelper.mouseWheelEvents.length > 0) {
+			var delta = GS.InputHelper.mouseWheelEvents.shift();
+			if (delta < 0) {
+				this.zoom -= this.zoomSpeed;
+			}
+			if (delta > 0) {
+				this.zoom += this.zoomSpeed;
+			}
+			this.zoom = GS.MathHelper.clamp(this.zoom, this.minZoom, this.maxZoom);
+			this.needsRedraw = true;
 		}
 	},
 
