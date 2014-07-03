@@ -30,6 +30,7 @@ GS.Settings = function() {
 		mouseMin: 1,
 		mouseMax: 10,
 		mouse: 5,
+		mouseInvertY: false,
 	};
 
 	return {
@@ -257,6 +258,18 @@ GS.Settings = function() {
 
 		get showWeapon() {
 			return settings.showWeapon;
+		},
+
+		set mouseInvertY(value) {
+			settings.mouseInvertY = (value === true);
+			this.saveSettings();
+			if (GAME.grid !== undefined) {
+				GAME.grid.player.controls.mouseInvertY = settings.mouseInvertY;
+			}
+		},
+
+		get mouseInvertY() {
+			return settings.mouseInvertY;
 		},
 	}
 }();

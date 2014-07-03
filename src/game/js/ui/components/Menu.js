@@ -259,7 +259,11 @@ GS.UIComponents.Menu.prototype = {
 		var that = this;
 
 		this.controlsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
-			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 30, 33);
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 28, 31);
+
+		this.btnToggleMouseInvertY = this.controlsPanel.addToggleButton("invert mouse y axis");
+		this.btnToggleMouseInvertY.button.currentStateIndex = (GS.Settings.mouseInvertY === true) ? 0 : 1;
+		this.btnToggleMouseInvertY.button.onClick = function(e) { GS.Settings.mouseInvertY = (e.state === "on"); };
 
 		this.numberPickerMouse = this.controlsPanel.addNumberPicker("mouse sensitivity", 
 			GS.Settings.mouse, GS.Settings.mouseMin, GS.Settings.mouseMax, 1);

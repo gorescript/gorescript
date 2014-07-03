@@ -8,6 +8,7 @@ GS.FPSControls = function(camera) {
 
 	this.moveSpeed = 1;
 	this.lookSpeed = 0.066 * (GS.Settings.mouse / 5);
+	this.mouseInvertY = GS.Settings.mouseInvertY;
 
 	this.forwardLookVector = new THREE.Vector3(0, 0, -1);
 	this.forwardMoveVector = new THREE.Vector3(0, 0, -1);
@@ -141,7 +142,9 @@ GS.FPSControls.prototype = {
 		var mx = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
 		var my = e.movementY || e.mozMovementY || e.webkitMovementY || 0;
 
-		this.setViewAngles(this.xAngle + mx * this.lookSpeed, this.yAngle + my * this.lookSpeed);
+		var invertY = this.mouseInvertY ? -1 : 1;
+
+		this.setViewAngles(this.xAngle + mx * this.lookSpeed, this.yAngle + invertY * my * this.lookSpeed);
 	},
 
 	setViewOffsetY: function(y) {
