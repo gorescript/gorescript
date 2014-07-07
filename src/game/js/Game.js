@@ -1,4 +1,4 @@
-GS.GameVersion = "build 8 - june 27, 2014";
+GS.GameVersion = "build 9 - july 7, 2014";
 
 GS.GameStates = {
 	Dispose: 0,
