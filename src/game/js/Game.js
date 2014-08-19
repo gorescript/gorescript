@@ -1,4 +1,5 @@
-GS.GameVersion = "build 9 - july 7, 2014";
+GS.GameVersion = "build 10 (august 20, 2014)";
+GS.BuildMessage = "added in this build: rebindable keys";
 
 GS.GameStates = {
 	Dispose: 0,

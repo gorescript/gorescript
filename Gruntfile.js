@@ -17,6 +17,7 @@ module.exports = function(grunt) {
           {
             src: [
               "src/deps/jquery.min.js",
+              "src/deps/lodash.min.js",
               "src/deps/jszip.min.js",
               "src/deps/tween.min.js",
               "src/deps/three.min.js",
