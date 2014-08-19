@@ -344,8 +344,11 @@ GS.UIComponents.Menu.prototype = {
 
 				GS.Settings.saveSettings();
 
-				GAME.uiManager.notifications.useText = "[" + GS.Keybinds.use.controlName + "] to use";
-				GAME.uiManager.notifications.calculateSizes();
+				var notifications = GAME.uiManager.notifications;				
+				if (notifications) {
+					notifications.useText = "[" + GS.Keybinds.use.controlName + "] to use";
+					notifications.calculateSizes();
+				}
 			}
 		};
 	},
