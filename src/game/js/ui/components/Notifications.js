@@ -6,26 +6,29 @@ GS.UIComponents.Notifications = function(vectorCanvas, assets, player) {
 	this.fontSize = 40;
 	this.boxCornerRadius = 10;
 
-	this.useText = "[E] to use";
+	this.useText = "[" + GS.Keybinds.use.controlName + "] to use";
 	this.pointerLockText = "right-click to enable pointer lock";
 	this.restartText = "[ENTER] to restart level";
 
 	this.usePopup = {
-		offset: new THREE.Vector2(0, 100),
+		originalOffset: new THREE.Vector2(0, 100),
+		offset: new THREE.Vector2(),
 		pos: new THREE.Vector2(0.5, 0.5),
 		size: new THREE.Vector2(0, 60),
 		textOffset: new THREE.Vector2(0, 0),
 	};
 
 	this.pointerLockPopup = {
-		offset: new THREE.Vector2(0, 100),
+		originalOffset: new THREE.Vector2(0, 100),
+		offset: new THREE.Vector2(),
 		pos: new THREE.Vector2(0.5, 0.5),
 		size: new THREE.Vector2(0, 60),
 		textOffset: new THREE.Vector2(0, 0),
 	};
 
 	this.restartPopup = {
-		offset: new THREE.Vector2(0, 100),
+		originalOffset: new THREE.Vector2(0, 100),
+		offset: new THREE.Vector2(),
 		pos: new THREE.Vector2(0.5, 0.5),
 		size: new THREE.Vector2(0, 60),
 		textOffset: new THREE.Vector2(0, 0),
@@ -104,9 +107,9 @@ GS.UIComponents.Notifications.prototype = {
 		var padding = 15;
 		var width = textWidth + padding * 2;
 
-		popup.offset.x = -width / 2;
 		popup.size.x = width;
-		popup.offset.y -= popup.size.y;
+		popup.offset.x = -width / 2;
+		popup.offset.y = popup.originalOffset.y - popup.size.y;
 		popup.textOffset.copy(popup.offset).add(popup.size.clone().multiplyScalar(0.5));
 	},
 };

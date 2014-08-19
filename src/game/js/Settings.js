@@ -31,6 +31,8 @@ GS.Settings = function() {
 		mouseMax: 10,
 		mouse: 5,
 		mouseInvertY: false,
+
+		keybinds: null,
 	};
 
 	return {
@@ -43,7 +45,14 @@ GS.Settings = function() {
 						settings[i] = loadedSettings[i];
 					}
 				}
+
+				if (loadedSettings.keybinds) {
+					GS.KeybindSettings.keybinds = loadedSettings.keybinds;
+				}
 			}
+
+			GS.KeybindSettings.init();
+			settings.keybinds = GS.KeybindSettings.keybinds;
 		},
 
 		saveSettings: function() {

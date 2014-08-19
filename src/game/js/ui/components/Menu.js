@@ -272,23 +272,15 @@ GS.UIComponents.Menu.prototype = {
 		this.controlsPanel.addEmptyRow();
 
 		this.btnToggleMoveForward = this.controlsPanel.addToggleButton("move forward", ["W"]);
-		this.btnToggleMoveForward.button.disabled = true;
 		this.btnToggleMoveBackward = this.controlsPanel.addToggleButton("move backward", ["S"]);
-		this.btnToggleMoveBackward.button.disabled = true;
 		this.btnToggleStrafeLeft = this.controlsPanel.addToggleButton("strafe left", ["A"]);
-		this.btnToggleStrafeLeft.button.disabled = true;
 		this.btnToggleStrafeRight = this.controlsPanel.addToggleButton("strafe right", ["D"]);
-		this.btnToggleStrafeRight.button.disabled = true;
 		this.btnToggleUse = this.controlsPanel.addToggleButton("use", ["E"]);
-		this.btnToggleUse.button.disabled = true;
 		this.btnToggleShoot = this.controlsPanel.addToggleButton("shoot", ["mouse left"]);
-		this.btnToggleShoot.button.disabled = true;
 		this.btnTogglePistol = this.controlsPanel.addToggleButton("pistol", ["2"]);
-		this.btnTogglePistol.button.disabled = true;
 		this.btnToggleShotgun = this.controlsPanel.addToggleButton("shotgun", ["3"]);
-		this.btnToggleShotgun.button.disabled = true;
 		this.btnToggleHyperBlaster = this.controlsPanel.addToggleButton("hyperblaster", ["4"]);
-		this.btnToggleHyperBlaster.button.disabled = true;
+
 		this.btnToggleAutomap = this.controlsPanel.addToggleButton("automap", ["TAB"]);
 		this.btnToggleAutomap.button.disabled = true;
 		this.btnToggleMenu = this.controlsPanel.addToggleButton("menu", ["ESC"]);
@@ -298,6 +290,64 @@ GS.UIComponents.Menu.prototype = {
 
 		this.btnControlsBack = this.controlsPanel.addButton("back");
 		this.btnControlsBack.onClick = function() { that.activePanel = that.optionsPanel; };
+
+		this.attachReboundEventHandlers();
+	},
+
+	attachReboundEventHandlers: function() {
+		var keyButtonMap = {
+			moveForward: 	this.btnToggleMoveForward,
+			moveBackward: 	this.btnToggleMoveBackward,
+			strafeLeft: 	this.btnToggleStrafeLeft,
+			strafeRight: 	this.btnToggleStrafeRight,
+			use: 			this.btnToggleUse,
+			shoot: 			this.btnToggleShoot,
+			pistol: 		this.btnTogglePistol,
+			shotgun: 		this.btnToggleShotgun,
+			hyperblaster: 	this.btnToggleHyperBlaster
+		};
+
+		for (var i in keyButtonMap) {
+			var button = keyButtonMap[i].button;
+			button.onClick = getOnClickEventHandler(i);
+			button.states = [GS.Keybinds[i].controlName];
+			button.currentStateIndex = 0;
+		}
+
+		function getOnClickEventHandler(actionName) { 
+			return function() {
+				GS.KeybindSettings.rebound.modifyKeybind(GS.Keybinds[actionName]);
+			}
+		}
+
+		GS.KeybindSettings.rebound.onModifyingKeybindStart = function(e) {
+			var button = keyButtonMap[e.keybind.actionName].button;
+			button.states = ["press new key"];
+			button.currentStateIndex = 0;
+		};
+
+		GS.KeybindSettings.rebound.onModifyingKeybindStop = function(e) {
+			for (var i in keyButtonMap) {
+				var button = keyButtonMap[i].button;
+				button.states = [GS.Keybinds[i].controlName];
+				button.currentStateIndex = 0;
+			}
+
+			if (e.success) {
+				var button2 = keyButtonMap[e.keybind.actionName].button;
+				var onClickEventHandler = button2.onClick;
+				button2.onClick = function() {};
+
+				setTimeout(function() {
+					button2.onClick = onClickEventHandler;
+				}, 100);
+
+				GS.Settings.saveSettings();
+
+				GAME.uiManager.notifications.useText = "[" + GS.Keybinds.use.controlName + "] to use";
+				GAME.uiManager.notifications.calculateSizes();
+			}
+		};
 	},
 
 	initCreditsPanel: function() {

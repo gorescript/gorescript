@@ -33,15 +33,7 @@ GS.Player = function(grid, camera, playerView) {
 	this.canUse = true;
 
 	this.ySmoothingMaxCooldown = GS.msToFrames(500);
-	this.ySmoothingCooldown = 0;
-
-	this.keys = {
-		Weapon1: 49, // 1
-		Weapon2: 50, // 2
-		Weapon3: 51, // 3
-		Weapon4: 52, // 4
-		Use: 69, // E
-	};
+	this.ySmoothingCooldown = 0;	
 
 	this.swapWeaponsOnPickup = true;
 };
@@ -169,8 +161,6 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 	},
 
 	update: function() {
-		GS.InputHelper.checkPressedKeys();
-
 		if (!this.dead) {
 			this.updateControls();
 			this.updateUse();
@@ -290,7 +280,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 	},
 
 	updateUse: function() {
-		if (this.canUse && !GS.InputHelper.keysPressed && GS.InputHelper.isKeyDown(this.keys.Use)) {			
+		if (this.canUse && GS.Keybinds.use.inUse) {			
 			this.useTarget.onUse();
 		}
 	},
@@ -304,7 +294,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 			}			
 
 			var oldShooting = this.shooting;
-			if (GS.InputHelper.leftMouseDown && this.playerView.weaponReady) {
+			if (GS.Keybinds.shoot.inUse && this.playerView.weaponReady) {
 				if (this.weapon.infiniteAmmo || this.weapon.ammo > 0) {
 					this.shooting = true;
 					if (this.shooting && !oldShooting) {
@@ -388,7 +378,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 		Object.keys(this.availableWeapons).forEach(function(key) {
 			var weapon = that.availableWeapons[key];
 			if (weapon.pickedUp && weapon !== that.weapon && that.weapon !== undefined && that.playerView.weaponReady) {
-				if (!GS.InputHelper.keysPressed && GS.InputHelper.isKeyDown(that.keys["Weapon" + weapon.powerLevel])) {
+				if (GS.Keybinds[weapon.name].inUse) {
 					that.changeToWeapon(key);
 				}
 			}

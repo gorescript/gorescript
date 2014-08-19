@@ -20,13 +20,6 @@ GS.FPSControls = function(camera) {
 	this.viewOffsetY = 0;
 	this.eyeOffsetY = 3.5;
 
-	this.keys = { 
-		StrafeLeft: 65, // A 
-		MoveForward: 87, // W
-		StrafeRight: 68, // D
-		MoveBackward: 83, // S		
-	};
-
 	this.pointerLockEnabled = false;
 
 	this.onHandleCollisions = function(oldPos, newPos) {};
@@ -159,20 +152,18 @@ GS.FPSControls.prototype = {
 		var x = 0;
 		var z = 0;
 
-		GS.InputHelper.checkPressedKeys();
-
-		if (GS.InputHelper.isKeyDown(this.keys.MoveForward, true)) {
+		if (GS.Keybinds.moveForward.inUse) {
 			z++;
 		}
-		if (GS.InputHelper.isKeyDown(this.keys.MoveBackward, true)) {
+		if (GS.Keybinds.moveBackward.inUse) {
 			z--;
 		}
-		if (GS.InputHelper.isKeyDown(this.keys.StrafeLeft, true)) {
+		if (GS.Keybinds.strafeLeft.inUse) {
 			x--;
 		}
-		if (GS.InputHelper.isKeyDown(this.keys.StrafeRight, true)) {
+		if (GS.Keybinds.strafeRight.inUse) {
 			x++;
-		}		
+		}
 
 		this.move(x, z);
 		this.dispatchEvent({ type: "update", pos: this.eye, xAngle: this.xAngle, yAngle: this.yAngle, look: this.lookNoOffset });
