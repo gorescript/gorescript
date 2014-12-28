@@ -321,7 +321,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 					}					
 				}
 
-				if (!this.weapon.infiniteAmmo && this.weapon.ammo == 0) {
+				if (!this.weapon.infiniteAmmo && this.weapon.ammo === 0) {
 					this.trySwapToWeaponWithAmmo();
 				}
 			} else {

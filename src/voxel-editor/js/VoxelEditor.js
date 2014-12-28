@@ -210,7 +210,7 @@ GS.VoxelEditor.prototype = {
 		var $fieldImport = $("#field-import");
 
 		var files = $fieldImport[0].files;
-		if (files == undefined || files.length == 0) {
+		if (files === undefined || files.length === 0) {
 			$fieldImport.trigger("click");
 			return;
 		}

@@ -20,7 +20,7 @@ GS.ColorPicker.prototype = {
 
 		this.rowCount = Math.ceil(this.colors.length / this.columnCount);
 		var width = this.$container.width();
-		if (width % 2 != 0) {
+		if (width % 2 !== 0) {
 			width--;
 		}
 		this.cellSize = width / this.columnCount;

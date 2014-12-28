@@ -784,8 +784,9 @@ GS.MapManager.prototype = {
 
 	importMap: function(jsonStr) {
 		var error = false;
+		var map;
 		try {
-			var map = JSON.parse(jsonStr, function(k, v) {
+			map = JSON.parse(jsonStr, function(k, v) {
 				if (v instanceof Object) {
 					if (v.x !== undefined && v.y !== undefined && v.z !== undefined) {
 						return new THREE.Vector3(v.x, v.y, v.z);

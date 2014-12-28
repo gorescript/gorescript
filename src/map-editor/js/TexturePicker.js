@@ -78,7 +78,7 @@ GS.TexturePopup = {
 		}
 
 		this.$popupDiv = $("#texture-popup");
-		if (this.$popupDiv.length == 0) {
+		if (this.$popupDiv.length === 0) {
 			$(document.body).append(this.getHtml());
 			this.$popupDiv = $("#texture-popup");
 		}

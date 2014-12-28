@@ -84,26 +84,7 @@ GS.CollisionManager.prototype = {
 			while (k < 5) {
 				foundCollision = false;
 
-				lineSegmentIterator(function(seg) {
-					GAME.grid.totalBoxSegmentChecks++;
-					var result = box.isIntersectionLineSwept(oldPos, newPos0, seg);
-
-					if (result.foundCollision) {
-						foundCollision = true;
-
-						aux.copy(newPos0).sub(result.pos);
-						var m = -aux.dot(result.normal);
-
-						slideVelocity.copy(aux);
-						aux.copy(result.normal).multiplyScalar(m);
-						slideVelocity.add(aux);
-
-						aux.copy(result.pos).sub(newPos0).normalize().multiplyScalar(epsilon);
-						result.pos.add(aux);
-						
-						newPos0.copy(result.pos).add(slideVelocity);
-					}
-				});
+				lineSegmentIterator(iterator);
 
 				if (!foundCollision) {
 					break;
@@ -113,6 +94,27 @@ GS.CollisionManager.prototype = {
 			}
 
 			newPos.copy(newPos0);
+
+			function iterator(seg) {
+				GAME.grid.totalBoxSegmentChecks++;
+				var result = box.isIntersectionLineSwept(oldPos, newPos0, seg);
+
+				if (result.foundCollision) {
+					foundCollision = true;
+
+					aux.copy(newPos0).sub(result.pos);
+					var m = -aux.dot(result.normal);
+
+					slideVelocity.copy(aux);
+					aux.copy(result.normal).multiplyScalar(m);
+					slideVelocity.add(aux);
+
+					aux.copy(result.pos).sub(newPos0).normalize().multiplyScalar(epsilon);
+					result.pos.add(aux);
+					
+					newPos0.copy(result.pos).add(slideVelocity);
+				}
+			}
 		}
 	}(),
 
@@ -310,7 +312,7 @@ GS.CollisionManager.prototype = {
 			ceilHeight: Infinity,
 		};
 
-		var sector = undefined;
+		var sector;
 		this.grid.forEachUniqueGridObjectInCells(cells, [GS.Concrete, GS.Elevator], function(gridObject) {
 			if (gridObject instanceof GS.Concrete) {
 				if (gridObject.type === GS.MapLayers.Sector) {

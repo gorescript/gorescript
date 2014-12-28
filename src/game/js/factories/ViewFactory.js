@@ -493,15 +493,16 @@ GS.ViewFactory.prototype = {
 
 		var v = movingSector.sector.vertices;
 		var idx = movingSector.sector.indices;
+		var v0, v1, v2;
 		for (var i = 0; i < idx.length; i += 3) {
 			if (elevator === true) {
-				var v0 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
-				var v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
-				var v2 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
+				v0 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
+				v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
+				v2 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
 			} else {
-				var v0 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
-				var v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
-				var v2 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
+				v0 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
+				v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
+				v2 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
 			}
 
 			geometry.faces.push(new THREE.Face3(i, i + 1, i + 2));
@@ -524,13 +525,13 @@ GS.ViewFactory.prototype = {
 		idx = movingSector.sector.collisionIndices;
 		for (var i = 0; i < idx.length; i += 3) {
 			if (elevator === true) {
-				var v0 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
-				var v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
-				var v2 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
+				v0 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
+				v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
+				v2 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
 			} else {
-				var v0 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
-				var v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
-				var v2 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
+				v0 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
+				v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
+				v2 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
 			}
 
 			movingSectorTriangles.push(v0);

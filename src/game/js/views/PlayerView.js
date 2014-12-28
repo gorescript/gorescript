@@ -129,7 +129,7 @@ GS.PlayerView.prototype = {
 	updateMuzzleFlash: function() {
 		if (this.muzzleCooldown > 0) {
 			this.muzzleCooldown--;
-			if (this.muzzleCooldown == 0) {
+			if (this.muzzleCooldown === 0) {
 				this.lightingView.endMuzzleFlash();				
 			}
 		}

@@ -44,7 +44,7 @@ GS.ZoneTools.prototype = GS.inherit(GS.LayerObjectTools, {
 
 		if (GS.InputHelper.leftMouseDown) {
 			if (this.inCanvas(mx, my)) {
-				if (this.isDrawingZone == false) {
+				if (this.isDrawingZone === false) {
 					this.isDrawingZone = true;
 					this.zoneStart = new THREE.Vector2(mx, my);
 					this.mapManager.convertToGridCellCoords(this.zoneStart);

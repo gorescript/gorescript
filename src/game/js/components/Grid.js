@@ -74,7 +74,7 @@ GS.Grid.prototype = {
 			}
 		});
 
-		if (this.player.linkedGridCells.length == 0) {
+		if (this.player.linkedGridCells.length === 0) {
 			this.player.update();
 		}
 

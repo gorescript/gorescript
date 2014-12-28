@@ -147,7 +147,7 @@ GS.GridObject.prototype = {
 		return function() {
 			var that = this;
 
-			var sector = undefined;
+			var sector;
 			var currentSector;
 			this.position.toVector2(position2d);
 

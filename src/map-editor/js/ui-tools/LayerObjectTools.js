@@ -71,7 +71,7 @@ GS.LayerObjectTools.prototype = {
 
 		if (GS.InputHelper.leftMouseDown) {
 			if (this.inCanvas(mx, my)) {
-				if (this.isSelecting == false) {					
+				if (this.isSelecting === false) {
 					this.isSelecting = true;
 					this.selectStart = v;
 				}
@@ -99,7 +99,7 @@ GS.LayerObjectTools.prototype = {
 	addSelection: function(selection) {
 		var that = this;
 		var n = Object.keys(this.selected).length;
-		if (n == 0) {
+		if (n === 0) {
 			this.selected = selection;
 			return;
 		}

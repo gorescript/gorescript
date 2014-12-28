@@ -276,8 +276,9 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	},
 
 	update: function() {
+		var time;
 		if (this.showPerformanceDebugMeters) {
-			var time = window.performance.now();
+			time = window.performance.now();
 		}
 
 		if (this.state == GS.GameStates.Dispose) {
@@ -310,7 +311,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.menu();
 		}
 
-		if (this.nextState != null) {
+		if (this.nextState !== null) {
 			if (this.updated) {
 				if (this.nextState == GS.GameStates.Play || this.nextState == GS.GameStates.Menu) {
 					this.loadingUI.hide();
@@ -330,8 +331,9 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	},
 
 	draw: function() {
+		var time;
 		if (this.showPerformanceDebugMeters) {
-			var time = window.performance.now();
+			time = window.performance.now();
 		}
 
 		if (this.state == GS.GameStates.PreLoad) {
