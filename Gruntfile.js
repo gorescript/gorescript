@@ -20,7 +20,7 @@ module.exports = function(grunt) {
 				separator: ";",
 				preserveComments: "some",
 				banner: [
-					"/*! gorescript / http://timeinvariant.com/gorescript */", "",
+					"/*! gorescript / http://timeinvariant.github.io/gorescript */", "",
 					"/*! three.js / threejs.org/license */",
 					"/*! tween.js - http://github.com/sole/tween.js */", "", "",
 				].join("\n")
