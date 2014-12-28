@@ -98,9 +98,10 @@ GS.Grid.prototype = {
 
 		var regions = this.aiManager.regions;
 		for (var i = 0; i < regions.length; i++) {
-			regions[i].rootMesh = this.mergeConcreteMeshes(regions[i].rootMesh);
-			this.scene.add(regions[i].rootMesh);
+			this.concreteMeshes.children.push(regions[i].rootMesh);
 		}
+
+		this.scene.add(this.concreteMeshes);
 	},
 
 	addEntityMeshesToScene: function() {
@@ -406,31 +407,6 @@ GS.Grid.prototype = {
 	updateFov: function() {
 		this.skybox.camera.fov = GS.Settings.fov;
 		this.skybox.camera.updateProjectionMatrix();
-	},
-
-	mergeConcreteMeshes: function(rootMesh) {		
-		var geometry = new THREE.Geometry();
-		var material = new THREE.MeshPhongMaterial();
-		var bigMesh = new THREE.Mesh(geometry, material);
-
-		var addMesh = function(mesh) {
-			var meshGeo = mesh.geometry.clone();
-			THREE.GeometryUtils.merge(geometry, meshGeo);
-		};
-
-		for (var i = 0; i < rootMesh.children.length; i++) {
-			var mesh = rootMesh.children[i];
-			
-			if (mesh.children.length > 0) {
-				for (var j = 0; j < mesh.children.length; j++) {
-					addMesh(mesh.children[j]);
-				}
-			} else {
-				addMesh(mesh);
-			}
-		}
-
-		return bigMesh;
 	},
 
 	getSingleObjectMapOBJ: function() {

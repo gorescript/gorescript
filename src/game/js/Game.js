@@ -28,7 +28,7 @@ GS.Game = function() {
 	this.cameraFov = GS.Settings.fov;
 	this.cameraFar = 1500;
 
-	this.noMenu = true;
+	this.noMenu = false;
 	this.useAssetsZip = false;
 
 	if (GS.BuildOverride === true) {
@@ -36,7 +36,7 @@ GS.Game = function() {
 	}
 	
 	this.showFPS = GS.Settings.showFPS;
-	this.showPerformanceDebugMeters = true;
+	this.showPerformanceDebugMeters = false;
 };
 
 GS.Game.prototype = GS.inherit(GS.Base, {
@@ -122,6 +122,8 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.initComponents(this.assetLoader.assets);			
 			this.uiManager.initComponents(this.assetLoader.assets, this.grid);
 			this.uiManager.useIngameMenu();
+
+			// GAME.grid.exportMapToOBJ();
 
 			this.nextState = GS.GameStates.Play;			
 			this.graphicsManager.monochromeEnabled = false;

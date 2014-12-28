@@ -126,6 +126,20 @@ GS.AIManager.prototype = {
 				}
 			}
 
+			// var totalCount = Object.keys(this.sectorDict).length;
+			// var visitedCount = Object.keys(visited).length;
+			// console.log("total sectors", totalCount);
+			// console.log("visited", visitedCount);
+			// console.log("doors", doorCount);
+			// console.log("coverage " + ((visitedCount / totalCount) * 100).toFixed(2) + "%");
+
+			// var seedCoverage = 0;
+			// for (var i in seeds) {
+			// 	var sectorIds = seeds[i].sectorIds;
+			// 	seedCoverage += Object.keys(sectorIds).length;
+			// }
+			// console.log("seed coverage " + ((seedCoverage / visitedCount) * 100).toFixed(2) + "%");
+
 			for (var i in seeds) {
 				var sectorIds = seeds[i].sectorIds;
 				if (Object.keys(sectorIds).length > 0) {
