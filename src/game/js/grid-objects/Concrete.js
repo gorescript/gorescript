@@ -28,16 +28,27 @@ GS.Concrete.prototype = GS.inherit(GS.GridObject, {
 	},
 
 	setLightLevel: function(lightLevel) {
+		this.sector.lightLevel = lightLevel;
+
 		return this;
 	},
 
 	setLightColor: function() {
+		var color = new THREE.Color();
+
 		return function(r, g, b) {
+			this.sector.lightColor = color.setRGB(r, g, b).getHex();
+
 			return this;
 		}
 	}(),
 
 	staticLight: function(value) {
+		this.lightBehavior = GS.SectorLightBehaviors.Static;
+		if (value) {
+			this.setLightLevel(value);
+		}
+
 		return this;
 	},
 

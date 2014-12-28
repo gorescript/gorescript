@@ -10,7 +10,7 @@ GS.Settings = function() {
 		vignette: true,
 		fxaa: true,
 
-		halfSize: false,
+		halfSize: true,
 		showFPS: true,
 
 		viewBob: true,
