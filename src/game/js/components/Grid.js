@@ -98,8 +98,8 @@ GS.Grid.prototype = {
 
 		var regions = this.aiManager.regions;
 		for (var i = 0; i < regions.length; i++) {
-			var bigMesh = this.mergeConcreteMeshes(regions[i].rootMesh);
-			this.scene.add(bigMesh);
+			regions[i].rootMesh = this.mergeConcreteMeshes(regions[i].rootMesh);
+			this.scene.add(regions[i].rootMesh);
 		}
 	},
 
