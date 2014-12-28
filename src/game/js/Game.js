@@ -28,7 +28,7 @@ GS.Game = function() {
 	this.cameraFov = GS.Settings.fov;
 	this.cameraFar = 1500;
 
-	this.noMenu = false;
+	this.noMenu = true;
 	this.useAssetsZip = false;
 
 	if (GS.BuildOverride === true) {
@@ -36,7 +36,7 @@ GS.Game = function() {
 	}
 	
 	this.showFPS = GS.Settings.showFPS;
-	this.showPerformanceDebugMeters = false;
+	this.showPerformanceDebugMeters = true;
 };
 
 GS.Game.prototype = GS.inherit(GS.Base, {
