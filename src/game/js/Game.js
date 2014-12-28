@@ -123,8 +123,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.uiManager.initComponents(this.assetLoader.assets, this.grid);
 			this.uiManager.useIngameMenu();
 
-			// GAME.grid.exportMapToOBJ();
-
 			this.nextState = GS.GameStates.Play;			
 			this.graphicsManager.monochromeEnabled = false;
 

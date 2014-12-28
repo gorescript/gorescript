@@ -25,6 +25,8 @@ GS.Concrete.prototype = GS.inherit(GS.GridObject, {
 	constructor: GS.Concrete,
 
 	update: function() {
+		return;
+
 		switch (this.lightBehavior) {
 			case GS.SectorLightBehaviors.Static:
 				break;
