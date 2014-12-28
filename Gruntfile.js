@@ -78,10 +78,22 @@ module.exports = function(grunt) {
         }
       }
     },
+
+    connect: {
+      client: {
+        options: {
+          port: 9000,
+          hostname: "localhost",
+          base: "./",
+          keepalive: true,
+        }
+      },
+    },
   });
 
   grunt.loadNpmTasks("grunt-contrib-uglify");
   grunt.loadNpmTasks("grunt-contrib-copy");
+  grunt.loadNpmTasks("grunt-contrib-connect");
   grunt.loadNpmTasks("grunt-shell");
 
   grunt.registerTask("default", ["shell", "uglify", "copy"]);
