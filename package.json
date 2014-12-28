@@ -2,7 +2,7 @@
   "name": "gorescript",
   "description": "Retro first-person shooter, written in JavaScript using three.js",
   "version": "0.1.0",
-  "homepage": "http://timeinvariant.com/gorescript",
+  "homepage": "http://timeinvariant.github.io/gorescript",
   "repository": {
     "type": "git",
     "url": "https://github.com/timeinvariant/gorescript.git"
