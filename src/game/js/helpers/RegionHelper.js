@@ -1,4 +1,7 @@
 GS.RegionHelper = function() {
+	this.material = new THREE.MeshPhongMaterial({
+		vertexColors: THREE.FaceColors
+	});
 };
 
 GS.RegionHelper.prototype = {
@@ -129,10 +132,12 @@ GS.RegionHelper.prototype = {
 			id: this.regionIdCount,
 			doorIds: doorIds || {},
 			sectorIds: sectorIds || {},
-			monsters: [],
-			mesh: new THREE.Object3D(),
-			needsUpdate: false,
+			monsters: []
 		};
+
+		var mesh = new THREE.Mesh(new THREE.Geometry(), this.material);
+		mesh.matrixAutoUpdate = false;
+		region.mesh = mesh;
 
 		this.regionIdCount++;
 		return region;

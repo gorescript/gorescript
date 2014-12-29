@@ -90,15 +90,14 @@ GS.Grid.prototype = {
 		var that = this;
 		this.forEachUniqueGridObject([GS.Concrete], function(gridObject) {
 			if (that.debugConcreteMeshes) {
-				gridObject.view.mesh.children.push(gridObject.view.debugMesh);
+				that.concreteMeshes.children.push(gridObject.view.debugMesh);
 			}
-
-			gridObject.view.mesh.userData.gridObject = gridObject;
 		});
 
 		var regions = this.regionInfo.regions;
 		for (var i = 0; i < regions.length; i++) {
-			this.concreteMeshes.children.push(regions[i].mesh);
+			var mesh = regions[i].mesh;
+			this.concreteMeshes.children.push(mesh);
 		}
 
 		this.scene.add(this.concreteMeshes);
@@ -407,126 +406,5 @@ GS.Grid.prototype = {
 	updateFov: function() {
 		this.skybox.camera.fov = GS.Settings.fov;
 		this.skybox.camera.updateProjectionMatrix();
-	},
-
-	getSingleObjectMapOBJ: function() {
-		var exporter = new THREE.OBJExporter();
-		var geometry = new THREE.Geometry();
-
-		var v = this.map.bounds.min.clone().multiplyScalar(-1);
-		v.sub(this.map.bounds.max.clone().sub(this.map.bounds.min).divideScalar(2));
-		var matrix = new THREE.Matrix4().makeTranslation(v.x, 0, v.y);		
-
-		var addMesh = function(mesh) {
-			var meshGeo = mesh.geometry.clone();
-			meshGeo.applyMatrix(matrix);
-			THREE.GeometryUtils.merge(geometry, meshGeo);
-		};
-
-		for (var i = 0; i < this.concreteMeshes.children.length; i++) {
-			var mesh = this.concreteMeshes.children[i];
-			
-			if (mesh.children.length > 0) {
-				for (var j = 0; j < mesh.children.length; j++) {
-					addMesh(mesh.children[j]);
-				}
-			} else {
-				addMesh(mesh);
-			}
-		}
-
-		return exporter.parse(geometry);		
-	},
-
-	exportMapToOBJ: function() {
-		var lightBuckets = {};
-
-		var v = this.map.bounds.min.clone().multiplyScalar(-1);
-		v.sub(this.map.bounds.max.clone().sub(this.map.bounds.min).divideScalar(2));
-		var matrix = new THREE.Matrix4().makeTranslation(v.x, 0, v.y);
-
-		var color = new THREE.Color();
-		function addMesh(gridObject, mesh) {
-			var lightLevel = gridObject.sector.lightLevel;
-			var lightColor = gridObject.sector.lightColor;
-			var key = color.setHex(lightColor).getHexString() + GS.pad(lightLevel.toFixed(0), 2);
-
-			if (!(key in lightBuckets)) {
-				lightBuckets[key] = {
-					lightLevel: lightLevel,
-					lightColor: lightColor,
-					geometry: new THREE.Geometry(),
-				};
-			}
-
-			var geometry = mesh.geometry.clone();
-			geometry.applyMatrix(matrix);
-			THREE.GeometryUtils.merge(lightBuckets[key].geometry, geometry);
-		}
-
-		function colorToString(color) {
-			return color.r.toFixed(6) + " " + color.g.toFixed(6) + " " + color.b.toFixed(6);
-		}
-
-		function getEmissiveColor(lightLevel) {
-			if (lightLevel < 10) {
-				return 0;
-			}
-			return lightLevel / 10;
-		}
-
-		for (var i = 0; i < this.concreteMeshes.children.length; i++) {
-			var mesh = this.concreteMeshes.children[i];
-			var gridObject = mesh.userData.gridObject;
-			
-			if (mesh.children.length > 0) {
-				for (var j = 0; j < mesh.children.length; j++) {
-					addMesh(gridObject, mesh.children[j]);
-				}
-			} else {
-				addMesh(gridObject, mesh);
-			}
-		}
-
-		var exporter = new THREE.OBJExporter();
-
-		var specularHardness = 96.07;
-		var refractionIndex = 1;
-		var transparency = 1;
-		var illum = 2;
-		var ambient = new THREE.Color().setRGB(0, 0, 0);
-		var diffuse = new THREE.Color().setRGB(1, 1, 1);
-		var specular = new THREE.Color().setRGB(0.5, 0.5, 0.5);
-
-		var str = "mtllib map.mtl\n";
-		var mtl = "";
-		var j = 0;
-		var faceIndexOffset = 0;
-		for (var i in lightBuckets) {
-			str += "o Mesh" + j + "\n";
-			str += exporter.parse(lightBuckets[i].geometry, "Material" + j, faceIndexOffset) + "\n";
-
-			diffuse.setHex(lightBuckets[i].lightColor);
-
-			mtl += "newmtl Material" + j + "\n";
-			mtl += "Ns " + specularHardness.toFixed(6) + "\n";
-			mtl += "Ka " + colorToString(ambient) + "\n";
-			mtl += "Kd " + colorToString(diffuse) + "\n";
-			mtl += "Ks " + colorToString(specular) + "\n";
-			mtl += "Ke " + getEmissiveColor(lightBuckets[i].lightLevel).toFixed(6) + "\n";
-			mtl += "Ni " + refractionIndex.toFixed(6) + "\n";
-			mtl += "d " + transparency.toFixed(6) + "\n";
-			mtl += "illum " + illum + "\n\n";
-
-			j++;
-			faceIndexOffset += lightBuckets[i].geometry.vertices.length;
-		}
-
-		var zip = new JSZip();
-		zip.file("map.obj", str);
-		zip.file("map.mtl", mtl);
-		zip.file("map_base.obj", this.getSingleObjectMapOBJ());
-		var content = zip.generate();
-		location.href = "data:application/zip;base64," + content;
 	},
 };

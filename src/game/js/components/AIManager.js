@@ -23,7 +23,10 @@ GS.AIManager.prototype = {
 		this.sectorDict = this.grid.regionInfo.sectorDict;
 		this.regions = this.grid.regionInfo.regions;
 
-		this.assignConcreteMeshesToRegions();
+		for (var i = 0; i < this.regions.length; i++) {
+			this.regions[i].mesh.visible = false;
+		}
+
 		this.assignMonstersToRegions();
 		this.initGridObjectLibrary();
 		this.initScripts();
@@ -34,19 +37,6 @@ GS.AIManager.prototype = {
 		for (var i = 0; i < this.zones.length; i++) {
 			var zone = this.zones[i];
 			zone.boundingSquare = new THREE.Box2().setFromPoints([zone.start, zone.end]);
-		}
-	},
-
-	assignConcreteMeshesToRegions: function() {
-		var that = this;
-		this.grid.forEachUniqueGridObject([GS.Concrete], function(gridObject) {			
-			gridObject.region.mesh.children.push(gridObject.view.mesh);
-		});
-
-		for (var i = 0; i < this.regions.length; i++) {
-			this.regions[i].mesh.traverse(function(obj) {
-				obj.visible = false;
-			});
 		}
 	},
 
@@ -196,27 +186,19 @@ GS.AIManager.prototype = {
 		var visibleRegions = 0;
 		this.propagateRegions(player, function(region) {
 			region.reachedThisFrame = true;
-			if (!region.mesh.visible) {
-				that.setRegionVisibility(region, true);				
-			}
+			region.mesh.visible = true;
 			visibleRegions++;
 		});
 
 		for (var i = 0; i < this.regions.length; i++) {
 			var region = this.regions[i];
 			if (region.mesh.visible && !region.reachedThisFrame) {
-				this.setRegionVisibility(region, false);
+				region.mesh.visible = false;
 			}
 		}
 
 		// GS.DebugUI.setStaticLine("total regions", this.regions.length);
 		// GS.DebugUI.trackNumericValue("visible regions", visibleRegions);
-	},
-
-	setRegionVisibility: function(region, value) {
-		region.mesh.traverse(function(obj) {
-			obj.visible = value;
-		});
 	},
 
 	checkZones: function() {

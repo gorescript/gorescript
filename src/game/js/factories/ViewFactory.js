@@ -51,10 +51,6 @@ GS.ViewFactory.prototype = {
 			}
 		}
 
-		this.tempMaterial = new THREE.MeshPhongMaterial({
-			color: 0x85AD86,
-		});
-
 		for (var i in GS.Weapons) {
 			this.wrap(this.textures[i]);
 			this.materials[i] = new GS.MeshPhongGlowMaterial(this.textures[i], this.textures[i + "_glow"]);
@@ -105,17 +101,18 @@ GS.ViewFactory.prototype = {
 		}
 
 		for (var i = 0; i < triangles.length; i += 3) {
-			geometry.faces.push(new THREE.Face3(i, i + 1, i + 2));
+			geometry.faces.push(new THREE.Face3(
+				i, i + 1, i + 2,
+				null, // normal
+				new THREE.Color(0x85AD86)
+			));
 		}
 
 		geometry.computeFaceNormals();
 		geometry.computeVertexNormals();
 
-		var material = this.tempMaterial;
-		var mesh = new THREE.Mesh(geometry, material);
-		mesh.matrixAutoUpdate = false;
-
-		gridObject.view.mesh = mesh;
+		gridObject.region.mesh.geometry.merge(geometry);
+	
 		gridObject.view.collisionData.triangles = this.getSegmentTriangles(seg);
 		this.applyConcreteBoundingBox(gridObject, triangles);
 
@@ -125,23 +122,23 @@ GS.ViewFactory.prototype = {
 	applySectorView: function(gridObject, ceiling) {
 		var sector = gridObject.sourceObj;
 
-		var mesh = new THREE.Object3D();
 		var triangles = [];
 
-		var material = this.tempMaterial;
+		var geometry;
 
 		if (!ceiling) {
 			if (sector.elevator !== true) {
-				mesh.children.push(this.getSectorMesh(sector, triangles, false, material));
+				geometry = this.getSectorGeometry(sector, triangles, false);
+				gridObject.region.mesh.geometry.merge(geometry);
 			}
 		} else {
 			var hasCeiling = (sector.ceiling !== undefined) ? sector.ceiling : true;
 			if (hasCeiling) {
-				mesh.children.push(this.getSectorMesh(sector, triangles, true, material));
+				geometry = this.getSectorGeometry(sector, triangles, true);
+				gridObject.region.mesh.geometry.merge(geometry);
 			}
 		}
 
-		gridObject.view.mesh = mesh;
 		gridObject.view.collisionData.triangles = triangles;
 		this.applyConcreteBoundingBox(gridObject, triangles);
 
@@ -157,22 +154,24 @@ GS.ViewFactory.prototype = {
 		gridObject.view.debugMesh = debugMesh;
 	},
 
-	getSectorMesh: function(sector, sectorTriangles, ceiling, material) {
+	getSectorGeometry: function(sector, sectorTriangles, ceiling) {
 		var geometry = new THREE.Geometry();
 		var triangles = this.getSectorTriangles(sector, ceiling);
 		GS.pushArray(geometry.vertices, triangles);
 		GS.pushArray(sectorTriangles, this.getSectorTriangles(sector, ceiling, true));
 
 		for (var j = 0; j < triangles.length; j += 3) {
-			geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
+			geometry.faces.push(new THREE.Face3(
+				j, j + 1, j + 2, 
+				null, // normal
+				new THREE.Color(0x85AD86)
+			));
 		}
 
 		geometry.computeFaceNormals();
 		geometry.computeVertexNormals();
 
-		var mesh = new THREE.Mesh(geometry, material);
-		mesh.matrixAutoUpdate = false;
-		return mesh;
+		return geometry;
 	},
 
 	getSegmentDefinedTriangles: function(seg) {
