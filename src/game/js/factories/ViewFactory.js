@@ -100,11 +100,13 @@ GS.ViewFactory.prototype = {
 			length = distance / this.texScale;
 		}
 
+		var color = this.getSectorColor(gridObject.sector);
+
 		for (var i = 0; i < triangles.length; i += 3) {
 			geometry.faces.push(new THREE.Face3(
 				i, i + 1, i + 2,
 				null, // normal
-				new THREE.Color(0x85AD86)
+				color
 			));
 		}
 
@@ -117,6 +119,16 @@ GS.ViewFactory.prototype = {
 		this.applyConcreteBoundingBox(gridObject, triangles);
 
 		this.triangleCount += gridObject.view.collisionData.triangles.length / 3;
+	},
+
+	getSectorColor: function(sector) {
+		var color = new THREE.Color(0x85AD86);
+		var hsl = color.getHSL();
+		hsl.s = sector.lightLevel * 0.1;
+		hsl.l = sector.lightLevel * 0.1;
+		color.setHSL(hsl.h, hsl.s, hsl.l);
+
+		return color;
 	},
 
 	applySectorView: function(gridObject, ceiling) {
@@ -160,11 +172,13 @@ GS.ViewFactory.prototype = {
 		GS.pushArray(geometry.vertices, triangles);
 		GS.pushArray(sectorTriangles, this.getSectorTriangles(sector, ceiling, true));
 
+		var color = this.getSectorColor(sector);
+
 		for (var j = 0; j < triangles.length; j += 3) {
 			geometry.faces.push(new THREE.Face3(
 				j, j + 1, j + 2, 
 				null, // normal
-				new THREE.Color(0x85AD86)
+				color
 			));
 		}
 

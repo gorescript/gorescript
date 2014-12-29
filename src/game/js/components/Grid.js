@@ -97,6 +97,13 @@ GS.Grid.prototype = {
 		var regions = this.regionInfo.regions;
 		for (var i = 0; i < regions.length; i++) {
 			var mesh = regions[i].mesh;
+
+			var bufferGeo = new THREE.BufferGeometry();
+			bufferGeo.fromGeometry(mesh.geometry, {
+				vertexColors: THREE.FaceColors
+			});
+			mesh.geometry = bufferGeo;
+
 			this.concreteMeshes.children.push(mesh);
 		}
 

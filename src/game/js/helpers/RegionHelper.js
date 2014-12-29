@@ -1,6 +1,7 @@
 GS.RegionHelper = function() {
 	this.material = new THREE.MeshPhongMaterial({
-		vertexColors: THREE.FaceColors
+		vertexColors: THREE.FaceColors,
+		emissive: new THREE.Color().setRGB(0.5, 0.5, 0.5),
 	});
 };
 
