@@ -46,13 +46,10 @@ function processMaps(textureColors) {
 		}
 
 		function processSectors() {
-			var allSectors = map.layerObjects[2];
-			var concreteSectors = _.where(allSectors, function(item) {
-				return !item.door && !item.elevator;
-			});
+			var sectors = map.layerObjects[2];
 
-			for (var i = 0; i < concreteSectors.length; i++) {
-				var sector = concreteSectors[i];
+			for (var i = 0; i < sectors.length; i++) {
+				var sector = sectors[i];
 				var texId = sector.floorTexId || sector.ceilTexId;
 
 				sector.lightColor = textureColors[texId].color;

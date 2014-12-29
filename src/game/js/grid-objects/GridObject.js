@@ -130,7 +130,7 @@ GS.GridObject.prototype = {
 			var x = (sector.lightLevel * this.lightLevelFactor);
 			x *= x;
 			x = GS.MathHelper.clamp(x, this.minLightLevel, this.maxLightLevel);
-			color.setHex(sector.lightColor).multiplyScalar(x);
+			color.setHex(0xffffff).multiplyScalar(x);
 		}
 	},
 

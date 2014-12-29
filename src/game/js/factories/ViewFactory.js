@@ -100,7 +100,7 @@ GS.ViewFactory.prototype = {
 			length = distance / this.texScale;
 		}
 
-		var color = this.getSectorColor(gridObject.sector);
+		var color = this.getSegmentColor(seg, gridObject.sector);
 
 		for (var i = 0; i < triangles.length; i += 3) {
 			geometry.faces.push(new THREE.Face3(
@@ -121,14 +121,27 @@ GS.ViewFactory.prototype = {
 		this.triangleCount += gridObject.view.collisionData.triangles.length / 3;
 	},
 
-	getSectorColor: function(sector) {
-		var color = new THREE.Color(0x85AD86);
-		var hsl = color.getHSL();
-		hsl.s = sector.lightLevel * 0.1;
-		hsl.l = sector.lightLevel * 0.1;
-		color.setHSL(hsl.h, hsl.s, hsl.l);
-
+	getSegmentColor: function(seg, sector) {
+		var color = new THREE.Color(seg.lightColor);
+		this.processLightColor(color, sector.lightLevel);
 		return color;
+	},
+
+	getSectorColor: function(sector) {
+		var color = new THREE.Color(sector.lightColor);
+		this.processLightColor(color, sector.lightLevel);
+		return color;
+	},
+
+	processLightColor: function(color, lightLevel) {
+		var lightLevelFactor = 0.15;
+		var minLightLevel = 0.25;
+		var maxLightLevel = 1.25;
+
+		var x = lightLevel * lightLevelFactor;
+		x *= x;
+		x = GS.MathHelper.clamp(x, minLightLevel, maxLightLevel);
+		color.multiplyScalar(x);
 	},
 
 	applySectorView: function(gridObject, ceiling) {
