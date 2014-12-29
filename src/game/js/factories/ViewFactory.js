@@ -51,6 +51,10 @@ GS.ViewFactory.prototype = {
 			}
 		}
 
+		this.tempMaterial = new THREE.MeshPhongMaterial({
+			color: 0x85AD86,
+		});
+
 		for (var i in GS.Weapons) {
 			this.wrap(this.textures[i]);
 			this.materials[i] = new GS.MeshPhongGlowMaterial(this.textures[i], this.textures[i + "_glow"]);
@@ -102,30 +106,12 @@ GS.ViewFactory.prototype = {
 
 		for (var i = 0; i < triangles.length; i += 3) {
 			geometry.faces.push(new THREE.Face3(i, i + 1, i + 2));
-
-			var v0 = geometry.vertices[i];
-			var v1 = geometry.vertices[i + 1];
-			var v2 = geometry.vertices[i + 2];
-
-			if (i < seg.bottomRightIndex) {				
-				geometry.faceVertexUvs[0].push([
-					new THREE.Vector2(0, v0.y / this.texScale),
-					new THREE.Vector2(length, v1.y / this.texScale),
-					new THREE.Vector2(length, v2.y / this.texScale),
-				]);
-			} else {
-				geometry.faceVertexUvs[0].push([
-					new THREE.Vector2(length, v0.y / this.texScale),
-					new THREE.Vector2(0, v1.y / this.texScale),
-					new THREE.Vector2(0, v2.y / this.texScale),
-				]);
-			}
 		}
 
 		geometry.computeFaceNormals();
 		geometry.computeVertexNormals();
 
-		var material = this.materials[seg.texId].clone();
+		var material = this.tempMaterial;
 		var mesh = new THREE.Mesh(geometry, material);
 		mesh.matrixAutoUpdate = false;
 
@@ -142,14 +128,16 @@ GS.ViewFactory.prototype = {
 		var mesh = new THREE.Object3D();
 		var triangles = [];
 
+		var material = this.tempMaterial;
+
 		if (!ceiling) {
 			if (sector.elevator !== true) {
-				mesh.children.push(this.getSectorMesh(sector, triangles, false, this.materials[sector.floorTexId].clone()));
+				mesh.children.push(this.getSectorMesh(sector, triangles, false, material));
 			}
 		} else {
 			var hasCeiling = (sector.ceiling !== undefined) ? sector.ceiling : true;
 			if (hasCeiling) {
-				mesh.children.push(this.getSectorMesh(sector, triangles, true, this.materials[sector.ceilTexId].clone()));
+				mesh.children.push(this.getSectorMesh(sector, triangles, true, material));
 			}
 		}
 
@@ -176,16 +164,7 @@ GS.ViewFactory.prototype = {
 		GS.pushArray(sectorTriangles, this.getSectorTriangles(sector, ceiling, true));
 
 		for (var j = 0; j < triangles.length; j += 3) {
-			var v0 = triangles[j];
-			var v1 = triangles[j + 1];
-			var v2 = triangles[j + 2];
-
 			geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
-			geometry.faceVertexUvs[0].push([
-				new THREE.Vector2(v0.x / this.texScale, v0.z / this.texScale),
-				new THREE.Vector2(v1.x / this.texScale, v1.z / this.texScale),
-				new THREE.Vector2(v2.x / this.texScale, v2.z / this.texScale),
-			]);
 		}
 
 		geometry.computeFaceNormals();

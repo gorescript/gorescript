@@ -35,6 +35,7 @@ GS.GridFactory.prototype = {
 		grid.width = hCells;
 		grid.height = vCells;
 		grid.map = map;
+		grid.regionInfo = this.getRegions(map);
 		grid.soundManager = this.soundManager;
 
 		this.assignMapEntitiesToGrid(grid);
@@ -44,6 +45,17 @@ GS.GridFactory.prototype = {
 		grid.init();
 
 		return grid;
+	},
+
+	getRegions: function(map) {
+		var sectors = map.layerObjects[GS.MapLayers.Sector];
+		var sectorLinks = map.sectorLinks;
+		if (sectorLinks === undefined) {
+			throw "sector links not found";
+		}
+
+		var regionHelper = new GS.RegionHelper();
+		return regionHelper.getRegions(sectors, sectorLinks);
 	},
 
 	addPlayerToGrid: function(grid) {
@@ -77,12 +89,14 @@ GS.GridFactory.prototype = {
 			if (hasFloor || hasCeiling) {
 				if (hasFloor) {
 					var floor = new GS.Concrete(grid, GS.MapLayers.Sector, sector);
+					floor.region = this.getRegionBySectorId(grid, sector.id);
 					this.viewFactory.applySectorView(floor, false);
 					floor.assignToCells(gridLocation);
 				}			
 
 				if (hasCeiling) {
 					var ceiling = new GS.Concrete(grid, GS.MapLayers.Sector, sector);
+					ceiling.region = this.getRegionBySectorId(grid, sector.id);
 					this.viewFactory.applySectorView(ceiling, true);
 					ceiling.assignToCells(gridLocation);
 				}
@@ -108,6 +122,7 @@ GS.GridFactory.prototype = {
 			if (seg.type !== GS.SegmentTypes.TVScreen && seg.type !== GS.SegmentTypes.Switch) {
 				var gridObject = new GS.Concrete(grid, GS.MapLayers.Segment, seg);
 				gridObject.sector = sectorDict[seg.sectorId];
+				gridObject.region = this.getRegionBySectorId(grid, seg.sectorId);
 				this.viewFactory.applySegmentView(gridObject);
 				gridObject.assignToCells(gridLocation);
 			} else
@@ -169,5 +184,17 @@ GS.GridFactory.prototype = {
 		var switchObj = new GS.Switch(grid, seg);
 		this.viewFactory.applySwitchView(switchObj);
 		switchObj.assignToCells(gridLocation);
+	},
+
+	getRegionBySectorId: function(grid, sectorId) {
+		var regions = grid.regionInfo.regions;
+
+		for (var i = 0; i < regions.length; i++) {
+			if (sectorId in regions[i].sectorIds) {
+				return regions[i];
+			}
+		}
+
+		throw "sector has no corresponding region";
 	},
 };

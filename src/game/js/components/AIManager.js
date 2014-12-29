@@ -18,14 +18,11 @@ GS.AIManager = function(grid) {
 
 GS.AIManager.prototype = {
 	init: function() {
-		var sectorLinks = this.grid.map.sectorLinks;
-		if (sectorLinks === undefined) {
-			throw "sector links not found";
-		}
-
 		this.initZones();
-		this.constructSectorGraph(sectorLinks);
-		this.constructRegions();
+
+		this.sectorDict = this.grid.regionInfo.sectorDict;
+		this.regions = this.grid.regionInfo.regions;
+
 		this.assignConcreteMeshesToRegions();
 		this.assignMonstersToRegions();
 		this.initGridObjectLibrary();
@@ -40,140 +37,14 @@ GS.AIManager.prototype = {
 		}
 	},
 
-	constructSectorGraph: function(sectorLinks) {
-		this.sectorGraph = new GS.Graph(function(a, b) { return a.id == b.id });
-		this.sectorDict = {};
-
-		for (var i = 0; i < sectorLinks.length; i += 2) {
-			var s1 = this.getSectorById(sectorLinks[i]);
-			var s2 = this.getSectorById(sectorLinks[i + 1]);
-
-			this.sectorDict[s1.id] = { index: -1, sector: s1, center: GS.PolygonHelper.getSectorCentroid(s1) };
-			this.sectorDict[s2.id] = { index: -1, sector: s2, center: GS.PolygonHelper.getSectorCentroid(s2) };
-
-			this.sectorGraph.addEdge(s1, s2);
-		}
-
-		var keys = Object.keys(this.sectorDict);
-		for (var i = 0; i < keys.length; i++) {
-			var obj = this.sectorDict[keys[i]];
-			obj.index = this.sectorGraph.getVertexIndex(obj.sector);
-		}
-		
-		this.sectorGraph.computeVertexNeighborSets();
-	},
-
-	constructRegions: function() {
-		var that = this;
-		this.regionIdCount = 0;
-
-		var toVisit = [];
-		var doorCount = 0;
-		var seeds = {};
-		for (var i in this.sectorDict) {
-			if (this.sectorDict[i].sector.door) {
-				var neighbors = this.sectorGraph.neighborSets[this.sectorDict[i].index].elements;
-				for (var j = 0; j < neighbors.length; j++) {
-					var id = neighbors[j].id;
-					toVisit.push({ id: id, seed: id });
-					seeds[id] = { doorIds: {}, sectorIds: {} };
-				}
-				doorCount++;
-			}
-		}
-
-		function getNewRegion(doorIds, sectorIds) {
-			var region = {
-				id: that.regionIdCount,
-				doorIds: doorIds || {},
-				sectorIds: sectorIds || {},
-				monsters: [],
-				rootMesh: new THREE.Object3D(),
-				needsUpdate: false,
-			};
-
-			that.regionIdCount++;			
-			return region;
-		}
-
-		var regions = [];
-		if (doorCount > 0) {
-			var visited = {};
-			while (toVisit.length > 0) {
-				var current = toVisit.pop();
-				var id = current.id;
-				var seedId = current.seed;
-
-				if (this.sectorDict[id].sector.door) {
-					seeds[seedId].doorIds[id] = true;
-				}
-				if (visited[id]) {
-					continue;
-				}					
-
-				visited[id] = true;
-				seeds[seedId].sectorIds[id] = true;
-
-				if (this.sectorDict[id].sector.door) {
-					continue;
-				}
-
-				var neighbors = this.sectorGraph.neighborSets[this.sectorDict[id].index].elements;
-				for (var i = 0; i < neighbors.length; i++) {
-					var info = this.sectorDict[neighbors[i].id];
-					var id = info.sector.id;
-					toVisit.push({ id: id, seed: seedId });
-				}
-			}
-
-			for (var i in seeds) {
-				var sectorIds = seeds[i].sectorIds;
-				if (Object.keys(sectorIds).length > 0) {
-					regions.push(getNewRegion(seeds[i].doorIds, sectorIds));
-				}
-			}
-
-			for (var i = 0; i < regions.length; i++) {
-				var region = regions[i];
-				region.linkedRegions = [];
-				for (var j in region.doorIds) {
-					for (var k = 0; k < regions.length; k++) {
-						if (k !== i) {	
-							var region2 = regions[k];
-							for (var e in region2.doorIds) {
-								if (e === j) {
-									region.linkedRegions.push({ doorId: e, region: region2 });
-									break;
-								}
-							}
-						}
-					}
-				}
-			}
-		} else {
-			var region = getNewRegion();
-			for (var i in this.sectorDict) {
-				region.sectorIds[i] = true;
-			}
-			regions.push(region);
-		}
-
-		// console.log(regions);
-		this.regions = regions;
-	},
-
 	assignConcreteMeshesToRegions: function() {
 		var that = this;
-		this.grid.forEachUniqueGridObject([GS.Concrete], function(gridObject) {
-			var region = that.getRegionFromSector(gridObject.sector);
-			if (region === undefined) {
-				throw "sector not in region";
-			}
-			region.rootMesh.children.push(gridObject.view.mesh);			
+		this.grid.forEachUniqueGridObject([GS.Concrete], function(gridObject) {			
+			gridObject.region.mesh.children.push(gridObject.view.mesh);
 		});
 
 		for (var i = 0; i < this.regions.length; i++) {
-			this.regions[i].rootMesh.traverse(function(obj) {
+			this.regions[i].mesh.traverse(function(obj) {
 				obj.visible = false;
 			});
 		}
@@ -183,7 +54,7 @@ GS.AIManager.prototype = {
 		var that = this;
 		this.grid.forEachUniqueGridObject([GS.Monster], function(monster) {
 			if (monster.startingSector !== undefined) {
-				var region = that.getRegionFromSector(monster.startingSector);
+				var region = that.getRegionBySectorId(monster.startingSector.id);
 				if (region === undefined) {
 					throw "sector not in region";
 				}
@@ -325,7 +196,7 @@ GS.AIManager.prototype = {
 		var visibleRegions = 0;
 		this.propagateRegions(player, function(region) {
 			region.reachedThisFrame = true;
-			if (!region.rootMesh.visible) {
+			if (!region.mesh.visible) {
 				that.setRegionVisibility(region, true);				
 			}
 			visibleRegions++;
@@ -333,7 +204,7 @@ GS.AIManager.prototype = {
 
 		for (var i = 0; i < this.regions.length; i++) {
 			var region = this.regions[i];
-			if (region.rootMesh.visible && !region.reachedThisFrame) {
+			if (region.mesh.visible && !region.reachedThisFrame) {
 				this.setRegionVisibility(region, false);
 			}
 		}
@@ -343,7 +214,7 @@ GS.AIManager.prototype = {
 	},
 
 	setRegionVisibility: function(region, value) {
-		region.rootMesh.traverse(function(obj) {
+		region.mesh.traverse(function(obj) {
 			obj.visible = value;
 		});
 	},
@@ -383,9 +254,11 @@ GS.AIManager.prototype = {
 
 	propagateRegions: function(player, callback) {
 		var sector = player.getSector();
+
 		if (sector !== undefined) {
-			var toVisit = [ this.getRegionFromSector(sector) ];
+			var toVisit = [ this.getRegionBySectorId(sector.id) ];
 			var visited = {};
+
 			while (toVisit.length > 0) {
 				var region = toVisit.pop();
 
@@ -432,24 +305,14 @@ GS.AIManager.prototype = {
 		region.active = true;
 	},
 
-	getSectorById: function(id) {
-		var sectors = this.grid.map.layerObjects[GS.MapLayers.Sector];
-		for (var i = 0; i < sectors.length; i++) {
-			if (sectors[i].id == id) {
-				return sectors[i];
-			}
-		}
-
-		throw "sector " + id + " not found";
-	},
-
-	getRegionFromSector: function(sector) {
+	getRegionBySectorId: function(sectorId) {
 		for (var i = 0; i < this.regions.length; i++) {
 			var region = this.regions[i];
-			if (sector.id in region.sectorIds) {
+			if (sectorId in region.sectorIds) {
 				return region;
 			}
 		}
-		return undefined;
+
+		throw "sector has no corresponding region";
 	},
 };
