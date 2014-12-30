@@ -8,7 +8,9 @@ Besides the game itself, it features:
 * A 2.5D sector-based **map editor**
 * A basic **voxel editor** for monster, weapon and powerup meshes
 
-**Latest assets .zip**: http://goo.gl/FDqYXh (copy to **/src/game**)
+**See [releases](https://github.com/timeinvariant/gorescript/releases) for corresponding asset bundles.**
+
+#### Guides
 
 **Very crude guides can be found [here](https://github.com/timeinvariant/gorescript/wiki), for the following topics:**
 
