@@ -177,6 +177,21 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 	onMapWon: function() {
 		this.graphicsManager.monochromeEnabled = false;
+
+		this.trackMapWonEvent();
+	},
+
+	trackMapWonEvent: function() {
+		/* jshint ignore:start */
+		if (ga !== undefined) {
+			var mapName = this.grid.map.name;
+			var timeSpent = this.grid.aiManager.timeSpent;
+			var seconds = Math.floor(Math.floor(timeSpent) / 1000);
+			seconds = Math.max(0, seconds);
+
+			ga("send", "event", "level", "complete", mapName, seconds);
+		}
+		/* jshint ignore:end */
 	},
 
 	menu: function() {
