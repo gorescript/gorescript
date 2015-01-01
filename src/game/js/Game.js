@@ -189,9 +189,10 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			var mapName = this.grid.map.name;
 			var timeSpent = this.grid.aiManager.timeSpent;
 			var seconds = Math.floor(Math.floor(timeSpent) / 1000);
-			seconds = Math.max(0, seconds);
+			var fps = Math.floor(GS.DebugUI.valueTracking.fps.avg);
 
-			ga("send", "event", "level", "complete", mapName, seconds);
+			var str = mapName + " " + seconds + "s " + fps + "fps";
+			ga("send", "event", "level", "complete", str);
 		}
 		/* jshint ignore:end */
 	},
