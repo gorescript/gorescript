@@ -185,7 +185,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 	trackMapWonEvent: function() {
 		/* jshint ignore:start */
-		if (ga !== undefined) {
+		if (typeof ga !== "undefined") {
 			var mapName = this.grid.map.name;
 			var timeSpent = this.grid.aiManager.timeSpent;
 			var seconds = Math.floor(Math.floor(timeSpent) / 1000);
