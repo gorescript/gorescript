@@ -51,10 +51,7 @@ GS.ViewFactory.prototype = {
 			}
 		}
 
-		this.vertexColorMaterial = new THREE.MeshPhongMaterial({
-			vertexColors: THREE.FaceColors,
-			emissive: new THREE.Color().setRGB(0.5, 0.5, 0.5),
-		});
+		this.vertexColorMaterial = GS.RegionHelper.prototype.getMaterial();
 
 		for (var i in GS.Weapons) {
 			this.wrap(this.textures[i]);
