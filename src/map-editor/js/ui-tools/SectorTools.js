@@ -111,6 +111,7 @@ GS.SectorTools.prototype = GS.inherit(GS.LayerObjectTools, {
 			var $txtLightLevel = $("#sec-selected-light-level-text");
 			var $sldLightLevel = $("#sec-selected-light-level");
 			var $clrLightColor = $("#sec-selected-light-color");
+			var $chkUseVertexColors = $("#chk-sec-use-vertex-colors");
 
 			$sldLightLevel.off("slidechange.detail");
 
@@ -125,6 +126,7 @@ GS.SectorTools.prototype = GS.inherit(GS.LayerObjectTools, {
 				var doorMaxHeight = (sector.doorMaxHeight !== undefined) ? sector.doorMaxHeight : 16;
 				var isElevator = (sector.elevator !== undefined) ? sector.elevator : false;
 				var elevatorMaxHeight = (sector.elevatorMaxHeight !== undefined) ? sector.elevatorMaxHeight : 16;
+				var useVertexColors = (sector.useVertexColors !== undefined) ? sector.useVertexColors : false;
 
 				$txtId.text(sector.id);
 				$txtFloorHeight.val(floorHeight);
@@ -139,6 +141,7 @@ GS.SectorTools.prototype = GS.inherit(GS.LayerObjectTools, {
 				$chkElevator.prop("checked", isElevator);
 				$txtElevatorMaxHeight.val(elevatorMaxHeight);
 				$txtElevatorMaxHeight.prop("disabled", !isElevator);
+				$chkUseVertexColors.prop("checked", useVertexColors);
 				$txtFloorTexId.val(sector.floorTexId);
 				$txtCeilTexId.val(sector.ceilTexId);
 				$txtSideTexId.val(sector.sideTexId);
@@ -155,8 +158,9 @@ GS.SectorTools.prototype = GS.inherit(GS.LayerObjectTools, {
 				$txtCeilThickness.prop("disabled", false);
 				$chkDoor.prop("checked", false);
 				$txtDoorMaxHeight.prop("disabled", false);
-				$chkElevator.prop("checked", false);
+				$chkElevator.prop("checked", false);				
 				$txtElevatorMaxHeight.prop("disabled", false);
+				$chkUseVertexColors.prop("checked", false);
 				$txtFloorTexId.val("");
 				$txtCeilTexId.val("");
 				$txtSideTexId.val("");
@@ -255,6 +259,14 @@ GS.SectorTools.prototype = GS.inherit(GS.LayerObjectTools, {
 					$txtDoorMaxHeight.prop("disabled", true);
 				}
 				$txtElevatorMaxHeight.prop("disabled", !value);
+			});
+
+			$chkUseVertexColors.off("change.detail");
+			$chkUseVertexColors.on("change.detail", function() { 
+				var value = $(this).is(":checked");
+				for (var i = 0; i < selected.length; i++) {
+					selected[i].useVertexColors = value;
+				}
 			});
 
 			$txtElevatorMaxHeight.off("change.detail");

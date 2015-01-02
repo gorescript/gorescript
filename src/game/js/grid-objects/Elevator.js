@@ -104,11 +104,13 @@ GS.Elevator.prototype = GS.inherit(GS.GridObject, {
 			this.grid.collisionManager.elevatorMove(this, this.velocity.y);
 		}
 
-		this.getLightColorFromSector(this.lightColor, this.sector);
-		for (var i = 0; i < this.view.mesh.children.length; i++) {
-			var material = this.view.mesh.children[i].material;
-			if (material.emissive !== undefined) {
-				material.emissive.copy(this.lightColor);
+		if (!this.sector.useVertexColors) {
+			this.getLightColorFromSector(this.lightColor, this.sector);
+			for (var i = 0; i < this.view.mesh.children.length; i++) {
+				var material = this.view.mesh.children[i].material;
+				if (material.emissive !== undefined) {
+					material.emissive.copy(this.lightColor);
+				}
 			}
 		}
 	},
