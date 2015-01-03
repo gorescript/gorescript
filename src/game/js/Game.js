@@ -1,5 +1,5 @@
-GS.GameVersion = "build 10 (august 20, 2014)";
-GS.BuildMessage = "added in this build: rebindable keys";
+GS.GameVersion = "v1.1";
+GS.BuildReleaseDate = "january 3, 2015";
 
 GS.GameStates = {
 	Dispose: 0,
@@ -122,8 +122,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.initComponents(this.assetLoader.assets);			
 			this.uiManager.initComponents(this.assetLoader.assets, this.grid);
 			this.uiManager.useIngameMenu();
-
-			// GAME.grid.exportMapToOBJ();
 
 			this.nextState = GS.GameStates.Play;			
 			this.graphicsManager.monochromeEnabled = false;
@@ -294,8 +292,9 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	},
 
 	update: function() {
+		var time;
 		if (this.showPerformanceDebugMeters) {
-			var time = window.performance.now();
+			time = window.performance.now();
 		}
 
 		if (this.state == GS.GameStates.Dispose) {
@@ -328,7 +327,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.menu();
 		}
 
-		if (this.nextState != null) {
+		if (this.nextState !== null) {
 			if (this.updated) {
 				if (this.nextState == GS.GameStates.Play || this.nextState == GS.GameStates.Menu) {
 					this.loadingUI.hide();
@@ -348,8 +347,9 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	},
 
 	draw: function() {
+		var time;
 		if (this.showPerformanceDebugMeters) {
-			var time = window.performance.now();
+			time = window.performance.now();
 		}
 
 		if (this.state == GS.GameStates.PreLoad) {

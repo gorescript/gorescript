@@ -215,30 +215,32 @@ GS.VoxelMeshManager.prototype = {
 		var halfSize = new THREE.Vector3(0.5, 0.5, 0.5);
 
 		for (var i = floorHeight; i < this.size; i++) {
-			Object.keys(this.voxelMesh).forEach(function(key) {
-				var voxel = that.voxelMesh[key];
-				var p = that.getXYZ(key);
-				if (p.y === i) {
-					var newY = i - 1;
-					if (newY < floorHeight) {
-						newY = floorHeight;
-					}
-					var pHex = that.padXYZ(p.x, p.y, p.z);
-					var newHex = that.padXYZ(p.x, newY, p.z);
-
-					if (resultMesh[newHex] === undefined || Math.random() >= 0.5) {
-						resultMesh[newHex] = voxel;
-						voxel.pos.y = newY;
-						voxel.box3.set(voxel.pos.clone().sub(halfSize), voxel.pos.clone().add(halfSize));
-					} else {
-						resultMesh[pHex] = voxel;
-					}
-				}
-			});
+			Object.keys(this.voxelMesh).forEach(meltMesh);
 		}
 
 		this.voxelMesh = resultMesh;
 		this.updateMesh();
+
+		function meltMesh(key) {
+			var voxel = that.voxelMesh[key];
+			var p = that.getXYZ(key);
+			if (p.y === i) {
+				var newY = i - 1;
+				if (newY < floorHeight) {
+					newY = floorHeight;
+				}
+				var pHex = that.padXYZ(p.x, p.y, p.z);
+				var newHex = that.padXYZ(p.x, newY, p.z);
+
+				if (resultMesh[newHex] === undefined || Math.random() >= 0.5) {
+					resultMesh[newHex] = voxel;
+					voxel.pos.y = newY;
+					voxel.box3.set(voxel.pos.clone().sub(halfSize), voxel.pos.clone().add(halfSize));
+				} else {
+					resultMesh[pHex] = voxel;
+				}
+			}
+		}
 	},
 
 	addMeshToScene: function() {

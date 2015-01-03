@@ -23,7 +23,7 @@ GS.LineHelper = {
 		var y1 = s1.start.y, y2 = s1.end.y, y3 = s2.start.y, y4 = s2.end.y;
 
 		var denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
-		if (denom == 0) {
+		if (denom === 0) {
 			return false;
 		}
 
@@ -98,7 +98,7 @@ GS.LineHelper = {
 					}
 				}
 			}
-			cuts.sort(function(a, b) { return that.compare(a, b); });
+			cuts.sort(sort);
 
 			for (var j = 0; j < cuts.length - 1; j++) {
 				graph.addEdge(cuts[j], cuts[j + 1]);
@@ -111,6 +111,10 @@ GS.LineHelper = {
 				v.x = Math.floor(v.x / gridCellSize) * gridCellSize;
 				v.y = Math.floor(v.y / gridCellSize) * gridCellSize;
 			}
+		}
+
+		function sort(a, b) {
+			return that.compare(a, b);
 		}
 
 		return graph;
@@ -139,7 +143,7 @@ GS.LineHelper = {
 			return -1;
 		}
 
-		var offset = (lengthSq != 0) ? (dot / lengthSq) : 1;
+		var offset = (lengthSq !== 0) ? (dot / lengthSq) : 1;
 		return offset;
 	},
 

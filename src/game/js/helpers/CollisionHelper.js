@@ -60,7 +60,7 @@ GS.CollisionHelper = {
 		var finalPosition = this.collideWithWorld(p, triangleIterator);
 		var climbing = (oldY < finalPosition.y);
 
-		if (p.gravityFactor != 0 && !climbing && !p.horizontalOnly) {
+		if (p.gravityFactor !== 0 && !climbing && !p.horizontalOnly) {
 			p.lspVelocity.copy(this.gravity);
 			p.lspVelocity.y *= p.gravityFactor;
 			p.lspVelocity.divide(p.ellipsoidSpace);
@@ -210,7 +210,7 @@ GS.CollisionHelper = {
 				var signedDistFromPositionToTriPlane = position.dot(normal) + planeConstant;
 				var planeNormalDotVelocity = normal.dot(velocity);
 
-				if (planeNormalDotVelocity == 0) {
+				if (planeNormalDotVelocity === 0) {
 					if (Math.abs(signedDistFromPositionToTriPlane) >= 1) {
 						return false;
 					} else {

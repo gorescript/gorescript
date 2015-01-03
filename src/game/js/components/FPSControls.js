@@ -181,7 +181,7 @@ GS.FPSControls.prototype = {
 		return function(x, z) {
 			newPos.copy(this.eye);
 
-			if (x != 0 || z != 0) {
+			if (x !== 0 || z !== 0) {
 				aux.copy(this.rightMoveVector).multiplyScalar(this.moveSpeed * x);
 				newPos.add(aux);
 				aux.copy(this.forwardMoveVector).multiplyScalar(this.moveSpeed * z);

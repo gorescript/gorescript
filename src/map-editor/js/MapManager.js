@@ -503,9 +503,13 @@ GS.MapManager.prototype = {
 				lineColor.setRGB(0, 0.5, 1);
 			}
 
+			function toHexStr(color) {
+				return "#" + color.getHexString();
+			}
+
 			return {
-				lineColor: lineColor.getHexString(),
-				fillColor: fillColor.getHexString(),
+				lineColor: toHexStr(lineColor),
+				fillColor: toHexStr(fillColor),
 			};
 		};
 	}(),
@@ -784,8 +788,9 @@ GS.MapManager.prototype = {
 
 	importMap: function(jsonStr) {
 		var error = false;
+		var map;
 		try {
-			var map = JSON.parse(jsonStr, function(k, v) {
+			map = JSON.parse(jsonStr, function(k, v) {
 				if (v instanceof Object) {
 					if (v.x !== undefined && v.y !== undefined && v.z !== undefined) {
 						return new THREE.Vector3(v.x, v.y, v.z);
@@ -828,7 +833,7 @@ GS.MapManager.prototype = {
 		}
 	},
 
-	applySectorDefaults: function(sector) {
+	applySectorDefaults: function(sector) {		
 		sector.floorBottomY = sector.floorBottomY || 0;
 		sector.floorTopY = sector.floorTopY || 0;
 		sector.ceilBottomY = sector.ceilBottomY || 64;
@@ -838,6 +843,7 @@ GS.MapManager.prototype = {
 		sector.doorMaxHeight = (sector.doorMaxHeight !== undefined) ? sector.doorMaxHeight : 16;
 		sector.elevator = (sector.elevator !== undefined) ? sector.elevator : false;
 		sector.elevatorMaxHeight = (sector.elevatorMaxHeight !== undefined) ? sector.elevatorMaxHeight : 16;
+		sector.useVertexColors = false;
 		sector.floorTexId = sector.floorTexId || "wall";
 		sector.ceilTexId = sector.ceilTexId || "wall";
 		sector.sideTexId = sector.sideTexId || "wall";

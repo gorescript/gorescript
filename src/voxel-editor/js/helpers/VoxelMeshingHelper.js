@@ -213,48 +213,7 @@ GS.VoxelMeshingHelper = {
 		};
 
 		return result;
-	},
-
-	drawTextureCell: function(ctx, x, y, flags, cellSize, color, backgroundColor) {
-		ctx.fillStyle = backgroundColor;
-		ctx.fillRect(x, y, cellSize, cellSize);
-		ctx.fillStyle = color;
-
-		if (flags & this.cellSides.Left) {
-			ctx.fillRect(x, y, cellSize * 0.25, cellSize);
-		}
-		if (flags & this.cellSides.Right) {
-			ctx.fillRect(x + cellSize * 0.75, y, cellSize * 0.25, cellSize);
-		}
-		if (flags & this.cellSides.Up) {
-			ctx.fillRect(x, y, cellSize, cellSize * 0.25);
-		}
-		if (flags & this.cellSides.Down) {
-			ctx.fillRect(x, y + cellSize * 0.75, cellSize, cellSize * 0.25);
-		}
-	},
-
-	vec4FromHex: function(hex) {
-		return new THREE.Vector4((hex >> 16) & 255,	(hex >> 8) & 255, hex & 255, 1);
-	},
-
-	vec4ToRGBAString: function(rgba) {
-		return "rgba(" + rgba.x + ", " + rgba.y + ", " + rgba.z + ", " + rgba.w + ")";
-	},
-
-	vec4ClampRGBA: function(rgba) {
-		rgba.x = GS.MathHelper.clamp(rgba.x, 0, 255);
-		rgba.y = GS.MathHelper.clamp(rgba.y, 0, 255);
-		rgba.z = GS.MathHelper.clamp(rgba.z, 0, 255);
-		rgba.w = GS.MathHelper.clamp(rgba.w, 0, 1);
-	},
-
-	vec4Floor: function(v) {
-		v.x = Math.floor(v.x);
-		v.y = Math.floor(v.y);
-		v.z = Math.floor(v.z);
-		v.w = Math.floor(v.w);
-	},
+	},	
 
 	getTexture: function(colors, edgeColors) {
 		var that = this;

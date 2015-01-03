@@ -232,7 +232,7 @@ GS.ZipAssetLoader.prototype = {
 		var percentLoaded = (0.5 + ((this.totalAssets - this.assetsToLoad) / this.totalAssets) * 0.5) * 100;
 		this.dispatchEvent({ type: "progress", percentLoaded: percentLoaded.toFixed(0) });
 
-		if (this.assetsToLoad == 0) {
+		if (this.assetsToLoad === 0) {
 			this.loaded = true;
 			this.dispatchEvent({ type: "load", percentLoaded: 100, assets: this.assets });
 		}

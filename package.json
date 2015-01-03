@@ -1,8 +1,8 @@
 {
   "name": "gorescript",
   "description": "Retro first-person shooter, written in JavaScript using three.js",
-  "version": "0.1.0",
-  "homepage": "http://timeinvariant.com/gorescript",
+  "version": "1.1.0",
+  "homepage": "http://timeinvariant.github.io/gorescript",
   "repository": {
     "type": "git",
     "url": "https://github.com/timeinvariant/gorescript.git"
@@ -10,7 +10,7 @@
   "author": {
     "name": "Sergiu Valentin Bucur",
     "email": "timeinvariantgames@gmail.com",
-    "url": "http://timeinvariant.com/"
+    "url": "http://timeinvariant.github.io/"
   },
   "licenses": [
     {
@@ -23,7 +23,10 @@
     "grunt": "^0.4.5",
     "grunt-contrib-connect": "^0.9.0",
     "grunt-contrib-copy": "~0.5.0",
+    "grunt-contrib-jshint": "^0.10.0",
     "grunt-contrib-uglify": "~0.4.0",
-    "grunt-shell": "^0.7.0"
+    "grunt-shell": "^0.7.0",
+    "lodash": "^2.4.1",
+    "pngparse": "^2.0.1"
   }
 }

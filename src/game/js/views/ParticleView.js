@@ -150,7 +150,7 @@ GS.ParticleView.prototype = {
 		var axis = new THREE.Vector2(1, 0);
 
 		return function(particle, normal) {
-			if (normal.x == 0 && normal.z == 0) {
+			if (normal.x === 0 && normal.z === 0) {
 				if (normal.y == -1) {
 					return;
 				}

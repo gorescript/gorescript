@@ -394,7 +394,7 @@ GS.UIComponents.Menu.prototype = {
 		this.label2.fontSize = 30;		
 		this.children.push(this.label2);
 
-		this.label1 = new GS.UIComponents.MenuLabel(this.cvs, GS.BuildMessage,
+		this.label1 = new GS.UIComponents.MenuLabel(this.cvs, GS.BuildReleaseDate,
 			new THREE.Vector2(-12, -95), new THREE.Vector2(1, 1));
 		this.label1.textAlign = "right";
 		this.label1.fontSize = 30;

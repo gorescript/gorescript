@@ -159,7 +159,7 @@ GS.LightingView.prototype = {
 			light.pointLight.intensity = light.intensity.value;
 			light.pointLight.position.copy(light.projectile.position);
 
-			if (light.intensity.value == 0) {
+			if (light.intensity.value === 0) {
 				light.active = false;
 			}
 		}

@@ -1,5 +1,3 @@
-"use strict";
-
 var GS = GS || {};
 
 GS.inherit = function(classObj, members) {
@@ -47,7 +45,7 @@ GS.logOnce = function(id, str) {
 	console.log(str);
 },
 
-GS.isFirefox = typeof InstallTrigger !== "undefined";
+GS.isFirefox = typeof InstallTrigger !== "undefined"; // jshint ignore:line
 GS.isIFrame = function() {
     try {
         return window.self !== window.top;
@@ -104,7 +102,7 @@ GS.Base.prototype = {
 	},
 
 	load: function() {
-		if (this.requestAnimationFrameId != null) {
+		if (this.requestAnimationFrameId !== null) {
 			cancelAnimationFrame(this.requestAnimationFrameId);
 		}
 

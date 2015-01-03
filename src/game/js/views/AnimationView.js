@@ -113,7 +113,7 @@ GS.AnimationView.prototype = {
 	},
 
 	pain: function() {
-		if (Math.floor(Math.random() * 2) == 0) {
+		if (Math.floor(Math.random() * 2) === 0) {
 			this.painAngle = this.painMaxAngle;
 			this.painSgn = 1;
 		} else {

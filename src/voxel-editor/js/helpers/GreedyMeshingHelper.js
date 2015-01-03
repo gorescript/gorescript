@@ -29,7 +29,7 @@ GS.GreedyMeshingHelper = {
 						for (x[u] = 0; x[u] < dims[u]; ++x[u], ++n) {
 							var a = (0 <= x[d] ? f(x[0], x[1], x[2]) : 0),
 							b = (x[d] < dims[d] - 1 ? f(x[0] + q[0], x[1] + q[1], x[2] + q[2]) : 0);
-							if ((!!a) === (!!b)) {
+							if ((!!a) === (!!b)) { // jshint ignore:line
 								mask[n] = 0;
 							} else if (!!a) {
 								mask[n] = a;

@@ -106,15 +106,16 @@ GS.SegmentTools.prototype = GS.inherit(GS.LayerObjectTools, {
 
 		this.mapManager.drawCursorExtensions(v);
 
+		var color;
 		if (GS.InputHelper.leftMouseDown) {
 			if (this.inCanvas(mx, my)) {
-				if (this.isDrawingLine == false) {
+				if (this.isDrawingLine === false) {
 					this.isDrawingLine = true;
 					this.lineStart = new THREE.Vector2(mx, my);
 					this.mapManager.convertToGridCellCoords(this.lineStart);
 				}
 
-				var color = "#000";
+				color = "#000";
 				if (this.connectOnlyExisting) {
 					color = containsSegmentPoint ? "#00ff00" : "#ff0000";
 				}

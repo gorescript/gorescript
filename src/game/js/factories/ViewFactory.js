@@ -51,6 +51,8 @@ GS.ViewFactory.prototype = {
 			}
 		}
 
+		this.vertexColorMaterial = new GS.MeshVertexColorMaterial();
+
 		for (var i in GS.Weapons) {
 			this.wrap(this.textures[i]);
 			this.materials[i] = new GS.MeshPhongGlowMaterial(this.textures[i], this.textures[i + "_glow"]);
@@ -100,60 +102,59 @@ GS.ViewFactory.prototype = {
 			length = distance / this.texScale;
 		}
 
+		var color = new THREE.Color(seg.lightColor);
+		var emissive = this.getEmissiveColor(gridObject.sector.lightLevel);
+
 		for (var i = 0; i < triangles.length; i += 3) {
-			geometry.faces.push(new THREE.Face3(i, i + 1, i + 2));
+			var face = new THREE.Face3(i, i + 1, i + 2, null, color);
+			face.emissive = emissive;
 
-			var v0 = geometry.vertices[i];
-			var v1 = geometry.vertices[i + 1];
-			var v2 = geometry.vertices[i + 2];
-
-			if (i < seg.bottomRightIndex) {				
-				geometry.faceVertexUvs[0].push([
-					new THREE.Vector2(0, v0.y / this.texScale),
-					new THREE.Vector2(length, v1.y / this.texScale),
-					new THREE.Vector2(length, v2.y / this.texScale),
-				]);
-			} else {
-				geometry.faceVertexUvs[0].push([
-					new THREE.Vector2(length, v0.y / this.texScale),
-					new THREE.Vector2(0, v1.y / this.texScale),
-					new THREE.Vector2(0, v2.y / this.texScale),
-				]);
-			}
+			geometry.faces.push(face);
 		}
 
 		geometry.computeFaceNormals();
 		geometry.computeVertexNormals();
 
-		var material = this.materials[seg.texId].clone();
-		var mesh = new THREE.Mesh(geometry, material);
-		mesh.matrixAutoUpdate = false;
-
-		gridObject.view.mesh = mesh;
+		gridObject.region.mesh.geometry.merge(geometry);
+	
 		gridObject.view.collisionData.triangles = this.getSegmentTriangles(seg);
 		this.applyConcreteBoundingBox(gridObject, triangles);
 
 		this.triangleCount += gridObject.view.collisionData.triangles.length / 3;
 	},
 
+	getEmissiveColor: function(lightLevel) {
+		var lightLevelFactor = 0.1;
+		var minLightLevel = 0.1;
+		var maxLightLevel = 0.75;
+
+		var x = lightLevel * lightLevelFactor;
+		x *= x;
+		x = GS.MathHelper.clamp(x, minLightLevel, maxLightLevel);
+
+		return new THREE.Color(0xffffff).multiplyScalar(x);
+	},
+
 	applySectorView: function(gridObject, ceiling) {
 		var sector = gridObject.sourceObj;
 
-		var mesh = new THREE.Object3D();
 		var triangles = [];
+
+		var geometry;
 
 		if (!ceiling) {
 			if (sector.elevator !== true) {
-				mesh.children.push(this.getSectorMesh(sector, triangles, false, this.materials[sector.floorTexId].clone()));
+				geometry = this.getSectorGeometry(sector, triangles, false);
+				gridObject.region.mesh.geometry.merge(geometry);
 			}
 		} else {
 			var hasCeiling = (sector.ceiling !== undefined) ? sector.ceiling : true;
 			if (hasCeiling) {
-				mesh.children.push(this.getSectorMesh(sector, triangles, true, this.materials[sector.ceilTexId].clone()));
+				geometry = this.getSectorGeometry(sector, triangles, true);
+				gridObject.region.mesh.geometry.merge(geometry);
 			}
 		}
 
-		gridObject.view.mesh = mesh;
 		gridObject.view.collisionData.triangles = triangles;
 		this.applyConcreteBoundingBox(gridObject, triangles);
 
@@ -169,31 +170,26 @@ GS.ViewFactory.prototype = {
 		gridObject.view.debugMesh = debugMesh;
 	},
 
-	getSectorMesh: function(sector, sectorTriangles, ceiling, material) {
+	getSectorGeometry: function(sector, sectorTriangles, ceiling) {
 		var geometry = new THREE.Geometry();
 		var triangles = this.getSectorTriangles(sector, ceiling);
 		GS.pushArray(geometry.vertices, triangles);
 		GS.pushArray(sectorTriangles, this.getSectorTriangles(sector, ceiling, true));
 
-		for (var j = 0; j < triangles.length; j += 3) {
-			var v0 = triangles[j];
-			var v1 = triangles[j + 1];
-			var v2 = triangles[j + 2];
+		var emissive = this.getEmissiveColor(sector.lightLevel);
+		var color = new THREE.Color(ceiling ? sector.ceilingCatColor : sector.lightColor);		
 
-			geometry.faces.push(new THREE.Face3(j, j + 1, j + 2));
-			geometry.faceVertexUvs[0].push([
-				new THREE.Vector2(v0.x / this.texScale, v0.z / this.texScale),
-				new THREE.Vector2(v1.x / this.texScale, v1.z / this.texScale),
-				new THREE.Vector2(v2.x / this.texScale, v2.z / this.texScale),
-			]);
+		for (var j = 0; j < triangles.length; j += 3) {
+			var face = new THREE.Face3(j, j + 1, j + 2, null, color);
+			face.emissive = emissive;
+
+			geometry.faces.push(face);
 		}
 
 		geometry.computeFaceNormals();
 		geometry.computeVertexNormals();
 
-		var mesh = new THREE.Mesh(geometry, material);
-		mesh.matrixAutoUpdate = false;
-		return mesh;
+		return geometry;
 	},
 
 	getSegmentDefinedTriangles: function(seg) {
@@ -352,10 +348,17 @@ GS.ViewFactory.prototype = {
 
 		door.position = this.getMovingSectorPosition(door);
 		door.view.collisionData.segments = this.getSegmentsForMovingSector(door, false);
+
+		var centerMaterial = this.vertexColorMaterial;
+		var sideMaterial = this.vertexColorMaterial;
+		if (!door.sector.useVertexColors) {
+			centerMaterial = this.materials[door.sector.ceilTexId].clone();
+			sideMaterial = this.materials[door.sector.sideTexId].clone();
+		}
 		
 		var mesh = new THREE.Object3D();
-		mesh.children.push(this.getMovingSectorCenterMesh(door, triangles, this.materials[door.sector.ceilTexId].clone()));
-		mesh.children.push(this.getMovingSectorSideMesh(door, triangles, this.materials[door.sector.sideTexId].clone()));
+		mesh.children.push(this.getMovingSectorCenterMesh(door, triangles, centerMaterial));
+		mesh.children.push(this.getMovingSectorSideMesh(door, triangles, sideMaterial));
 
 		mesh.children[0].position.copy(door.position);
 		mesh.children[1].position.copy(door.position);
@@ -377,12 +380,19 @@ GS.ViewFactory.prototype = {
 
 		elevator.position = this.getMovingSectorPosition(elevator, true);
 		elevator.view.collisionData.segments = this.getSegmentsForMovingSector(elevator, true);
+
+		var centerMaterial = this.vertexColorMaterial;
+		var sideMaterial = this.vertexColorMaterial;
+		if (!elevator.sector.useVertexColors) {
+			centerMaterial = this.materials[elevator.sector.floorTexId].clone();
+			sideMaterial = this.materials[elevator.sector.sideTexId].clone();
+		}
 		
 		var mesh = new THREE.Object3D();
 		mesh.children.push(this.getMovingSectorCenterMesh(elevator, triangles, 
-			this.materials[elevator.sector.floorTexId].clone(), true));
+			centerMaterial, true));
 		mesh.children.push(this.getMovingSectorSideMesh(elevator, triangles, 
-			this.materials[elevator.sector.sideTexId].clone(), true));
+			sideMaterial, true));
 
 		mesh.children[0].position.copy(elevator.position);
 		mesh.children[1].position.copy(elevator.position);
@@ -425,7 +435,8 @@ GS.ViewFactory.prototype = {
 		}
 
 		var geometry = new THREE.Geometry();
-
+		var color = new THREE.Color(movingSector.sector.lightColor);
+		var emissive = this.getEmissiveColor(movingSector.sector.lightLevel);
 		var triangles = [];
 
 		var k = 0;
@@ -460,22 +471,37 @@ GS.ViewFactory.prototype = {
 				vertices[j].sub(movingSector.position);
 			}
 
-			GS.pushArray(geometry.vertices, vertices);
+			GS.pushArray(geometry.vertices, vertices);			
 
-			geometry.faces.push(new THREE.Face3(k, k + 1, k + 2));
-			geometry.faces.push(new THREE.Face3(k + 3, k + 4, k + 5));
+			if (!movingSector.sector.useVertexColors) {
+				geometry.faces.push(new THREE.Face3(k, k + 1, k + 2));
+				geometry.faces.push(new THREE.Face3(k + 3, k + 4, k + 5));
+
+				geometry.faceVertexUvs[0].push([
+					new THREE.Vector2(0, topY / this.texScale),
+					new THREE.Vector2(length, topY / this.texScale),
+					new THREE.Vector2(0, bottomY / this.texScale),
+				]);
+				geometry.faceVertexUvs[0].push([
+					new THREE.Vector2(length, topY / this.texScale),
+					new THREE.Vector2(length, bottomY / this.texScale),
+					new THREE.Vector2(0, bottomY / this.texScale),
+				]);
+			} else {
+				var face1 = new THREE.Face3(k, k + 1, k + 2,
+					null, color);
+				face1.emissive = emissive;
+
+				geometry.faces.push(face1);
+
+				var face2 = new THREE.Face3(k + 3, k + 4, k + 5,
+					null, color);
+				face2.emissive = emissive;
+
+				geometry.faces.push(face2);
+			}
+
 			k += 6;
-
-			geometry.faceVertexUvs[0].push([
-				new THREE.Vector2(0, topY / this.texScale),
-				new THREE.Vector2(length, topY / this.texScale),
-				new THREE.Vector2(0, bottomY / this.texScale),
-			]);
-			geometry.faceVertexUvs[0].push([
-				new THREE.Vector2(length, topY / this.texScale),
-				new THREE.Vector2(length, bottomY / this.texScale),
-				new THREE.Vector2(0, bottomY / this.texScale),
-			]);
 		}
 
 		GS.pushArray(movingSectorTriangles, triangles);
@@ -483,33 +509,53 @@ GS.ViewFactory.prototype = {
 		geometry.computeFaceNormals();
 		geometry.computeVertexNormals();
 
-		return new THREE.Mesh(geometry, material);
+		if (movingSector.sector.useVertexColors) {
+			var bufferGeo = new THREE.BufferGeometry()
+				.fromGeometry(geometry, {
+					vertexColors: THREE.FaceColors
+				});
+
+			return new THREE.Mesh(bufferGeo, material);
+		} else {
+			return new THREE.Mesh(geometry, material);
+		}
 	},
 
 	getMovingSectorCenterMesh: function(movingSector, movingSectorTriangles, material, elevator) {
 		var minHeight = movingSector.sector.floorTopY;
 
 		var geometry = new THREE.Geometry();
+		var color = new THREE.Color(movingSector.sector.lightColor);
+		var emissive = this.getEmissiveColor(movingSector.sector.lightLevel);
 
 		var v = movingSector.sector.vertices;
 		var idx = movingSector.sector.indices;
+		var v0, v1, v2;
 		for (var i = 0; i < idx.length; i += 3) {
 			if (elevator === true) {
-				var v0 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
-				var v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
-				var v2 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
+				v0 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
+				v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
+				v2 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
 			} else {
-				var v0 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
-				var v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
-				var v2 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
-			}
+				v0 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
+				v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
+				v2 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
+			}			
 
-			geometry.faces.push(new THREE.Face3(i, i + 1, i + 2));
-			geometry.faceVertexUvs[0].push([
-				new THREE.Vector2(v0.x / this.texScale, v0.z / this.texScale),
-				new THREE.Vector2(v1.x / this.texScale, v1.z / this.texScale),
-				new THREE.Vector2(v2.x / this.texScale, v2.z / this.texScale),
-			]);
+			if (!movingSector.sector.useVertexColors) {
+				geometry.faces.push(new THREE.Face3(i, i + 1, i + 2));
+				geometry.faceVertexUvs[0].push([
+					new THREE.Vector2(v0.x / this.texScale, v0.z / this.texScale),
+					new THREE.Vector2(v1.x / this.texScale, v1.z / this.texScale),
+					new THREE.Vector2(v2.x / this.texScale, v2.z / this.texScale),
+				]);
+			} else {
+				var face = new THREE.Face3(i, i + 1, i + 2,
+					null, color);
+				face.emissive = emissive;
+
+				geometry.faces.push(face);
+			}
 
 			v0.sub(movingSector.position);
 			v1.sub(movingSector.position);
@@ -524,13 +570,13 @@ GS.ViewFactory.prototype = {
 		idx = movingSector.sector.collisionIndices;
 		for (var i = 0; i < idx.length; i += 3) {
 			if (elevator === true) {
-				var v0 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
-				var v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
-				var v2 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
+				v0 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
+				v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
+				v2 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
 			} else {
-				var v0 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
-				var v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
-				var v2 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
+				v0 = new THREE.Vector3(v[idx[i]].x, minHeight, v[idx[i]].y);
+				v1 = new THREE.Vector3(v[idx[i + 1]].x, minHeight, v[idx[i + 1]].y);
+				v2 = new THREE.Vector3(v[idx[i + 2]].x, minHeight, v[idx[i + 2]].y);
 			}
 
 			movingSectorTriangles.push(v0);
@@ -541,7 +587,16 @@ GS.ViewFactory.prototype = {
 		geometry.computeFaceNormals();
 		geometry.computeVertexNormals();
 
-		return new THREE.Mesh(geometry, material);
+		if (movingSector.sector.useVertexColors) {
+			var bufferGeo = new THREE.BufferGeometry()
+				.fromGeometry(geometry, {
+					vertexColors: THREE.FaceColors
+				});
+
+			return new THREE.Mesh(bufferGeo, material);
+		} else {
+			return new THREE.Mesh(geometry, material);
+		}
 	},
 
 	applyTVScreenView: function(tvScreen) {

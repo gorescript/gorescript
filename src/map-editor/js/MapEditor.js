@@ -229,7 +229,7 @@ GS.MapEditor.prototype = {
 				that.layer = GS.MapLayers.Zone;
 				$zoneTools.show();
 				$editorMode.show();
-			};
+			}
 		});
 
 		for (var i in this.layerTools) {
@@ -295,7 +295,7 @@ GS.MapEditor.prototype = {
 		var $fieldImport = $("#field-import");
 
 		var files = $fieldImport[0].files;
-		if (files == undefined || files.length == 0) {
+		if (files === undefined || files.length === 0) {
 			$fieldImport.trigger("click");
 			return;
 		}

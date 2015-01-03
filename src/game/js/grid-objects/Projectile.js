@@ -55,7 +55,7 @@ GS.Projectile.prototype = GS.inherit(GS.GridObject, {
 			this.view.mesh.rotation.y += 0.1;
 		}
 
-		if (this.steps > this.maxSteps || this.linkedGridCells.length == 0) {
+		if (this.steps > this.maxSteps || this.linkedGridCells.length === 0) {
 			this.remove();
 		}
 	},

@@ -613,7 +613,7 @@ GS.Graph.prototype = {
 		this.computeVertexNeighborSets();
 
 		function bronKerbosch(R, P, X) {
-			if (P.elements.length == 0 && X.elements.length == 0) {
+			if (P.elements.length === 0 && X.elements.length === 0) {
 				that.maximalCliques.push(R);
 			}
 			for (var i = 0; i < P.elements.length; i++) {
@@ -919,7 +919,7 @@ GS.Set.prototype = {
 	equals: function(set) {
 		var diff1 = this.difference(set);
 		var diff2 = set.difference(this);
-		return diff1.elements.length == 0 && diff2.elements.length == 0;
+		return diff1.elements.length === 0 && diff2.elements.length === 0;
 	},
 
 	clone: function() {

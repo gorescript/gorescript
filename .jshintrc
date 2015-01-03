@@ -1,8 +1,7 @@
 {
 	"browser": true,
-	"devel": true,
 	"jquery": true,
-	"sub": true,	
+	"sub": true,
 	"asi": true,
 	"shadow": true,
 	
