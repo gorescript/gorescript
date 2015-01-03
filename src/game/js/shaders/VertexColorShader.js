@@ -9,7 +9,6 @@ GS.VertexColorShader = {
 
 		{
 			"ambient"  : { type: "c", value: new THREE.Color( 0xffffff ) },
-			"emissive" : { type: "c", value: new THREE.Color( 0x000000 ) },
 			"specular" : { type: "c", value: new THREE.Color( 0x111111 ) },
 			"shininess": { type: "f", value: 30 },
 			"wrapRGB"  : { type: "v3", value: new THREE.Vector3( 1, 1, 1 ) }
@@ -25,19 +24,33 @@ GS.VertexColorShader = {
 		"varying vec3 vNormal;",
 
 		THREE.ShaderChunk[ "lights_phong_pars_vertex" ],
-		THREE.ShaderChunk[ "color_pars_vertex" ],
+
+		"#ifdef USE_COLOR",
+			"attribute vec3 emissive;",
+
+			"varying vec3 vColor;",
+			"varying vec3 vEmissive;",
+		"#endif",
 
 		"void main() {",
 
-			THREE.ShaderChunk[ "color_vertex" ],
+			"#ifdef USE_COLOR",
+				"#ifdef GAMMA_INPUT",
+					"vColor = color * color;",
+				"#else",
+					"vColor = color;",
+				"#endif",
+
+				"vEmissive = emissive;",
+			"#endif",
 
 			THREE.ShaderChunk[ "defaultnormal_vertex" ],
 
-		"	vNormal = normalize( transformedNormal );",
+			"vNormal = normalize( transformedNormal );",
 
 			THREE.ShaderChunk[ "default_vertex" ],
 
-		"	vViewPosition = -mvPosition.xyz;",
+			"vViewPosition = -mvPosition.xyz;",
 
 			THREE.ShaderChunk[ "worldpos_vertex" ],
 			THREE.ShaderChunk[ "lights_phong_vertex" ],
@@ -54,11 +67,14 @@ GS.VertexColorShader = {
 		"uniform float opacity;",
 
 		"uniform vec3 ambient;",
-		"uniform vec3 emissive;",
 		"uniform vec3 specular;",
 		"uniform float shininess;",
 
-		THREE.ShaderChunk[ "color_pars_fragment" ],
+		"#ifdef USE_COLOR",
+			"varying vec3 vColor;",
+			"varying vec3 vEmissive;",
+		"#endif",
+
 		THREE.ShaderChunk[ "fog_pars_fragment" ],
 		THREE.ShaderChunk[ "lights_phong_pars_fragment" ],
 		THREE.ShaderChunk[ "normalmap_pars_fragment" ],
@@ -66,9 +82,11 @@ GS.VertexColorShader = {
 
 		"void main() {",
 
-		"	gl_FragColor = vec4( vec3( 1.0 ), opacity );",
+			"gl_FragColor = vec4( vec3( 1.0 ), opacity );",
 
 			THREE.ShaderChunk[ "specularmap_fragment" ],
+
+			"vec3 emissive = vEmissive;",
 
 			THREE.ShaderChunk[ "lights_phong_fragment" ],
 			THREE.ShaderChunk[ "color_fragment" ],

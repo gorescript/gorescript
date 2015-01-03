@@ -1,12 +1,13 @@
-GS.MeshVertexColorMaterial = function(emissive) {
+GS.MeshVertexColorMaterial = function() {
 	this.shader = GS.VertexColorShader;
 
 	this.uniforms = THREE.UniformsUtils.clone(this.shader.uniforms);
 
-	this.uniforms["emissive"].value = new THREE.Color(emissive || 0);
-
 	THREE.ShaderMaterial.call(this, {
 		uniforms: this.uniforms,
+		attributes: {
+			emissive: { type: "c", value: [] }
+		},
 		fragmentShader: this.shader.fragmentShader,
 		vertexShader: this.shader.vertexShader,
 		vertexColors: THREE.FaceColors,
@@ -18,14 +19,8 @@ GS.MeshVertexColorMaterial.prototype = GS.inherit(THREE.ShaderMaterial, {
 	constructor: GS.MeshVertexColorMaterial,
 
 	clone: function() {
-		var material = new GS.MeshVertexColorMaterial(
-			this.uniforms["emissive"].value
-		);
+		var material = new GS.MeshVertexColorMaterial();
 
 		return material;
-	},
-
-	get emissive() {
-		return this.uniforms["emissive"].value;
 	},
 });

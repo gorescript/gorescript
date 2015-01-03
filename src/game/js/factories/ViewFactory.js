@@ -51,7 +51,7 @@ GS.ViewFactory.prototype = {
 			}
 		}
 
-		this.vertexColorMaterial = GS.RegionHelper.prototype.getMaterial();
+		this.vertexColorMaterial = new GS.MeshVertexColorMaterial();
 
 		for (var i in GS.Weapons) {
 			this.wrap(this.textures[i]);
@@ -102,14 +102,14 @@ GS.ViewFactory.prototype = {
 			length = distance / this.texScale;
 		}
 
-		var color = this.getSegmentColor(seg, gridObject.sector);
+		var emissive = this.getEmissiveColor(gridObject.sector.lightLevel);
 
 		for (var i = 0; i < triangles.length; i += 3) {
-			geometry.faces.push(new THREE.Face3(
-				i, i + 1, i + 2,
-				null, // normal
-				color
-			));
+			var face = new THREE.Face3(i, i + 1, i + 2, null,
+				new THREE.Color(seg.lightColor));
+			face.emissive = emissive;
+
+			geometry.faces.push(face);
 		}
 
 		geometry.computeFaceNormals();
@@ -123,27 +123,16 @@ GS.ViewFactory.prototype = {
 		this.triangleCount += gridObject.view.collisionData.triangles.length / 3;
 	},
 
-	getSegmentColor: function(seg, sector) {
-		var color = new THREE.Color(seg.lightColor);
-		this.processLightColor(color, sector.lightLevel);
-		return color;
-	},
-
-	getSectorColor: function(sector) {
-		var color = new THREE.Color(sector.lightColor);
-		this.processLightColor(color, sector.lightLevel);
-		return color;
-	},
-
-	processLightColor: function(color, lightLevel) {
-		var lightLevelFactor = 0.15;
-		var minLightLevel = 0.25;
-		var maxLightLevel = 1.25;
+	getEmissiveColor: function(lightLevel) {
+		var lightLevelFactor = 0.1;
+		var minLightLevel = 0.1;
+		var maxLightLevel = 0.75;
 
 		var x = lightLevel * lightLevelFactor;
 		x *= x;
 		x = GS.MathHelper.clamp(x, minLightLevel, maxLightLevel);
-		color.multiplyScalar(x);
+
+		return new THREE.Color(0xffffff).multiplyScalar(x);
 	},
 
 	applySectorView: function(gridObject, ceiling) {
@@ -187,14 +176,15 @@ GS.ViewFactory.prototype = {
 		GS.pushArray(geometry.vertices, triangles);
 		GS.pushArray(sectorTriangles, this.getSectorTriangles(sector, ceiling, true));
 
-		var color = this.getSectorColor(sector);
+		var emissive = this.getEmissiveColor(sector.lightLevel);
 
 		for (var j = 0; j < triangles.length; j += 3) {
-			geometry.faces.push(new THREE.Face3(
-				j, j + 1, j + 2, 
-				null, // normal
-				color
-			));
+			var face = new THREE.Face3(j, j + 1, j + 2, null,
+				new THREE.Color(sector.lightColor));
+
+			face.emissive = emissive;
+
+			geometry.faces.push(face);
 		}
 
 		geometry.computeFaceNormals();
@@ -446,7 +436,8 @@ GS.ViewFactory.prototype = {
 		}
 
 		var geometry = new THREE.Geometry();
-		var color = this.getSectorColor(movingSector.sector);
+		var color = new THREE.Color(movingSector.sector.lightColor);
+		var emissive = this.getEmissiveColor(movingSector.sector.lightLevel);
 		var triangles = [];
 
 		var k = 0;
@@ -498,10 +489,17 @@ GS.ViewFactory.prototype = {
 					new THREE.Vector2(0, bottomY / this.texScale),
 				]);
 			} else {
-				geometry.faces.push(new THREE.Face3(k, k + 1, k + 2,
-					null, color));
-				geometry.faces.push(new THREE.Face3(k + 3, k + 4, k + 5,
-					null, color));
+				var face1 = new THREE.Face3(k, k + 1, k + 2,
+					null, color);
+				face1.emissive = emissive;
+
+				geometry.faces.push(face1);
+
+				var face2 = new THREE.Face3(k + 3, k + 4, k + 5,
+					null, color);
+				face2.emissive = emissive;
+
+				geometry.faces.push(face2);
 			}
 
 			k += 6;
@@ -512,14 +510,24 @@ GS.ViewFactory.prototype = {
 		geometry.computeFaceNormals();
 		geometry.computeVertexNormals();
 
-		return new THREE.Mesh(geometry, material);
+		if (movingSector.sector.useVertexColors) {
+			var bufferGeo = new THREE.BufferGeometry()
+				.fromGeometry(geometry, {
+					vertexColors: THREE.FaceColors
+				});
+
+			return new THREE.Mesh(bufferGeo, material);
+		} else {
+			return new THREE.Mesh(geometry, material);
+		}
 	},
 
 	getMovingSectorCenterMesh: function(movingSector, movingSectorTriangles, material, elevator) {
 		var minHeight = movingSector.sector.floorTopY;
 
 		var geometry = new THREE.Geometry();
-		var color = this.getSectorColor(movingSector.sector);
+		var color = new THREE.Color(movingSector.sector.lightColor);
+		var emissive = this.getEmissiveColor(movingSector.sector.lightLevel);
 
 		var v = movingSector.sector.vertices;
 		var idx = movingSector.sector.indices;
@@ -543,8 +551,11 @@ GS.ViewFactory.prototype = {
 					new THREE.Vector2(v2.x / this.texScale, v2.z / this.texScale),
 				]);
 			} else {
-				geometry.faces.push(new THREE.Face3(i, i + 1, i + 2,
-					null, color));
+				var face = new THREE.Face3(i, i + 1, i + 2,
+					null, color);
+				face.emissive = emissive;
+
+				geometry.faces.push(face);
 			}
 
 			v0.sub(movingSector.position);
@@ -577,7 +588,16 @@ GS.ViewFactory.prototype = {
 		geometry.computeFaceNormals();
 		geometry.computeVertexNormals();
 
-		return new THREE.Mesh(geometry, material);
+		if (movingSector.sector.useVertexColors) {
+			var bufferGeo = new THREE.BufferGeometry()
+				.fromGeometry(geometry, {
+					vertexColors: THREE.FaceColors
+				});
+
+			return new THREE.Mesh(bufferGeo, material);
+		} else {
+			return new THREE.Mesh(geometry, material);
+		}
 	},
 
 	applyTVScreenView: function(tvScreen) {

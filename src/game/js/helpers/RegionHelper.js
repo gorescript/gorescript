@@ -1,14 +1,9 @@
 GS.RegionHelper = function() {
-	this.material = this.getMaterial();
+	this.material = new GS.MeshVertexColorMaterial();
 };
 
 GS.RegionHelper.prototype = {
 	constructor: GS.RegionHelper,
-
-	getMaterial: function() {
-		return new GS.MeshVertexColorMaterial(
-			new THREE.Color().setRGB(0.5, 0.5, 0.5));
-	},
 
 	getRegions: function(sectors, sectorLinks) {
 		var result = this.getSectorGraph(sectors, sectorLinks);
