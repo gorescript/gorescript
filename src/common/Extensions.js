@@ -480,8 +480,9 @@
 	};
 
 	// BufferGeometry
+	// jshint ignore:start
 
-	THREE.BufferGeometry.prototype.fromGeometry = function ( geometry, settings ) {
+	THREE.BufferGeometry.prototype.fromGeometry = function ( geometry, settings ) {		
 
 		settings = settings || { 'vertexColors': THREE.NoColors };
 
@@ -645,5 +646,7 @@
 		return this;
 
 	};
+
+	// jshint ignore:end
 
 }());
