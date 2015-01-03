@@ -50,9 +50,11 @@ function processMaps(textureColors) {
 
 			for (var i = 0; i < sectors.length; i++) {
 				var sector = sectors[i];
-				var texId = sector.floorTexId || sector.ceilTexId;
+				var floorTexId = sector.floorTexId;
+				var ceilTexId = sector.ceilTexId;
 
-				sector.lightColor = textureColors[texId].color;
+				sector.lightColor = textureColors[floorTexId].color;
+				sector.ceilingCatColor = textureColors[ceilTexId].color;
 			}
 		}		
 	};

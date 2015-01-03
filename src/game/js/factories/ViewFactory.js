@@ -102,11 +102,11 @@ GS.ViewFactory.prototype = {
 			length = distance / this.texScale;
 		}
 
+		var color = new THREE.Color(seg.lightColor);
 		var emissive = this.getEmissiveColor(gridObject.sector.lightLevel);
 
 		for (var i = 0; i < triangles.length; i += 3) {
-			var face = new THREE.Face3(i, i + 1, i + 2, null,
-				new THREE.Color(seg.lightColor));
+			var face = new THREE.Face3(i, i + 1, i + 2, null, color);
 			face.emissive = emissive;
 
 			geometry.faces.push(face);
@@ -177,11 +177,10 @@ GS.ViewFactory.prototype = {
 		GS.pushArray(sectorTriangles, this.getSectorTriangles(sector, ceiling, true));
 
 		var emissive = this.getEmissiveColor(sector.lightLevel);
+		var color = new THREE.Color(ceiling ? sector.ceilingCatColor : sector.lightColor);		
 
 		for (var j = 0; j < triangles.length; j += 3) {
-			var face = new THREE.Face3(j, j + 1, j + 2, null,
-				new THREE.Color(sector.lightColor));
-
+			var face = new THREE.Face3(j, j + 1, j + 2, null, color);
 			face.emissive = emissive;
 
 			geometry.faces.push(face);
