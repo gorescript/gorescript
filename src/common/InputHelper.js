@@ -17,9 +17,9 @@ GS.InputHelper = {
 	init: function() {
 		var that = this;
 
-		// $(document).on("contextmenu", function(){
-		// 	return false;
-		// });
+		$(document).on("contextmenu", function(){
+			return false;
+		});
 
 		$(document).keydown(function(e){
 			that.keyState[e.keyCode] = true;
