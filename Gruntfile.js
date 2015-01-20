@@ -21,8 +21,6 @@ module.exports = function(grunt) {
 
 		uglify: {			
 			options: {
-				beautify: true,
-				mangle: false,
 				separator: ";",
 			},
 			vendor: {
