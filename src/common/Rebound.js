@@ -11,10 +11,6 @@ GS.Rebound.prototype = {
 	init: function() {
 		var that = this;
 
-		$(document).on("contextmenu", function() {
-			return false;
-		});
-
 		$(document).on("keydown.keybindUse", function(e) {
 			if (that.modifyingKeybind) {
 				return;

@@ -6,14 +6,8 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Free and open-source browser-based modern day Doom clone.">
-
-	<meta property="og:title" content="gorescript" />
-	<meta property="og:site_name" content="Time Invariant Games"/>
-	<meta property="og:url" content="http://timeinvariant.github.io/gorescript" />
-	<meta property="og:description" content="Free and open-source browser-based modern day Doom clone." />
-	<meta property="og:image" content="http://timeinvariant.github.io/img/gs_og.jpg" />
-
+	<meta name="description" content="">
+	
 	<title>gorescript</title>
 
 	<style>
@@ -26,112 +20,8 @@
 </head>
 <body>
 
-	<script src="../deps/jquery.min.js"></script>
-	<script src="../deps/lodash.min.js"></script>
-	<script src="../deps/jszip.min.js"></script>
-	<script src="../deps/tween.min.js"></script>
-	<script src="../deps/three.min.js"></script>
-	<script src="../deps/OBJExporter.js"></script>
-	<script src="../deps/OBJLoader.js"></script>
-
-	<script src="../deps/post-processing/ConvolutionShader.js"></script>
-	<script src="../deps/post-processing/CopyShader.js"></script>
-	<script src="../deps/post-processing/FXAAShader.js"></script>
-	<script src="../deps/post-processing/SSAOShader.js"></script>
-	<script src="../deps/post-processing/VignetteShader.js"></script>
-	<script src="../deps/post-processing/LuminosityShader.js"></script>
-	
-	<script src="../deps/post-processing/EffectComposer.js"></script>
-	<script src="../deps/post-processing/ShaderPass.js"></script>
-	<script src="../deps/post-processing/RenderPass.js"></script>
-	<script src="../deps/post-processing/MaskPass.js"></script>
-	<script src="../deps/post-processing/BloomPass.js"></script>
-
-	<script src="../common/Base.js"></script>
-	<script src="../common/Detector.js"></script>
-	<script src="../common/Canvas2d.js"></script>
-	<script src="../common/Extensions.js"></script>
-	<script src="../common/InputHelper.js"></script>
-	<script src="../common/MathHelper.js"></script>
-	<script src="../common/PolygonHelper.js"></script>
-	<script src="../common/LineHelper.js"></script>
-	<script src="../common/MapEnums.js"></script>
-	<script src="../common/Cube.js"></script>
-	<script src="../common/Rebound.js"></script>
-
-	<script src="js/KeybindSettings.js"></script>
-	<script src="js/Settings.js"></script>
-	<script src="js/Game.js"></script>
-
-	<script src="js/ui/DebugUI.js"></script>
-	<script src="js/ui/LoadingUI.js"></script>
-	
-	<script src="js/helpers/CollisionHelper.js"></script>
-	<script src="js/helpers/HitscanHelper.js"></script>
-	<script src="js/helpers/RegionHelper.js"></script>
-
-	<script src="js/shaders/ColorShader.js"></script>
-	<script src="js/shaders/BrightnessFilterShader.js"></script>
-	<script src="js/shaders/GlowShader.js"></script>
-	<script src="js/shaders/VertexColorShader.js"></script>
-	<script src="js/shaders/NoiseShader.js"></script>
-	<script src="js/shaders/PhongGlowShader.js"></script>
-	<script src="js/shaders/MeshPhongGlowMaterial.js"></script>
-	<script src="js/shaders/MeshVertexColorMaterial.js"></script>
-
-	<script src="js/enums/Assets.js"></script>
-	<script src="js/enums/Weapons.js"></script>
-	<script src="js/enums/Projectiles.js"></script>
-	<script src="js/enums/Monsters.js"></script>
-
-	<script src="js/grid-objects/GridObject.js"></script>	
-	<script src="js/grid-objects/Player.js"></script>
-	<script src="js/grid-objects/Concrete.js"></script>
-	<script src="js/grid-objects/Item.js"></script>	
-	<script src="js/grid-objects/Projectile.js"></script>
-	<script src="js/grid-objects/Monster.js"></script>
-	<script src="js/grid-objects/Door.js"></script>
-	<script src="js/grid-objects/Elevator.js"></script>
-	<script src="js/grid-objects/TVScreen.js"></script>
-	<script src="js/grid-objects/Switch.js"></script>
-
-	<script src="js/loaders/MapLoader.js"></script>
-	<script src="js/loaders/FontLoader.js"></script>
-	<script src="js/loaders/AssetLoader.js"></script>
-	<script src="js/loaders/ZipAssetLoader.js"></script>
-
-	<script src="js/factories/ViewFactory.js"></script>
-	<script src="js/factories/GridFactory.js"></script>
-	
-	<script src="js/components/GraphicsManager.js"></script>
-	<script src="js/components/SoundManager.js"></script>
-	<script src="js/components/MusicManager.js"></script>
-	<script src="js/components/AIManager.js"></script>
-	<script src="js/components/CollisionManager.js"></script>
-	<script src="js/components/Grid.js"></script>
-	<script src="js/components/FPSControls.js"></script>
-	<script src="js/components/MapScript.js"></script>
-
-	<script src="js/views/PlayerView.js"></script>
-	<script src="js/views/ParticleView.js"></script>
-	<script src="js/views/AnimationView.js"></script>
-	<script src="js/views/LightingView.js"></script>
-
-	<script src="js/ui/UIManager.js"></script>
-	<script src="js/ui/VectorCanvas.js"></script>
-	<script src="js/ui/UIEnums.js"></script>
-
-	<script src="js/ui/components/Menu.js"></script>
-	<script src="js/ui/components/MenuButton.js"></script>
-	<script src="js/ui/components/MenuPanel.js"></script>
-	<script src="js/ui/components/MenuLabel.js"></script>
-	<script src="js/ui/components/MenuNumberPicker.js"></script>
-	<script src="js/ui/components/MenuImageButton.js"></script>
-	<script src="js/ui/components/PowerBars.js"></script>
-	<script src="js/ui/components/Crosshair.js"></script>
-	<script src="js/ui/components/Notifications.js"></script>
-	<script src="js/ui/components/WinScreen.js"></script>
-	<script src="js/ui/components/Automap.js"></script>
+	<script src="gorescript-deps.min.js"></script>
+	<script src="gorescript.min.js"></script>
 
 </body>
 </html>

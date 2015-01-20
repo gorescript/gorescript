@@ -54,7 +54,7 @@ GS.UIComponents.Menu.prototype = {
 		var that = this;
 
 		this.topPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
-			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 72, 80);
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 60, 70);
 
 		this.btnNewGame = this.topPanel.addButton("new game");
 		this.btnNewGame.onClick = function() { GAME.newGame(); };
@@ -67,6 +67,9 @@ GS.UIComponents.Menu.prototype = {
 
 		this.btnCredits = this.topPanel.addButton("credits");
 		this.btnCredits.onClick = function() { that.activePanel = that.creditsPanel; };
+
+		this.btnExit = this.topPanel.addButton("exit");
+		this.btnExit.onClick = function() { GAME.exit(); };
 	},
 
 	initOptionsPanel: function() {
@@ -101,7 +104,13 @@ GS.UIComponents.Menu.prototype = {
 		var that = this;
 
 		this.graphicsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
-			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 28, 31);
+
+		this.btnToggleFullscreen = this.graphicsPanel.addToggleButton("fullscreen");
+		this.btnToggleFullscreen.button.currentStateIndex = (GS.Settings.fullscreen === true) ? 0 : 1;
+		this.btnToggleFullscreen.button.onClick = function(e) { GS.Settings.fullscreen = (e.state === "on"); };
+
+		this.graphicsPanel.addEmptyRow();
 
 		this.btnToggleHalfSize = this.graphicsPanel.addToggleButton("half-size rendering");
 		this.btnToggleHalfSize.button.currentStateIndex = (GS.Settings.halfSize === true) ? 0 : 1;
@@ -388,23 +397,11 @@ GS.UIComponents.Menu.prototype = {
 	},
 
 	initFooter: function() {
-		this.label2 = new GS.UIComponents.MenuLabel(this.cvs, GS.GameVersion,
-			new THREE.Vector2(-12, -130), new THREE.Vector2(1, 1));
-		this.label2.textAlign = "right";
-		this.label2.fontSize = 30;		
-		this.children.push(this.label2);
-
-		this.label1 = new GS.UIComponents.MenuLabel(this.cvs, GS.BuildReleaseDate,
-			new THREE.Vector2(-12, -95), new THREE.Vector2(1, 1));
-		this.label1.textAlign = "right";
-		this.label1.fontSize = 30;
-		this.children.push(this.label1);
-
-		this.label3 = new GS.UIComponents.MenuLabel(this.cvs, "feedback: timeinvariantgames @ gmail.com",
+		this.label1 = new GS.UIComponents.MenuLabel(this.cvs, GS.GameVersion,
 			new THREE.Vector2(-12, -25), new THREE.Vector2(1, 1));
-		this.label3.textAlign = "right";
-		this.label3.fontSize = 30;
-		this.children.push(this.label3);
+		this.label1.textAlign = "right";
+		this.label1.fontSize = 30;		
+		this.children.push(this.label1);
 	},
 
 	switchToIngame: function() {

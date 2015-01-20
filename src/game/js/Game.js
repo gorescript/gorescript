@@ -12,35 +12,39 @@ GS.GameStates = {
 
 GS.Game = function() {
 	GS.Base.call(this);
-
-	GS.Settings.loadSettings();
-
-	this.state = GS.GameStates.PreLoad;
-	this.nextState = null;
-	this.updated = false;
-	this.firstLoad = true;
-	this.firstPlay = true;
-	this.mapWon = false;
-	this.restartedLevel = false;
-	
-	this.antialias = false;
-	this.clearColor = 0x336699;
-	this.cameraFov = GS.Settings.fov;
-	this.cameraFar = 1500;
-
-	this.noMenu = false;
-	this.useAssetsZip = false;
-
-	if (GS.BuildOverride === true) {
-		this.useAssetsZip = true;
-	}
-	
-	this.showFPS = GS.Settings.showFPS;
-	this.showPerformanceDebugMeters = false;
 };
 
 GS.Game.prototype = GS.inherit(GS.Base, {
 	constructor: GS.Game,
+
+	preInit: function() {
+		if (GS.Settings.fullscreen) {
+			chrome.app.window.current().fullscreen();
+		}
+
+		this.state = GS.GameStates.PreLoad;
+		this.nextState = null;
+		this.updated = false;
+		this.firstLoad = true;
+		this.firstPlay = true;
+		this.mapWon = false;
+		this.restartedLevel = false;
+		
+		this.antialias = false;
+		this.clearColor = 0x336699;
+		this.cameraFov = GS.Settings.fov;
+		this.cameraFar = 1500;
+
+		this.noMenu = false;
+		this.useAssetsZip = false;
+
+		if (GS.BuildOverride === true) {
+			this.useAssetsZip = true;
+		}
+		
+		this.showFPS = GS.Settings.showFPS;
+		this.showPerformanceDebugMeters = false;
+	},
 
 	init: function() {
 		GS.DebugUI.init();
@@ -177,22 +181,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 	onMapWon: function() {
 		this.graphicsManager.monochromeEnabled = false;
-
-		this.trackMapWonEvent();
-	},
-
-	trackMapWonEvent: function() {
-		/* jshint ignore:start */
-		if (typeof ga !== "undefined") {
-			var mapName = this.grid.map.name;
-			var timeSpent = this.grid.aiManager.timeSpent;
-			var seconds = Math.floor(Math.floor(timeSpent) / 1000);
-			var fps = Math.floor(GS.DebugUI.valueTracking.fps.avg);
-
-			var str = mapName + " " + seconds + "s " + fps + "fps";
-			ga("send", "event", "level", "complete", str);
-		}
-		/* jshint ignore:end */
 	},
 
 	menu: function() {
@@ -213,7 +201,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		if (this.grid !== undefined) {
 			this.grid.player.inMenu = true;
 			this.grid.player.controls.disable();
-			this.grid.player.controls.detachEvents();
 		}
 
 		this.graphicsManager.monochromeEnabled = true;
@@ -227,7 +214,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 		if (this.grid !== undefined) {
 			this.grid.player.inMenu = false;
-			this.grid.player.controls.attachEvents();
 			this.grid.player.controls.enable();
 			this.grid.aiManager.resume();
 
@@ -286,8 +272,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.grid.update();
 		this.graphicsManager.setGrid(this.grid);
 		
-		this.grid.player.controls.addEventListener("pointerLockDisabled", function() { that.openMenu(); });
-
 		// console.log("collision triangles", viewFactory.triangleCount);
 	},
 
@@ -332,6 +316,9 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 				if (this.nextState == GS.GameStates.Play || this.nextState == GS.GameStates.Menu) {
 					this.loadingUI.hide();
 					this.uiManager.show();
+				}
+				if (this.nextState == GS.GameStates.Play) {
+					this.grid.player.controls.enable();
 				}
 
 				this.state = this.nextState;
@@ -415,12 +402,15 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		var that = this;
 
 		if (this.grid !== undefined) {
-			this.grid.player.controls.dispose(function() {
-				that.disposeEnd();
-			});
-		} else {
-			this.disposeEnd();
+			this.grid.player.controls.dispose();
 		}
+		this.disposeEnd();
+	},
+
+	exit: function() {
+		this.dispose();
+
+		chrome.app.window.current().close();
 	},
 });
 
@@ -428,6 +418,10 @@ var GAME;
 window.addEventListener("load", function() {
 	GS.Detector.run(function() {
 		GAME = new GS.Game();
-		GAME.init();
+
+		GS.Settings.loadSettings(function() {
+			GAME.preInit();
+			GAME.init();
+		});
 	});
 }, false);

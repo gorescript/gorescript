@@ -7,18 +7,9 @@ GS.UIComponents.Notifications = function(vectorCanvas, assets, player) {
 	this.boxCornerRadius = 10;
 
 	this.useText = "[" + GS.Keybinds.use.controlName + "] to use";
-	this.pointerLockText = "right-click to enable pointer lock";
 	this.restartText = "[ENTER] to restart level";
 
 	this.usePopup = {
-		originalOffset: new THREE.Vector2(0, 100),
-		offset: new THREE.Vector2(),
-		pos: new THREE.Vector2(0.5, 0.5),
-		size: new THREE.Vector2(0, 60),
-		textOffset: new THREE.Vector2(0, 0),
-	};
-
-	this.pointerLockPopup = {
 		originalOffset: new THREE.Vector2(0, 100),
 		offset: new THREE.Vector2(),
 		pos: new THREE.Vector2(0.5, 0.5),
@@ -41,9 +32,6 @@ GS.UIComponents.Notifications = function(vectorCanvas, assets, player) {
 	this.oldShowUsePopup = false;
 	this.showUsePopup = false;
 
-	this.oldShowPointerLockPopup = false;
-	this.showPointerLockPopup = false;
-
 	this.oldShowRestartPopup = false;
 	this.showRestartPopup = false;
 };
@@ -61,12 +49,6 @@ GS.UIComponents.Notifications.prototype = {
 			this.oldShowUsePopup = this.showUsePopup;
 		}
 
-		this.showPointerLockPopup = !this.player.controls.pointerLockEnabled;
-		if (this.showPointerLockPopup != this.oldShowPointerLockPopup) {
-			this.needsRedraw = true;
-			this.oldShowPointerLockPopup = this.showPointerLockPopup;
-		}
-
 		this.showRestartPopup = this.player.dead;
 		if (this.showRestartPopup != this.oldShowRestartPopup) {
 			this.needsRedraw = true;
@@ -77,9 +59,6 @@ GS.UIComponents.Notifications.prototype = {
 	draw: function() {
 		if (this.showRestartPopup) {
 			this.drawPopup(this.restartText, this.restartPopup);
-		} else
-		if (this.showPointerLockPopup) {
-			this.drawPopup(this.pointerLockText, this.pointerLockPopup);
 		} else
 		if (this.showUsePopup) {
 			this.drawPopup(this.useText, this.usePopup);
@@ -93,9 +72,8 @@ GS.UIComponents.Notifications.prototype = {
 			GS.UIColors.foreground, this.fontSize, "middle", "center", GS.UIFont);
 	},
 
-	calculateSizes: function() {		
+	calculateSizes: function() {
 		this.calculatePopupSize(this.useText, this.usePopup);
-		this.calculatePopupSize(this.pointerLockText, this.pointerLockPopup);
 		this.calculatePopupSize(this.restartText, this.restartPopup);
 	},
 

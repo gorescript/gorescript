@@ -35,101 +35,33 @@ GS.FPSControls.prototype = {
 
 	init: function() {
 		var that = this;
-		var pointerLock = "pointerLockElement" in document || "mozPointerLockElement" in document || "webkitPointerLockElement" in document;
+		var pointerLock = "pointerLockElement" in document;
 		if (!pointerLock) {
 			throw "Pointer Lock API not supported";
 		}
 
-		this.attachEvents();
+		this.canvas = $("#game-canvas")[0];
+		this.debugCanvas = $("#debug-ui-canvas")[0];
 
 		this.setViewAngles(this.xAngle, this.yAngle);
 	},
 
-	attachEvents: function() {
-		var that = this;
-
-		$(document).on("pointerlockchange.fpsControls", function(e) { that.onPointerLockChange(e); });
-		$(document).on("mozpointerlockchange.fpsControls", function(e) { that.onPointerLockChange(e); });
-		$(document).on("webkitpointerlockchange.fpsControls", function(e) { that.onPointerLockChange(e); });
-
-		$(document).on("pointerlockerror.fpsControls", function(e) { that.onPointerLockError(e); });
-		$(document).on("mozpointerlockerror.fpsControls", function(e) { that.onPointerLockError(e); });
-		$(document).on("webkitpointerlockerror.fpsControls", function(e) { that.onPointerLockError(e); });
-
-		this.canvas = $("#game-canvas")[0];
-		this.debugCanvas = $("#debug-ui-canvas")[0];
-
-		var rightMouseDown = false;
-		$(this.debugCanvas).on("mousedown.fpsControls", function(e) { 
-			if (e.which == 3) { 
-				rightMouseDown = true; 
-			} 
-		});
-		$(this.debugCanvas).on("mouseup.fpsControls", function(e) { 
-			if (e.which == 3 && rightMouseDown) { 
-				rightMouseDown = false; 
-				that.enable(); 
-			}
-		});
-	},
-	
-	detachEvents: function() {
-		$(this.debugCanvas).off("mousedown.fpsControls");
-		$(this.debugCanvas).off("mouseup.fpsControls");
-
-		$(document).off("pointerlockchange.fpsControls");
-		$(document).off("mozpointerlockchange.fpsControls");
-		$(document).off("webkitpointerlockchange.fpsControls");
-
-		$(document).off("pointerlockerror.fpsControls");
-		$(document).off("mozpointerlockerror.fpsControls");
-		$(document).off("webkitpointerlockerror.fpsControls");
-	},
-
 	enable: function() {
-		if (!this.pointerLockEnabled) {
-			this.canvas.requestPointerLock = this.canvas.requestPointerLock || 
-				this.canvas.mozRequestPointerLock || this.canvas.webkitRequestPointerLock;
-			this.canvas.requestPointerLock();
-		}
+		var that = this;
+		this.canvas.requestPointerLock();
+		$(document).off("mousemove.fpsControls");
+		$(document).on("mousemove.fpsControls", function(e) { that.onMouseMove(e.originalEvent); });
 	},
 
 	disable: function() {
-		if (this.pointerLockEnabled) {
-			document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock || document.webkitExitPointerLock;
-			document.exitPointerLock();			
-		}
+		document.exitPointerLock();
+		$(document).off("mousemove.fpsControls");
 	},
 
-	onPointerLockChange: function(e) {
-		var that = this;
-
-		var isCanvas = document.pointerLockElement === this.canvas || document.mozPointerLockElement === this.canvas ||
-			document.webkitPointerLockElement === this.canvas;
-
-		if (isCanvas) {
-			this.pointerLockEnabled = true;
-			$(document).on("mousemove.fpsControls", function(e) { that.onMouseMove(e.originalEvent); });
-			this.dispatchEvent({ type: "pointerLockEnabled" });
-		} else {
-			this.pointerLockEnabled = false;
-			$(document).off("mousemove.fpsControls");
-
-			if (this.disposeCallback !== undefined) {
-				this.detachEvents();
-				this.disposeCallback();
-			} else {
-				this.dispatchEvent({ type: "pointerLockDisabled" });
-			}
-		}
-	},
-
-	onPointerLockError: function() {
-	},
 
 	onMouseMove: function(e) {
 		if (!this.enabled) {
-			return
+			return;
 		}
 
 		var mx = e.movementX || e.mozMovementX || e.webkitMovementX || 0;
@@ -247,17 +179,8 @@ GS.FPSControls.prototype = {
 	}(),
 
 	dispose: function(callback) {
-		if (this.pointerLockEnabled) {
-			this.disposeCallback = callback;
-		}
-
 		this.onHandleCollisions = undefined;
 		this.disable();
-
-		if (!this.pointerLockEnabled) {
-			this.detachEvents();
-			callback();
-		}
 	},
 };
 

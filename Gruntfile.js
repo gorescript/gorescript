@@ -10,22 +10,22 @@ module.exports = function(grunt) {
 				"src/map-editor/js/**/*.js",
 				"src/voxel-editor/js/**/*.js",
 			],
+			watch: [
+				"src/game/js/**/*.js",
+				"src/common/**/*.js",
+			],
 			options: {
 				jshintrc: true
 			}
 		},
 
-		uglify: {
+		uglify: {			
 			options: {
+				beautify: true,
+				mangle: false,
 				separator: ";",
-				preserveComments: "some",
-				banner: [
-					"/*! gorescript / http://timeinvariant.github.io/gorescript */", "",
-					"/*! three.js / threejs.org/license */",
-					"/*! tween.js - http://github.com/sole/tween.js */", "", "",
-				].join("\n")
-			},			
-			build: {
+			},
+			vendor: {
 				files: [
 					{
 						src: [
@@ -40,13 +40,17 @@ module.exports = function(grunt) {
 							"src/deps/post-processing/*.js",
 						],
 
-						dest: "build/gorescript-deps.min.js"
-					},					
+						dest: "app/gorescript-deps.min.js"
+					},
+				]
+			},
+			client: {
+				files: [
 					{
 						src: [
 							"src/game/js/BuildOverride.js",
 							"src/common/Base.js",              
-							"src/common/*.js",   
+							"src/common/*.js",
 
 							"src/game/js/ui/*.js",
 							"src/game/js/ui/components/*.js",
@@ -56,6 +60,8 @@ module.exports = function(grunt) {
 							"src/game/js/grid-objects/GridObject.js",
 							"src/game/js/grid-objects/*.js",
 							"src/game/js/loaders/*.js",
+							"src/game/js/components/MapScript.js",
+							"src/game/js/map-scripts/*.js",
 							"src/game/js/factories/*.js",
 							"src/game/js/components/*.js",
 							"src/game/js/views/*.js",
@@ -63,18 +69,43 @@ module.exports = function(grunt) {
 							"src/game/js/*.js",
 						],
 
-						dest: "build/gorescript.min.js"
+						dest: "app/gorescript.min.js"
 					}
 				]
 			}
 		},
 
-		copy: {
-			main: {
+		watch: {
+			js: {
 				files: [
-					{ src: "src/game/index_build.html", dest: "build/index.html" },
-					{ src: "src/game/assets/fonts/capsuula.woff", dest: "build/capsuula.woff" },
-					{ src: "src/server/assets.zip", dest: "build/assets.zip" }
+					"src/game/js/**/*.js",
+					"src/common/**/*.js",
+				],
+				tasks: ["jshint:watch", "uglify:client"],
+				options: {
+					spawn: false
+				}
+			},
+			copy: {
+				files: ["src/game/index.html"],
+				tasks: ["copy:watch"],
+				options: {
+					spawn: false
+				}
+			}
+		},
+
+		copy: {
+			all: {
+				files: [
+					{ src: "src/game/index.html", dest: "app/index.html" },
+					{ src: "src/game/assets/fonts/capsuula.woff", dest: "app/capsuula.woff" },
+					{ src: "src/server/assets.zip", dest: "app/assets.zip" }
+				]
+			},
+			watch: {
+				files: [
+					{ src: "src/game/index.html", dest: "app/index.html" },
 				]
 			}
 		},
@@ -107,8 +138,9 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-copy");
 	grunt.loadNpmTasks("grunt-contrib-connect");
+	grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-shell");
 
-	grunt.registerTask("default", ["jshint", "shell", "uglify", "copy"]);
+	grunt.registerTask("default", ["jshint:all", "shell", "uglify:vendor", "uglify:client", "copy:all"]);
 
 };

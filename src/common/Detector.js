@@ -31,17 +31,6 @@ GS.Detector = {
 			return;
 		}
 
-		var localStorage;
-		try {
-			localStorage = "localStorage" in window && window["localStorage"] !== null;
-		} catch(e) {
-			localStorage = false;
-		}
-		if (!localStorage) {
-			this.displayErrorMessage("HTML5 local storage");
-			return;
-		}
-
 		callback();
 	},
 

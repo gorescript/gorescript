@@ -78,11 +78,7 @@ GS.Base.prototype = {
 	constructor: GS.Base,
 
 	init: function() {
-		var that = this;
-
-		$(document).on("contextmenu", function(){
-			return false;
-		});
+		var that = this;		
 
 		this.renderer = new THREE.WebGLRenderer({ antialias: this.antialias });
 		this.renderer.setClearColor(this.clearColor, 1);

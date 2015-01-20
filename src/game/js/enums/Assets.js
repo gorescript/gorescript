@@ -5,7 +5,6 @@ GS.AssetTypes = {
 	CubeTexture: 3,
 	UIWidget: 4,
 	Map: 5,
-	Script: 6,
 	MusicTrack: 7,
 };
 
@@ -126,12 +125,6 @@ GS.Assets[GS.AssetTypes.MusicTrack] = {
 };
 
 GS.Assets[GS.AssetTypes.Map] = {
-	"airstrip1": 			{ filename: "airstrip1.js" },
-	"drencrom":				{ filename: "drencrom.js" },
-	"sacrosanct":			{ filename: "sacrosanct.js" },
-};
-
-GS.Assets[GS.AssetTypes.Script] = {
 	"airstrip1": 			{ filename: "airstrip1.js" },
 	"drencrom":				{ filename: "drencrom.js" },
 	"sacrosanct":			{ filename: "sacrosanct.js" },

@@ -10,6 +10,8 @@ GS.Settings = function() {
 		vignette: true,
 		fxaa: true,
 
+		fullscreen: true,
+
 		halfSize: true,
 		showFPS: true,
 
@@ -36,28 +38,31 @@ GS.Settings = function() {
 	};
 
 	return {
-		loadSettings: function() {
-			var jsonStr = localStorage["gs-settings"];
-			if (jsonStr !== undefined) {
-				var loadedSettings = JSON.parse(jsonStr);
-				for (var i in loadedSettings) {
-					if (i in settings) {
-						settings[i] = loadedSettings[i];
+		loadSettings: function(callback) {
+			chrome.storage.local.get("gs-settings", function(result) {
+				var loadedSettings = result["gs-settings"];
+
+				if (loadedSettings) {
+					for (var i in loadedSettings) {
+						if (i in settings) {
+							settings[i] = loadedSettings[i];
+						}
+					}
+
+					if (loadedSettings.keybinds) {
+						GS.KeybindSettings.keybinds = loadedSettings.keybinds;
 					}
 				}
 
-				if (loadedSettings.keybinds) {
-					GS.KeybindSettings.keybinds = loadedSettings.keybinds;
-				}
-			}
+				GS.KeybindSettings.init();
+				settings.keybinds = GS.KeybindSettings.keybinds;
 
-			GS.KeybindSettings.init();
-			settings.keybinds = GS.KeybindSettings.keybinds;
+				callback();
+			});
 		},
 
 		saveSettings: function() {
-			var jsonStr = JSON.stringify(settings);
-			localStorage["gs-settings"] = jsonStr;
+			chrome.storage.local.set({ "gs-settings": settings });
 		},
 
 		get fovMin() {
@@ -155,6 +160,24 @@ GS.Settings = function() {
 
 		get weaponBob() {
 			return settings.weaponBob;
+		},
+
+		set fullscreen(value) {
+			var oldValue = settings.fullscreen;
+			settings.fullscreen = (value === true);
+			this.saveSettings();
+
+			if (oldValue !== value) {
+				if (value === true) {
+					chrome.app.window.current().fullscreen();
+				} else {
+					chrome.app.window.current().restore();
+				}
+			}
+		},
+
+		get fullscreen() {
+			return settings.fullscreen;
 		},
 
 		set halfSize(value) {

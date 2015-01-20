@@ -13,7 +13,6 @@ GS.AssetLoader = function(audioContext) {
 	this.path[GS.AssetTypes.Mesh] = "assets/meshes/";
 	this.path[GS.AssetTypes.Sound] = "assets/sounds/";
 	this.path[GS.AssetTypes.Map] = "assets/maps/";
-	this.path[GS.AssetTypes.Script] = "assets/scripts/";
 	this.path[GS.AssetTypes.MusicTrack] = "assets/music/";
 
 	this.reset();
@@ -32,7 +31,6 @@ GS.AssetLoader.prototype = {
 		this.assets[GS.AssetTypes.Mesh] = {};
 		this.assets[GS.AssetTypes.Sound] = {};
 		this.assets[GS.AssetTypes.Map] = {};
-		this.assets[GS.AssetTypes.Script] = {};
 		this.assets[GS.AssetTypes.MusicTrack] = {};
 	},
 
@@ -95,9 +93,6 @@ GS.AssetLoader.prototype = {
 				break;
 			case GS.AssetTypes.Map:
 				this.loadMap(asset.name, asset.filename);
-				break;
-			case GS.AssetTypes.Script:
-				this.loadScript(asset.name, asset.filename);
 				break;
 			case GS.AssetTypes.MusicTrack:
 				this.loadSound(asset.name, asset.filename, GS.AssetTypes.MusicTrack);
@@ -169,20 +164,6 @@ GS.AssetLoader.prototype = {
 		this.mapLoader.load(name, filename, function(map) {
 			that.assets[GS.AssetTypes.Map][name] = map;
 			that.checkIfFullyLoaded();
-		});
-	},
-
-	loadScript: function(name, filename) {
-		var that = this;
-		var path = this.path[GS.AssetTypes.Script] + filename;
-
-		$.ajax({
-			url: path,
-			dataType: "script", 
-			crossDomain: true,
-			success: function() {
-				that.checkIfFullyLoaded();
-			},
 		});
 	},
 

@@ -1,3 +1,10 @@
+app/app.zip
+app/assets.zip
+app/capsuula.woff
+app/gorescript-deps.min.js
+app/gorescript.min.js
+app/index.html
+
 build/
 node_modules/
 src/game/assets/

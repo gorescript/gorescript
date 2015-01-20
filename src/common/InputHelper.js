@@ -16,28 +16,33 @@ GS.InputHelper = {
 
 	init: function() {
 		var that = this;
+
+		// $(document).on("contextmenu", function(){
+		// 	return false;
+		// });
+
 		$(document).keydown(function(e){
 			that.keyState[e.keyCode] = true;
 			that.ctrl = e.ctrlKey;
 			that.alt = e.altKey;
 			that.shift = e.shiftKey;
 
-			// avoid normal behavior: tab, ctrl+a, ctrl+z, ctrl+g, ctrl-minus, ctrl-plus, ctrl-zero
-			if (e.keyCode == 9 || (e.keyCode == 65 && e.ctrlKey) ||
-				(e.keyCode == 90 && e.ctrlKey) || (e.keyCode == 71 && e.ctrlKey) ||
-				(e.keyCode == 189 && e.ctrlKey) || (e.keyCode == 187 && e.ctrlKey) ||
-				(e.keyCode == 48 && e.ctrlKey)) {
-				e.stopPropagation();
-				e.preventDefault();
-				return false;
-			}
+			e.stopPropagation();
+			e.preventDefault();
+			return false;
 		});
+
 		$(document).keyup(function(e){
 			that.keyState[e.keyCode] = false;
 			that.ctrl = e.ctrlKey;
 			that.alt = e.altKey;
 			that.shift = e.shiftKey;
+
+			e.stopPropagation();
+			e.preventDefault();
+			return false;
 		});
+
 		$(document).mousedown(function(e){
 			if (e.which == 1)
 				that.leftMouseDown = true;
@@ -46,6 +51,7 @@ GS.InputHelper = {
 			if (e.which == 3)
 				that.rightMouseDown = true;
 		});
+
 		$(document).mouseup(function(e){
 			if (e.which == 1)
 				that.leftMouseDown = false;
@@ -54,6 +60,7 @@ GS.InputHelper = {
 			if (e.which == 3)
 				that.rightMouseDown = false;
 		});
+
 		$(document).mousemove(function(e){
 			that.mouseX = e.pageX * that.screenRatioX;
 			that.mouseY = e.pageY * that.screenRatioY;

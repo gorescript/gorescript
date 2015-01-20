@@ -1,0 +1,26 @@
+{
+  "name": "gorescript",
+  "short_name": "gorescript",
+  "description": "First-person shooter written in JavaScript / WebGL and inspired from '90s FPS classics.",
+  "version": "1.1.4",
+  "manifest_version": 2,
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "requirements": {
+    "3D": {
+      "features": ["webgl"]
+    }
+  },
+  "permissions": [
+    "storage",
+    "pointerLock",
+    "app.window.fullscreen",
+    "app.window.fullscreen.overrideEsc"
+  ],
+  "icons": { 
+    "128": "icon128.png"
+  }
+}
