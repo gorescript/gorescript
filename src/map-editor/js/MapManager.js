@@ -8,8 +8,6 @@ GS.MapManager = function(canvas, ctx) {
 	this.canvas = canvas;
 	this.ctx = ctx;
 
-    this.body = document.getElementById("body");
-    
 	this.map = {
 		name: this.generateName(),
 		cellSize: 4,
@@ -103,10 +101,6 @@ GS.MapManager.prototype = {
 		return v;
 	},
 
-    getScrollOffset: function() {
-        return new THREE.Vector2(this.body.scrollLeft, this.body.scrollTop);    
-    },
-    
 	drawLayer: function(ctx, layer, selected) {
 		switch (layer) {
 			case GS.MapLayers.Segment:
