@@ -4,6 +4,7 @@ GS.LayerObjectTools = function(mapManager, actionLog, inCanvas) {
 	this.actionLog = actionLog;
 	this.inCanvas = inCanvas;
 
+    this.body = document.getElementById("body");
 	this.isSelecting = false;
 	this.mode = GS.EditorModes.Drawing;
 	this.selected = {};	
