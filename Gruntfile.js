@@ -81,7 +81,7 @@ module.exports = function(grunt) {
 
 		shell: {
 			generateAssetsZip: {
-				command: "gen_assets_zip.sh",
+				command: "node generateAssetsZip.js",
 				options: {
 					stderr: false,
 					execOptions: {
