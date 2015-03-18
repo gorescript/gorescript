@@ -476,8 +476,8 @@ GS.MapEditor.prototype = {
 
 		this.canvasContainer.width = this.canvasWidth + "px";
 		this.canvasContainer.height = this.canvasHeight + "px";
-		this.menuContainer.style.width = this.menuWidth + "px";
-		this.menuContainer.style.height = this.menuHeight + "px";
+		//this.menuContainer.style.width = this.menuWidth + "px";
+		//this.menuContainer.style.height = this.menuHeight + "px";
 		this.menuContainer.style.marginLeft = this.canvasWidth + "px";
 	},
 };

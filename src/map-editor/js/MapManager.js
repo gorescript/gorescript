@@ -157,7 +157,6 @@ GS.MapManager.prototype = {
 	},
 
 	drawSelection: function(start, end) {
-        console.log("Selection");
 		var x0 = Math.min(start.x, end.x);
 		var x1 = Math.max(start.x, end.x);
 		var y0 = Math.min(start.y, end.y);
