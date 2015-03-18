@@ -8,6 +8,8 @@ GS.MapManager = function(canvas, ctx) {
 	this.canvas = canvas;
 	this.ctx = ctx;
 
+    this.body = document.getElementById("body");
+    
 	this.map = {
 		name: this.generateName(),
 		cellSize: 4,
@@ -93,6 +95,7 @@ GS.MapManager.prototype = {
 			v.x = Math.round(v.x / this.map.cellSize) * this.map.cellSize;
 			v.y = Math.round(v.y / this.map.cellSize) * this.map.cellSize;
 		}
+        return v;
 	},
 
 	convertToScreenCoords: function(v) {
@@ -100,6 +103,10 @@ GS.MapManager.prototype = {
 		return v;
 	},
 
+    getScrollOffset: function() {
+        return new THREE.Vector2(this.body.scrollLeft, this.body.scrollTop);    
+    },
+    
 	drawLayer: function(ctx, layer, selected) {
 		switch (layer) {
 			case GS.MapLayers.Segment:
@@ -156,6 +163,7 @@ GS.MapManager.prototype = {
 	},
 
 	drawSelection: function(start, end) {
+        console.log("Selection");
 		var x0 = Math.min(start.x, end.x);
 		var x1 = Math.max(start.x, end.x);
 		var y0 = Math.min(start.y, end.y);

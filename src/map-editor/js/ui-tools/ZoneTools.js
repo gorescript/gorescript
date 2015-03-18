@@ -24,9 +24,9 @@ GS.ZoneTools.prototype = GS.inherit(GS.LayerObjectTools, {
 	},
 
 	update: function() {
-		var mx = GS.InputHelper.mouseX;
-		var my = GS.InputHelper.mouseY;
-
+		var mx = GS.InputHelper.mouseX - this.body.scrollLeft;
+		var my = GS.InputHelper.mouseY - this.body.scrollTop;
+        
 		switch (this.mode) {
 			case GS.EditorModes.Selecting:
 				this.handleSelecting(mx, my);

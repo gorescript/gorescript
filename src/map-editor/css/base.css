@@ -15,11 +15,11 @@
     user-select: text;
 }
 
-body { margin: 0; padding: 0; background-color: #fff; }
-canvas { position: fixed; cursor: default; }
-#canvas-container { position: absolute; display: none; }
+body { margin: 0; padding: 0; background-color: #fff; overflow: hidden; }
+canvas { position: fixed; cursor: default; overflow: hidden;}
+#canvas-container { position: absolute; display: none; overflow: hidden;}
 #menu-container { background-color: #DFDFDF; border-left: 1px solid #AAAAAB; 
-				  font-family: Arial, Helvetica; font-size: 12px; display: none; }
+				  font-family: Arial, Helvetica; font-size: 12px; display: none; overflow-y: auto; }
 .menu-inner { padding: 5px; }
 .menu-label { clear: both; width: 135px; float: left; height: 30px; padding: 7px 10px 2px 2px; text-align: right; }
 .menu-field { height: 30px; padding: 2px; font-size: 10px; }
