@@ -119,7 +119,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-connect");
 	grunt.loadNpmTasks("grunt-shell");
 
-	grunt.registerTask("default", ["jshint", "shell:generateAssetsZip", "uglify", "copy", "conTools"]);
+	grunt.registerTask("default", ["jshint", "shell:generateAssetsZip", "uglify", "copy"]);
     grunt.registerTask("tools", ["shell:startServer"]);
 
 };
