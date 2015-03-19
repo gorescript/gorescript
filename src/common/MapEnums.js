@@ -48,4 +48,8 @@ GS.MapEntities = {
 			attack: 2,
 		},
 	},
+    "Q": {
+        name: "quad",
+        type: "Item",
+    },
 };

@@ -52,6 +52,8 @@ GS.Assets[GS.AssetTypes.Texture] = {
 	"nom_glow": 			{ filename: "nom_glow.png", 				type: GS.TextureTypes.Entity },
 	"eye": 					{ filename: "eye.png", 						type: GS.TextureTypes.Entity },
 	"eye_glow": 			{ filename: "eye_glow.png", 				type: GS.TextureTypes.Entity },
+    "quad": 					{ filename: "quad.png", 						type: GS.TextureTypes.Entity },
+	"quad_glow": 			{ filename: "quad_glow.png", 				type: GS.TextureTypes.Entity },
 };
 
 GS.Assets[GS.AssetTypes.CubeTexture] = {
@@ -96,6 +98,7 @@ GS.Assets[GS.AssetTypes.Mesh] = {
 	"eye_death3": 			{ filename: "eye_death3.js" },
 	"eye_attack0": 			{ filename: "eye_attack0.js" },
 	"eye_attack1": 			{ filename: "eye_attack1.js" },
+    "quad":                 { filename: "quad.js" },
 };
 
 GS.Assets[GS.AssetTypes.Sound] = {
