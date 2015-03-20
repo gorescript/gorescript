@@ -13,6 +13,7 @@ GS.Player = function(grid, camera, playerView) {
 
 	this.health = 100;
 	this.dead = false;
+    this.hasQuad = false;
 
 	this.size = new THREE.Vector3(3, 7, 3);
 	this.useRange = this.size.x + 15;
@@ -198,7 +199,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 	onItemCollision: function(item) {
 		var name = GS.MapEntities[item.sourceObj.type].name;
 
-		if (this.pickupWeapon(name) || this.pickupAmmo(name) || this.pickupMedkit(name)) {
+		if (this.pickupWeapon(name) || this.pickupAmmo(name) || this.pickupMedkit(name) || this.pickupQuad(name)){
 			this.grid.aiManager.onPlayerItemPickup(this, item);
 			item.remove();
 			this.playerView.onItemPickup();
@@ -278,6 +279,18 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 		}
 		return false;
 	},
+    
+    pickupQuad: function(name) {
+        var that = this;
+        if (name == "quad") {
+            GS.DebugUI.addTempLine("picked up quad damage");
+        
+            this.hasQuad = true;
+            this.grid.soundManager.playSound("pickup_item");
+            return true;
+        }
+        return false;
+    },
 
 	updateUse: function() {
 		if (this.canUse && GS.Keybinds.use.inUse) {			
