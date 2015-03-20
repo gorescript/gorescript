@@ -451,7 +451,6 @@ GS.VoxelMeshManager.prototype = {
 	},
 
 	update: function() {
-        console.log("Scroll: " + this.body.scrollTop);
 		var mx = GS.InputHelper.mouseX - this.body.scrollLeft;
 		var my = GS.InputHelper.mouseY - this.body.scrollTop;
 
