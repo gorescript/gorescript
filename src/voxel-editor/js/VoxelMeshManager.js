@@ -5,7 +5,8 @@ GS.VoxelMeshManager = function(canvasInfo, renderer, scene, camera) {
 	this.camera = camera;
 
 	this.maxAnisotropy = this.renderer.getMaxAnisotropy();
-
+    this.body = document.getElementById("body");
+    
 	this.size = 32;
 	this.voxelMesh = {};
 	this.name = this.generateName();
@@ -450,8 +451,8 @@ GS.VoxelMeshManager.prototype = {
 	},
 
 	update: function() {
-		var mx = GS.InputHelper.mouseX;
-		var my = GS.InputHelper.mouseY;
+		var mx = GS.InputHelper.mouseX - this.body.scrollLeft;
+		var my = GS.InputHelper.mouseY - this.body.scrollTop;
 
 		if (!GS.InputHelper.leftMouseDown && !GS.InputHelper.rightMouseDown) {
 			this.mousePressed = false;
