@@ -316,6 +316,9 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 					if (this.weaponName == "hyper_blaster") {
 						this.grid.addProjectile(this, "hyper_blaster_bolt", projectileStart, this.direction.clone());
 					} else
+                    if (this.weaponName == "railgun") {
+						this.grid.addProjectile(this, "railgun_bolt", projectileStart, this.direction.clone());
+					} else
 					if (this.weaponName == "pistol") {
 						this.grid.addProjectile(this, "pistol_bolt", projectileStart, this.direction.clone());
 					}					
@@ -339,6 +342,9 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 			name = "shotgun_fire";
 		} else 
 		if (this.weaponName == "hyper_blaster") {
+			name = "hyper_blaster_fire";
+		} else 
+		if (this.weaponName == "railgun") {
 			name = "hyper_blaster_fire";
 		} else
 		if (this.weaponName == "pistol") {

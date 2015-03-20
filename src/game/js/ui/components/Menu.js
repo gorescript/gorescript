@@ -280,6 +280,7 @@ GS.UIComponents.Menu.prototype = {
 		this.btnTogglePistol = this.controlsPanel.addToggleButton("pistol", ["2"]);
 		this.btnToggleShotgun = this.controlsPanel.addToggleButton("shotgun", ["3"]);
 		this.btnToggleHyperBlaster = this.controlsPanel.addToggleButton("hyperblaster", ["4"]);
+		this.btnToggleRailgun = this.controlsPanel.addToggleButton("railgun", ["5"]);
 
 		this.btnToggleAutomap = this.controlsPanel.addToggleButton("automap", ["TAB"]);
 		this.btnToggleAutomap.button.disabled = true;
@@ -304,7 +305,8 @@ GS.UIComponents.Menu.prototype = {
 			shoot: 			this.btnToggleShoot,
 			pistol: 		this.btnTogglePistol,
 			shotgun: 		this.btnToggleShotgun,
-			hyperblaster: 	this.btnToggleHyperBlaster
+			hyperblaster: 	this.btnToggleHyperBlaster,
+            railgun:        this.btnToggleRailgun
 		};
 
 		for (var i in keyButtonMap) {

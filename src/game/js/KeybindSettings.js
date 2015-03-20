@@ -46,6 +46,11 @@ GS.KeybindSettings = {
 			controlName: "4",
 			code: 52
 		},
+        {
+            actionName: "railgun",
+            controlName: "5",
+            code: 53
+        },
 	],
 
 	init: function() {

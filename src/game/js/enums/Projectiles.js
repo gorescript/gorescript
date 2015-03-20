@@ -19,6 +19,16 @@ GS.Projectiles = {
 		color: new THREE.Color().setRGB(1, 1, 1).getHex(),
 		damage: 10,
 	},
+	railgun_bolt: {
+		hitSound: "hyper_blaster_hit",
+		size: new THREE.Vector3(1, 1, 1),
+		visualSize: new THREE.Vector3(1, 1, 3),
+		rotating: false,
+		speed: 500,
+		maxDistance: 500,
+		color: new THREE.Color().setRGB(1, 1, 1).getHex(),
+		damage: 90,
+	},
 	eye_bolt: {
 		hitSound: "hyper_blaster_hit",
 		size: new THREE.Vector3(2, 2, 2),
