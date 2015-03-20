@@ -390,8 +390,14 @@ GS.Monster.prototype = GS.inherit(GS.GridObject, {
 			this.animationView.pain();
 			this.grid.soundManager.playSound(this.painSound);
 		}
-
-		this.health -= damage;
+        
+        if (this.grid.player.hasQuad) {
+		  this.health -= damage * 4;
+        }
+        else {
+            this.health -= damage;
+        }
+        
 		if (this.health < 0) {
 			this.health = 0;
 			this.onDeath();
