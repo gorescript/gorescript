@@ -284,9 +284,12 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
         var that = this;
         if (name == "quad") {
             GS.DebugUI.addTempLine("picked up quad damage");
-        
             this.hasQuad = true;
             this.grid.soundManager.playSound("pickup_item");
+            setTimeout(function() {
+               GS.DebugUI.addTempLine("used up quad damage"); 
+                that.hasQuad = false;
+            }, 30000);
             return true;
         }
         return false;
