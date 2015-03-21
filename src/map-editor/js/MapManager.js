@@ -93,6 +93,7 @@ GS.MapManager.prototype = {
 			v.x = Math.round(v.x / this.map.cellSize) * this.map.cellSize;
 			v.y = Math.round(v.y / this.map.cellSize) * this.map.cellSize;
 		}
+        return v;
 	},
 
 	convertToScreenCoords: function(v) {

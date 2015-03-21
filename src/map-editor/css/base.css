@@ -16,8 +16,8 @@
 }
 
 body { margin: 0; padding: 0; background-color: #fff; }
-canvas { position: fixed; cursor: default; }
-#canvas-container { position: absolute; display: none; }
+canvas { position: fixed; cursor: default; overflow: hidden;}
+#canvas-container { position: absolute; display: none; overflow: hidden;}
 #menu-container { background-color: #DFDFDF; border-left: 1px solid #AAAAAB; 
 				  font-family: Arial, Helvetica; font-size: 12px; display: none; }
 .menu-inner { padding: 5px; }

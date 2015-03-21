@@ -34,4 +34,31 @@ GS.Weapons = {
 		cooldown: 80,
 		hitscan: false,
 	},
+    railgun: {
+        name: "railgun",
+        powerLevel: 5,
+        ammo: 0,
+        ammoMax: 18,
+        ammoClip: 6,
+        bulletsPerShot: 1,
+        cooldown: 1600,
+        hitscan: false
+    },
+	streetsweeper: {
+		name: "streetsweeper",
+		powerLevel: 6,
+		ammo: 0,
+		ammoMax: 50,
+		ammoClip: 8,
+		bulletsPerShot: 1,
+		cooldown: 100,
+		hitscan: true,
+		spread: {
+			shots: 4,
+			angleOffset: 5,
+		},
+		damage: 10,
+		impactParticleColor: new THREE.Color().setRGB(1, 1, 1).getHex(),
+		impactParticleCount: 1,
+	},
 };

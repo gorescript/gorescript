@@ -28,5 +28,8 @@
     "grunt-shell": "^0.7.0",
     "lodash": "^2.4.1",
     "pngparse": "^2.0.1"
+  },
+  "dependencies": {
+    "paperboy": "0.0.5"
   }
 }

@@ -13,6 +13,7 @@ GS.Player = function(grid, camera, playerView) {
 
 	this.health = 100;
 	this.dead = false;
+    this.hasQuad = false;
 
 	this.size = new THREE.Vector3(3, 7, 3);
 	this.useRange = this.size.x + 15;
@@ -198,7 +199,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 	onItemCollision: function(item) {
 		var name = GS.MapEntities[item.sourceObj.type].name;
 
-		if (this.pickupWeapon(name) || this.pickupAmmo(name) || this.pickupMedkit(name)) {
+		if (this.pickupWeapon(name) || this.pickupAmmo(name) || this.pickupMedkit(name) || this.pickupQuad(name)){
 			this.grid.aiManager.onPlayerItemPickup(this, item);
 			item.remove();
 			this.playerView.onItemPickup();
@@ -278,6 +279,21 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 		}
 		return false;
 	},
+    
+    pickupQuad: function(name) {
+        var that = this;
+        if (name == "quad") {
+            GS.DebugUI.addTempLine("picked up quad damage");
+            this.hasQuad = true;
+            this.grid.soundManager.playSound("pickup_item");
+            setTimeout(function() {
+               GS.DebugUI.addTempLine("used up quad damage"); 
+                that.hasQuad = false;
+            }, 30000);
+            return true;
+        }
+        return false;
+    },
 
 	updateUse: function() {
 		if (this.canUse && GS.Keybinds.use.inUse) {			
@@ -316,6 +332,9 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 					if (this.weaponName == "hyper_blaster") {
 						this.grid.addProjectile(this, "hyper_blaster_bolt", projectileStart, this.direction.clone());
 					} else
+                    if (this.weaponName == "railgun") {
+						this.grid.addProjectile(this, "railgun_bolt", projectileStart, this.direction.clone());
+					} else
 					if (this.weaponName == "pistol") {
 						this.grid.addProjectile(this, "pistol_bolt", projectileStart, this.direction.clone());
 					}					
@@ -338,7 +357,13 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 		if (this.weaponName == "double_shotgun") {
 			name = "shotgun_fire";
 		} else 
+		if (this.weaponName == "streetsweeper") {
+			name = "shotgun_fire";
+		} else 
 		if (this.weaponName == "hyper_blaster") {
+			name = "hyper_blaster_fire";
+		} else 
+		if (this.weaponName == "railgun") {
 			name = "hyper_blaster_fire";
 		} else
 		if (this.weaponName == "pistol") {

@@ -33,6 +33,28 @@ GS.PlayerView = function() {
 			muzzleDuration: GS.msToFrames(125),
 			muzzleFlashColor: new THREE.Color().setRGB(1, 1, 1),
 		},
+		railgun: {
+			position: new THREE.Vector3(2.75, -3.5, -3),
+			startPosition: new THREE.Vector3(2.5, -6.5, 1),
+			scale: new THREE.Vector3(0.4, 0.4, 0.4),
+			rotation: new THREE.Vector3(0, THREE.Math.degToRad(-90), 0),
+			pushback: 2,
+			shootBackwardFactor: 0.1,
+			shootForwardFactor: 0.9,
+			muzzleDuration: GS.msToFrames(125),
+			muzzleFlashColor: new THREE.Color().setRGB(1, 1, 1),
+		},
+		streetsweeper: {
+			position: new THREE.Vector3(2.75, -2.5, -3),
+			startPosition: new THREE.Vector3(2.5, -6.5, 1),
+			scale: new THREE.Vector3(0.4, 0.4, 0.4),
+			rotation: new THREE.Vector3(0, THREE.Math.degToRad(-90), 0),
+			pushback: 2,
+			shootBackwardFactor: 0.5,
+			shootForwardFactor: 0.5,
+			muzzleDuration: GS.msToFrames(125),
+			muzzleFlashColor: new THREE.Color().setRGB(1, 1, 1),
+		},
 	}
 	$.extend(true, this.weapons, GS.Weapons);
 

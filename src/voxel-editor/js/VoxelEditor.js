@@ -68,7 +68,7 @@ GS.VoxelEditor.prototype = {
 		this.controls.distance = 8;
 		this.controls.minDistance = 4;
 		this.controls.maxDistance = 32;
-		this.controls.mouseDownProperty = "middleMouseDown";
+		this.controls.mouseDownProperty = "shift";
 		this.controls.canvasSelector = "#voxel-canvas";
 
 		this.controls.init();

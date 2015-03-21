@@ -48,10 +48,16 @@ GS.Assets[GS.AssetTypes.Texture] = {
 	"double_shotgun_glow": 	{ filename: "double_shotgun_glow.png", 		type: GS.TextureTypes.Entity },
 	"hyper_blaster": 		{ filename: "hyper_blaster.png", 			type: GS.TextureTypes.Entity },
 	"hyper_blaster_glow": 	{ filename: "hyper_blaster_glow.png", 		type: GS.TextureTypes.Entity },
+	"railgun":      		{ filename: "railgun.png",        			type: GS.TextureTypes.Entity },
+	"railgun_glow":     	{ filename: "railgun_glow.png",        		type: GS.TextureTypes.Entity },
+	"streetsweeper":   		{ filename: "streetsweeper.png",   			type: GS.TextureTypes.Entity },
+	"streetsweeper_glow":  	{ filename: "streetsweeper_glow.png",  		type: GS.TextureTypes.Entity },
 	"nom": 					{ filename: "nom.png", 						type: GS.TextureTypes.Entity },
 	"nom_glow": 			{ filename: "nom_glow.png", 				type: GS.TextureTypes.Entity },
 	"eye": 					{ filename: "eye.png", 						type: GS.TextureTypes.Entity },
 	"eye_glow": 			{ filename: "eye_glow.png", 				type: GS.TextureTypes.Entity },
+    "quad": 				{ filename: "quad.png", 					type: GS.TextureTypes.Entity },
+	"quad_glow": 			{ filename: "quad_glow.png", 				type: GS.TextureTypes.Entity },
 };
 
 GS.Assets[GS.AssetTypes.CubeTexture] = {
@@ -74,6 +80,8 @@ GS.Assets[GS.AssetTypes.Mesh] = {
 	"pistol": 				{ filename: "pistol.js" },
 	"double_shotgun": 		{ filename: "double_shotgun.js" },
 	"hyper_blaster": 		{ filename: "hyper_blaster.js" },
+	"railgun":      		{ filename: "railgun.js" },
+	"streetsweeper":   		{ filename: "streetsweeper.js" },
 	
 	"nom_walk0": 			{ filename: "nom_walk0.js" },
 	"nom_walk1": 			{ filename: "nom_walk1.js" },
@@ -96,6 +104,7 @@ GS.Assets[GS.AssetTypes.Mesh] = {
 	"eye_death3": 			{ filename: "eye_death3.js" },
 	"eye_attack0": 			{ filename: "eye_attack0.js" },
 	"eye_attack1": 			{ filename: "eye_attack1.js" },
+    "quad":                 { filename: "quad.js" },
 };
 
 GS.Assets[GS.AssetTypes.Sound] = {
@@ -105,6 +114,8 @@ GS.Assets[GS.AssetTypes.Sound] = {
 	"elevator_stop": 		{ filename: "elevator_stop.ogg",			allowMultipleAtOnce: true },
 	"hyper_blaster_fire": 	{ filename: "hyper_blaster_fire.ogg",		allowMultipleAtOnce: true },
 	"hyper_blaster_hit": 	{ filename: "hyper_blaster_hit.ogg",		allowMultipleAtOnce: true },
+	"railgun_fire":     	{ filename: "hyper_blaster_fire.ogg",		allowMultipleAtOnce: true },
+	"railgun_hit":      	{ filename: "hyper_blaster_hit.ogg",		allowMultipleAtOnce: true },
 	"monster_pain": 		{ filename: "monster_pain.ogg",				allowMultipleAtOnce: false },
 	"monster_roar": 		{ filename: "monster_roar.ogg",				allowMultipleAtOnce: true },
 	"monster_bite": 		{ filename: "monster_bite.ogg",				allowMultipleAtOnce: true },
@@ -114,6 +125,7 @@ GS.Assets[GS.AssetTypes.Sound] = {
 	"pickup_item": 			{ filename: "pickup_item.ogg",				allowMultipleAtOnce: true },
 	"pickup_weapon": 		{ filename: "pickup_weapon.ogg",			allowMultipleAtOnce: true },
 	"shotgun_fire": 		{ filename: "shotgun_fire.ogg",				allowMultipleAtOnce: true },
+	"streetsweeper_fire":	{ filename: "shotgun_fire.ogg",				allowMultipleAtOnce: true },
 	"player_death": 		{ filename: "player_death.ogg",				allowMultipleAtOnce: true },
 	"switch_on": 			{ filename: "switch_on.ogg",				allowMultipleAtOnce: true },
 	"none": 				{ filename: "none.ogg",						allowMultipleAtOnce: true },

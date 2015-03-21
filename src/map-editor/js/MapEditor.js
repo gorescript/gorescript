@@ -15,6 +15,7 @@ GS.MapEditor = function() {
 	this.keys = {
 		Escape: 27,
 		Delete: 46,
+        D: 68,
 		A: 65,
 		Z: 90,
 		G: 71,
@@ -91,7 +92,7 @@ GS.MapEditor.prototype = {
 	initModifyOriginEvent: function() {
 		var that = this;
 		$(document).mousemove(function(e) {
-			if (GS.InputHelper.middleMouseDown) {
+			if (GS.InputHelper.middleMouseDown || (GS.InputHelper.leftMouseDown && GS.InputHelper.shift)) {
 				var mx = GS.InputHelper.mouseX;
 				var my = GS.InputHelper.mouseY;
 				var dx = (mx - that.ox);
@@ -350,7 +351,7 @@ GS.MapEditor.prototype = {
 			this.undoLastAction();
 		}
 
-		if (!GS.InputHelper.keysPressed && GS.InputHelper.isKeyDown(this.keys.Delete)) {
+		if (!GS.InputHelper.keysPressed && (GS.InputHelper.isKeyDown(this.keys.Delete) || GS.InputHelper.isKeyDown(this.keys.D))) {
 			this.layerTools[this.layer].onDelete();
 		}
 

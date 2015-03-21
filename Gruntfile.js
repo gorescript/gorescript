@@ -81,7 +81,17 @@ module.exports = function(grunt) {
 
 		shell: {
 			generateAssetsZip: {
-				command: "gen_assets_zip.sh",
+				command: "node generateAssetsZip.js",
+				options: {
+					stderr: false,
+					execOptions: {
+						cwd: "src/server"
+					}
+				}
+			},
+            
+            startServer: {
+				command: "node server.js",
 				options: {
 					stderr: false,
 					execOptions: {
@@ -100,7 +110,7 @@ module.exports = function(grunt) {
 					keepalive: true,
 				}
 			},
-		},
+		}
 	});
 
 	grunt.loadNpmTasks("grunt-contrib-jshint");
@@ -109,6 +119,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-connect");
 	grunt.loadNpmTasks("grunt-shell");
 
-	grunt.registerTask("default", ["jshint", "shell", "uglify", "copy"]);
+	grunt.registerTask("default", ["jshint", "shell:generateAssetsZip", "uglify", "copy"]);
+    grunt.registerTask("tools", ["shell:startServer"]);
 
 };

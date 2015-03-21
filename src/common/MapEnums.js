@@ -31,6 +31,14 @@ GS.MapEntities = {
 		name: "double_shotgun",
 		type: "Item",
 	},
+    "R": {
+        name: "railgun",
+        type: "Item"
+    },
+    "S": {
+        name: "streetsweeper",
+        type: "Item"
+    },
 	"N": {
 		name: "nom",
 		type: "Monster",
@@ -48,4 +56,8 @@ GS.MapEntities = {
 			attack: 2,
 		},
 	},
+    "Q": {
+        name: "quad",
+        type: "Item",
+    },
 };

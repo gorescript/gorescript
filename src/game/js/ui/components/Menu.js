@@ -277,9 +277,11 @@ GS.UIComponents.Menu.prototype = {
 		this.btnToggleStrafeRight = this.controlsPanel.addToggleButton("strafe right", ["D"]);
 		this.btnToggleUse = this.controlsPanel.addToggleButton("use", ["E"]);
 		this.btnToggleShoot = this.controlsPanel.addToggleButton("shoot", ["mouse left"]);
-		this.btnTogglePistol = this.controlsPanel.addToggleButton("pistol", ["2"]);
+		/*this.btnTogglePistol = this.controlsPanel.addToggleButton("pistol", ["2"]);
 		this.btnToggleShotgun = this.controlsPanel.addToggleButton("shotgun", ["3"]);
 		this.btnToggleHyperBlaster = this.controlsPanel.addToggleButton("hyperblaster", ["4"]);
+		this.btnToggleRailgun = this.controlsPanel.addToggleButton("railgun", ["5"]);
+		this.btnToggleStreetsweeper = this.controlsPanel.addToggleButton("streetsweeper", ["6"]);*/
 
 		this.btnToggleAutomap = this.controlsPanel.addToggleButton("automap", ["TAB"]);
 		this.btnToggleAutomap.button.disabled = true;
@@ -302,9 +304,11 @@ GS.UIComponents.Menu.prototype = {
 			strafeRight: 	this.btnToggleStrafeRight,
 			use: 			this.btnToggleUse,
 			shoot: 			this.btnToggleShoot,
-			pistol: 		this.btnTogglePistol,
+			/*pistol: 		this.btnTogglePistol,
 			shotgun: 		this.btnToggleShotgun,
-			hyperblaster: 	this.btnToggleHyperBlaster
+			hyperblaster: 	this.btnToggleHyperBlaster,
+            railgun:        this.btnToggleRailgun,
+            streetsweeper:  this.btnToggleStreetsweeper*/
 		};
 
 		for (var i in keyButtonMap) {
