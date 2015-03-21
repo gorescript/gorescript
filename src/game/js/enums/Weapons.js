@@ -39,7 +39,7 @@ GS.Weapons = {
         powerLevel: 5,
         ammo: 0,
         ammoMax: 18,
-        ammoClip: 1,
+        ammoClip: 6,
         bulletsPerShot: 1,
         cooldown: 1500,
         hitscan: false

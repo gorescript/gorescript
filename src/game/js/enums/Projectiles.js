@@ -24,7 +24,7 @@ GS.Projectiles = {
 		size: new THREE.Vector3(1, 1, 1),
 		visualSize: new THREE.Vector3(1, 1, 3),
 		rotating: false,
-		speed: 500,
+		speed: 100,
 		maxDistance: 500,
 		color: new THREE.Color().setRGB(1, 1, 1).getHex(),
 		damage: 90,
