@@ -35,6 +35,10 @@ GS.MapEntities = {
         name: "railgun",
         type: "Item"
     },
+    "S": {
+        name: "streetsweeper",
+        type: "Item"
+    },
 	"N": {
 		name: "nom",
 		type: "Monster",

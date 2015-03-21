@@ -357,6 +357,9 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 		if (this.weaponName == "double_shotgun") {
 			name = "shotgun_fire";
 		} else 
+		if (this.weaponName == "streetsweeper") {
+			name = "shotgun_fire";
+		} else 
 		if (this.weaponName == "hyper_blaster") {
 			name = "hyper_blaster_fire";
 		} else 
