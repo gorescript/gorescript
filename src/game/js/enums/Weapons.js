@@ -41,7 +41,7 @@ GS.Weapons = {
         ammoMax: 18,
         ammoClip: 6,
         bulletsPerShot: 1,
-        cooldown: 1500,
+        cooldown: 1600,
         hitscan: false
     }
 };

@@ -54,7 +54,7 @@ GS.Assets[GS.AssetTypes.Texture] = {
 	"nom_glow": 			{ filename: "nom_glow.png", 				type: GS.TextureTypes.Entity },
 	"eye": 					{ filename: "eye.png", 						type: GS.TextureTypes.Entity },
 	"eye_glow": 			{ filename: "eye_glow.png", 				type: GS.TextureTypes.Entity },
-    "quad": 					{ filename: "quad.png", 						type: GS.TextureTypes.Entity },
+    "quad": 				{ filename: "quad.png", 					type: GS.TextureTypes.Entity },
 	"quad_glow": 			{ filename: "quad_glow.png", 				type: GS.TextureTypes.Entity },
 };
 
