@@ -1,4 +1,4 @@
-GS.UIComponents.Menu = function(vectorCanvas, assets) {	
+GS.UIComponents.Menu = function(vectorCanvas, assets) {
 	this.cvs = vectorCanvas;
 	this.assets = assets;
 
@@ -53,7 +53,7 @@ GS.UIComponents.Menu.prototype = {
 	initTopPanel: function() {
 		var that = this;
 
-		this.topPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+		this.topPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160),
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 72, 80);
 
 		this.btnNewGame = this.topPanel.addButton("new game");
@@ -72,7 +72,7 @@ GS.UIComponents.Menu.prototype = {
 	initOptionsPanel: function() {
 		var that = this;
 
-		this.optionsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+		this.optionsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160),
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 60, 65);
 
 		this.btnGraphics = this.optionsPanel.addButton("graphics");
@@ -100,7 +100,7 @@ GS.UIComponents.Menu.prototype = {
 	initGraphicsPanel: function() {
 		var that = this;
 
-		this.graphicsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+		this.graphicsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160),
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
 
 		this.btnToggleHalfSize = this.graphicsPanel.addToggleButton("half-size rendering");
@@ -147,7 +147,7 @@ GS.UIComponents.Menu.prototype = {
 	initSoundPanel: function() {
 		var that = this;
 
-		this.soundPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+		this.soundPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160),
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
 
 		this.numberPickerSound = this.soundPanel.addNumberPicker("sound volume", GS.Settings.sound, GS.Settings.soundMin, GS.Settings.soundMax, 1);
@@ -165,7 +165,7 @@ GS.UIComponents.Menu.prototype = {
 	initGameplayPanel: function() {
 		var that = this;
 
-		this.gameplayPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+		this.gameplayPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160),
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
 
 		this.btnToggleViewBob = this.gameplayPanel.addToggleButton("view bobbing");
@@ -195,26 +195,26 @@ GS.UIComponents.Menu.prototype = {
 	initCheatsPanel: function() {
 		var that = this;
 
-		this.cheatsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+		this.cheatsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160),
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
 
 		this.btnToggleGod = this.cheatsPanel.addToggleButton("god mode");
 		this.btnToggleGod.button.currentStateIndex = 1;
-		this.btnToggleGod.button.onClick = function(e) { 
-			GAME.grid.player.god(); 
+		this.btnToggleGod.button.onClick = function(e) {
+			GAME.grid.player.god();
 			GS.DebugUI.addTempLine("god mode " + e.state);
 		};
 
 		this.btnToggleFly = this.cheatsPanel.addToggleButton("fly mode");
 		this.btnToggleFly.button.currentStateIndex = 1;
-		this.btnToggleFly.button.onClick = function(e) { 
+		this.btnToggleFly.button.onClick = function(e) {
 			GAME.grid.player.fly();
 			GS.DebugUI.addTempLine("fly mode " + e.state);
 		};
 
 		this.btnToggleNoclip = this.cheatsPanel.addToggleButton("noclip mode");
 		this.btnToggleNoclip.button.currentStateIndex = 1;
-		this.btnToggleNoclip.button.onClick = function(e) { 
+		this.btnToggleNoclip.button.onClick = function(e) {
 			GAME.grid.player.noClip();
 			GS.DebugUI.addTempLine("noclip mode " + e.state);
 		};
@@ -222,7 +222,7 @@ GS.UIComponents.Menu.prototype = {
 		this.cheatsPanel.addEmptyRow();
 
 		this.btnCheatsGiveAll = this.cheatsPanel.addButton("give ammo and all weapons");
-		this.btnCheatsGiveAll.onClick = function() { 
+		this.btnCheatsGiveAll.onClick = function() {
 			GAME.grid.player.giveAll();
 			GS.DebugUI.addTempLine("all weapons and max ammo given");
 		};
@@ -236,7 +236,7 @@ GS.UIComponents.Menu.prototype = {
 	initLevelSelectPanel: function() {
 		var that = this;
 
-		this.levelSelectPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+		this.levelSelectPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160),
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 60, 140);
 
 		this.btnLevel1 = this.levelSelectPanel.addImageButton("airstrip one", this.assets.images.thumb_airstrip1);
@@ -258,14 +258,14 @@ GS.UIComponents.Menu.prototype = {
 	initControlsPanel: function() {
 		var that = this;
 
-		this.controlsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+		this.controlsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160),
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 28, 31);
 
 		this.btnToggleMouseInvertY = this.controlsPanel.addToggleButton("invert mouse y axis");
 		this.btnToggleMouseInvertY.button.currentStateIndex = (GS.Settings.mouseInvertY === true) ? 0 : 1;
 		this.btnToggleMouseInvertY.button.onClick = function(e) { GS.Settings.mouseInvertY = (e.state === "on"); };
 
-		this.numberPickerMouse = this.controlsPanel.addNumberPicker("mouse sensitivity", 
+		this.numberPickerMouse = this.controlsPanel.addNumberPicker("mouse sensitivity",
 			GS.Settings.mouse, GS.Settings.mouseMin, GS.Settings.mouseMax, 1);
 		this.numberPickerMouse.numberPicker.onChange = function(e) { GS.Settings.mouse = e.value; };
 
@@ -314,7 +314,7 @@ GS.UIComponents.Menu.prototype = {
 			button.currentStateIndex = 0;
 		}
 
-		function getOnClickEventHandler(actionName) { 
+		function getOnClickEventHandler(actionName) {
 			return function() {
 				GS.KeybindSettings.rebound.modifyKeybind(GS.Keybinds[actionName]);
 			}
@@ -344,7 +344,7 @@ GS.UIComponents.Menu.prototype = {
 
 				GS.Settings.saveSettings();
 
-				var notifications = GAME.uiManager.notifications;				
+				var notifications = GAME.uiManager.notifications;
 				if (notifications) {
 					notifications.useText = "[" + GS.Keybinds.use.controlName + "] to use";
 					notifications.calculateSizes();
@@ -356,7 +356,7 @@ GS.UIComponents.Menu.prototype = {
 	initCreditsPanel: function() {
 		var that = this;
 
-		this.creditsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160), 
+		this.creditsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160),
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 30, 33);
 
 		this.dblLabelCredits1 = this.creditsPanel.addDoubleLabel("code, \"art\"", "sergiu valentin bucur");
@@ -389,16 +389,10 @@ GS.UIComponents.Menu.prototype = {
 
 	initFooter: function() {
 		this.label2 = new GS.UIComponents.MenuLabel(this.cvs, GS.GameVersion,
-			new THREE.Vector2(-12, -130), new THREE.Vector2(1, 1));
+			new THREE.Vector2(-12, -60), new THREE.Vector2(1, 1));
 		this.label2.textAlign = "right";
-		this.label2.fontSize = 30;		
+		this.label2.fontSize = 30;
 		this.children.push(this.label2);
-
-		this.label1 = new GS.UIComponents.MenuLabel(this.cvs, GS.BuildReleaseDate,
-			new THREE.Vector2(-12, -95), new THREE.Vector2(1, 1));
-		this.label1.textAlign = "right";
-		this.label1.fontSize = 30;
-		this.children.push(this.label1);
 
 		this.label3 = new GS.UIComponents.MenuLabel(this.cvs, "feedback: timeinvariantgames @ gmail.com",
 			new THREE.Vector2(-12, -25), new THREE.Vector2(1, 1));

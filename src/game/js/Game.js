@@ -1,5 +1,4 @@
-GS.GameVersion = "v1.1";
-GS.BuildReleaseDate = "january 3, 2015";
+GS.GameVersion = "v1.1.5b";
 
 GS.GameStates = {
 	Dispose: 0,
@@ -22,7 +21,7 @@ GS.Game = function() {
 	this.firstPlay = true;
 	this.mapWon = false;
 	this.restartedLevel = false;
-	
+
 	this.antialias = false;
 	this.clearColor = 0x336699;
 	this.cameraFov = GS.Settings.fov;
@@ -34,7 +33,7 @@ GS.Game = function() {
 	if (GS.BuildOverride === true) {
 		this.useAssetsZip = true;
 	}
-	
+
 	this.showFPS = GS.Settings.showFPS;
 	this.showPerformanceDebugMeters = false;
 };
@@ -74,7 +73,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 	preLoad: function() {
 		this.uiManager.reset();
-		
+
 		this.loadingUI.percentLoaded = 0;
 		this.loadingUI.show();
 
@@ -119,11 +118,11 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 				this.newGame();
 			}
 		} else {
-			this.initComponents(this.assetLoader.assets);			
+			this.initComponents(this.assetLoader.assets);
 			this.uiManager.initComponents(this.assetLoader.assets, this.grid);
 			this.uiManager.useIngameMenu();
 
-			this.nextState = GS.GameStates.Play;			
+			this.nextState = GS.GameStates.Play;
 			this.graphicsManager.monochromeEnabled = false;
 
 			if (this.grid.aiManager.script !== undefined && !this.restartedLevel) {
@@ -177,22 +176,6 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 	onMapWon: function() {
 		this.graphicsManager.monochromeEnabled = false;
-
-		this.trackMapWonEvent();
-	},
-
-	trackMapWonEvent: function() {
-		/* jshint ignore:start */
-		if (typeof ga !== "undefined") {
-			var mapName = this.grid.map.name;
-			var timeSpent = this.grid.aiManager.timeSpent;
-			var seconds = Math.floor(Math.floor(timeSpent) / 1000);
-			var fps = Math.floor(GS.DebugUI.valueTracking.fps.avg);
-
-			var str = mapName + " " + seconds + "s " + fps + "fps";
-			ga("send", "event", "level", "complete", str);
-		}
-		/* jshint ignore:end */
 	},
 
 	menu: function() {
@@ -253,7 +236,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		}
 
 		this.mapName = name;
-		this.nextState = GS.GameStates.Dispose; 
+		this.nextState = GS.GameStates.Dispose;
 	},
 
 	newGame: function() {
@@ -261,8 +244,8 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.closeMenu();
 		}
 
-		this.mapName = "airstrip1"; 
-		this.nextState = GS.GameStates.Dispose; 
+		this.mapName = "airstrip1";
+		this.nextState = GS.GameStates.Dispose;
 	},
 
 	initComponents: function(assets) {
@@ -271,7 +254,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.mapWon = false;
 
 		var viewFactory = new GS.ViewFactory(this.renderer, map, assets);
-		viewFactory.init();		
+		viewFactory.init();
 		var gridFactory = new GS.GridFactory(viewFactory, this.soundManager, this.renderer, this.scene, this.camera);
 		this.grid = gridFactory.getGrid(map);
 
@@ -285,7 +268,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 		this.grid.update();
 		this.graphicsManager.setGrid(this.grid);
-		
+
 		this.grid.player.controls.addEventListener("pointerLockDisabled", function() { that.openMenu(); });
 
 		// console.log("collision triangles", viewFactory.triangleCount);
@@ -308,7 +291,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 				this.updated = true;
 				this.preLoad();
 			}
-		} else 
+		} else
 		if (this.state == GS.GameStates.Loading) {
 			this.updated = true;
 		} else
@@ -317,7 +300,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 				this.updated = true;
 				this.postLoad();
 			}
-		} else 
+		} else
 		if (this.state == GS.GameStates.Play) {
 			this.updated = true;
 			this.play();
@@ -339,7 +322,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 				this.updated = false;
 			}
 		}
-		
+
 		if (this.showPerformanceDebugMeters) {
 			this.updateTime = (window.performance.now() - time).toFixed(2);
 			GS.DebugUI.trackNumericValue("updateTime", this.updateTime);
@@ -354,13 +337,13 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 		if (this.state == GS.GameStates.PreLoad) {
 			this.loadingUI.draw();
-		} else 
+		} else
 		if (this.state == GS.GameStates.Loading) {
 			this.loadingUI.draw();
 		} else
 		if (this.state == GS.GameStates.PostLoad) {
 			this.loadingUI.draw();
-		} else 
+		} else
 		if (this.state == GS.GameStates.Play || this.state == GS.GameStates.Menu) {
 			if (this.grid !== undefined) {
 				this.graphicsManager.draw();
