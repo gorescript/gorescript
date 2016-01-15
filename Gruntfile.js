@@ -20,11 +20,11 @@ module.exports = function(grunt) {
 				separator: ";",
 				preserveComments: "some",
 				banner: [
-					"/*! gorescript / http://timeinvariant.github.io/gorescript */", "",
+					"/*! gorescript / http://gorescript.com */", "",
 					"/*! three.js / threejs.org/license */",
 					"/*! tween.js - http://github.com/sole/tween.js */", "", "",
 				].join("\n")
-			},			
+			},
 			build: {
 				files: [
 					{
@@ -41,18 +41,18 @@ module.exports = function(grunt) {
 						],
 
 						dest: "build/gorescript-deps.min.js"
-					},					
+					},
 					{
 						src: [
 							"src/game/js/BuildOverride.js",
-							"src/common/Base.js",              
-							"src/common/*.js",   
+							"src/common/Base.js",
+							"src/common/*.js",
 
 							"src/game/js/ui/*.js",
 							"src/game/js/ui/components/*.js",
 							"src/game/js/helpers/*.js",
 							"src/game/js/shaders/*.js",
-							"src/game/js/enums/*.js",              
+							"src/game/js/enums/*.js",
 							"src/game/js/grid-objects/GridObject.js",
 							"src/game/js/grid-objects/*.js",
 							"src/game/js/loaders/*.js",

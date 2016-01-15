@@ -1,4 +1,4 @@
-GS.GameVersion = "v1.1.5b";
+GS.GameVersion = "v1.1.5c";
 
 GS.GameStates = {
 	Dispose: 0,
