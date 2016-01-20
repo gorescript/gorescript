@@ -211,7 +211,7 @@ GS.ZipAssetLoader.prototype = {
 			this.assets[GS.AssetTypes.Map][name] = this.zip.file(path).asText();
 		} else {
 			if (GAME.isTestMap()) {
-				that.assets[GS.AssetTypes.Map][name] = this.mapLoader.loadTestMap();
+				this.assets[GS.AssetTypes.Map][name] = this.mapLoader.loadTestMap();
 			}
 		}
 
