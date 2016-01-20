@@ -51,7 +51,7 @@ GS.ZipAssetLoader.prototype = {
 		}
 	},
 
-	add: function(name, filename, type) {		
+	add: function(name, filename, type) {
 		this.queue.push({
 			name: name,
 			filename: filename,
@@ -115,7 +115,7 @@ GS.ZipAssetLoader.prototype = {
 				break;
 			case GS.AssetTypes.UIWidget:
 				this.loadUIWidget(asset.name, asset.filename);
-				break;	
+				break;
 			case GS.AssetTypes.Mesh:
 				this.loadMesh(asset.name, asset.filename);
 				break;
@@ -149,7 +149,7 @@ GS.ZipAssetLoader.prototype = {
 	getTextureFromZip: function(path) {
 		var img = this.getImageFromZip(path);
 		var tex = new THREE.Texture(img);
-		tex.needsUpdate = true;		
+		tex.needsUpdate = true;
 
 		return tex;
 	},
@@ -162,7 +162,7 @@ GS.ZipAssetLoader.prototype = {
 	},
 
 	loadCubeTexture: function(name, folder) {
-		var path = this.path[GS.AssetTypes.CubeTexture] + folder + "/";		
+		var path = this.path[GS.AssetTypes.CubeTexture] + folder + "/";
 
 		var tex = new THREE.Texture();
 		tex.image = [];
@@ -207,7 +207,14 @@ GS.ZipAssetLoader.prototype = {
 	loadMap: function(name, filename) {
 		var path = this.path[GS.AssetTypes.Map] + filename;
 
-		this.assets[GS.AssetTypes.Map][name] = this.zip.file(path).asText();
+		if (name !== "testMap") {
+			this.assets[GS.AssetTypes.Map][name] = this.zip.file(path).asText();
+		} else {
+			if (GAME.isTestMap()) {
+				that.assets[GS.AssetTypes.Map][name] = this.mapLoader.loadTestMap();
+			}
+		}
+
 		this.checkIfFullyLoaded();
 	},
 
