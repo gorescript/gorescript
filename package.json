@@ -5,19 +5,13 @@
   "homepage": "http://timeinvariant.github.io/gorescript",
   "repository": {
     "type": "git",
-    "url": "https://github.com/timeinvariant/gorescript.git"
+    "url": "https://github.com/gorescript/gorescript.git"
   },
   "author": {
-    "name": "Sergiu Valentin Bucur",
-    "email": "timeinvariantgames@gmail.com",
-    "url": "http://timeinvariant.github.io/"
+    "name": "Sergiu Bucur",
+    "email": "sergiu.bucur@outlook.com"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/timeinvariant/gorescript/blob/master/LICENSE.txt"
-    }
-  ],
+  "license": "MIT",
   "devDependencies": {
     "archiver": "^0.10.0-alpha",
     "grunt": "^0.4.5",

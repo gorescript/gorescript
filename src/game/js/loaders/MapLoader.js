@@ -7,12 +7,22 @@ GS.MapLoader = function() {
 GS.MapLoader.prototype = {
 	constructor: GS.MapLoader,
 
+	loadTestMap: function() {
+		var testMap = window.localStorage.testMap;
+
+		if (!testMap) {
+			alert("testMap not found in localStorage");
+		}
+
+		return testMap;
+	},
+
 	load: function(name, filename, callback) {
 		var that = this;
 		var path = this.mapPath + filename;
 
-		$.ajax({ 
-			url: path, 
+		$.ajax({
+			url: path,
 			dataType: "text",
 			success: function(jsonStr) {
 				callback(jsonStr);
@@ -38,7 +48,7 @@ GS.MapLoader.prototype = {
 
 		map.bounds = this.getMapBounds(map);
 
-		return map;		
+		return map;
 	},
 
 	getMapBounds: function(map) {

@@ -45,7 +45,7 @@ GS.AssetLoader.prototype = {
 		}
 	},
 
-	add: function(name, filename, type) {		
+	add: function(name, filename, type) {
 		this.queue.push({
 			name: name,
 			filename: filename,
@@ -56,7 +56,7 @@ GS.AssetLoader.prototype = {
 
 	load: function() {
 		var that = this;
-		
+
 		this.totalAssets = this.queue.length + 1;
 		this.assetsToLoad++;
 		this.fontLoader.load("hudFont", GS.CustomFontFile, function() {
@@ -86,7 +86,7 @@ GS.AssetLoader.prototype = {
 				break;
 			case GS.AssetTypes.UIWidget:
 				this.loadUIWidget(asset.name, asset.filename);
-				break;	
+				break;
 			case GS.AssetTypes.Mesh:
 				this.loadMesh(asset.name, asset.filename);
 				break;
@@ -103,7 +103,7 @@ GS.AssetLoader.prototype = {
 				this.loadSound(asset.name, asset.filename, GS.AssetTypes.MusicTrack);
 				break;
 		}
-	},	
+	},
 
 	loadTexture: function(name, filename) {
 		var that = this;
@@ -166,10 +166,15 @@ GS.AssetLoader.prototype = {
 	loadMap: function(name, filename) {
 		var that = this;
 
-		this.mapLoader.load(name, filename, function(map) {
-			that.assets[GS.AssetTypes.Map][name] = map;
-			that.checkIfFullyLoaded();
-		});
+		if (name !== "testMap") {
+			this.mapLoader.load(name, filename, function(map) {
+				that.assets[GS.AssetTypes.Map][name] = map;
+				that.checkIfFullyLoaded();
+			});
+		} else {
+			that.assets[GS.AssetTypes.Map][name] = this.mapLoader.loadTestMap();
+			this.checkIfFullyLoaded();
+		}
 	},
 
 	loadScript: function(name, filename) {
@@ -178,7 +183,7 @@ GS.AssetLoader.prototype = {
 
 		$.ajax({
 			url: path,
-			dataType: "script", 
+			dataType: "script",
 			crossDomain: true,
 			success: function() {
 				that.checkIfFullyLoaded();

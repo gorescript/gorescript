@@ -394,7 +394,7 @@ GS.UIComponents.Menu.prototype = {
 		this.label2.fontSize = 30;
 		this.children.push(this.label2);
 
-		this.label3 = new GS.UIComponents.MenuLabel(this.cvs, "feedback: timeinvariantgames @ gmail.com",
+		this.label3 = new GS.UIComponents.MenuLabel(this.cvs, "twitter: @gorescript",
 			new THREE.Vector2(-12, -25), new THREE.Vector2(1, 1));
 		this.label3.textAlign = "right";
 		this.label3.fontSize = 30;

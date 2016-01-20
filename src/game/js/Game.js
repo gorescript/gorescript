@@ -27,7 +27,12 @@ GS.Game = function() {
 	this.cameraFov = GS.Settings.fov;
 	this.cameraFar = 1500;
 
-	this.noMenu = false;
+	if (this.isTestMap()) {
+		this.noMenu = true;
+	} else {
+		this.noMenu = false;
+	}
+
 	this.useAssetsZip = false;
 
 	if (GS.BuildOverride === true) {
@@ -244,8 +249,17 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.closeMenu();
 		}
 
-		this.mapName = "airstrip1";
+		if (this.isTestMap()) {
+			this.mapName = "testMap";
+		} else {
+			this.mapName = "airstrip1";
+		}
+
 		this.nextState = GS.GameStates.Dispose;
+	},
+
+	isTestMap: function() {
+		return window.location.search.toLowerCase().indexOf("testmap") > -1;
 	},
 
 	initComponents: function(assets) {
