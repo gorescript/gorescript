@@ -172,7 +172,10 @@ GS.AssetLoader.prototype = {
 				that.checkIfFullyLoaded();
 			});
 		} else {
-			that.assets[GS.AssetTypes.Map][name] = this.mapLoader.loadTestMap();
+			if (GAME.isTestMap()) {
+				that.assets[GS.AssetTypes.Map][name] = this.mapLoader.loadTestMap();
+			}
+
 			this.checkIfFullyLoaded();
 		}
 	},
