@@ -1,19 +1,9 @@
+var generateAssetsZip = require("./grunt-config/generateAssetsZip");
+
 module.exports = function(grunt) {
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON("package.json"),
-
-		jshint: {
-			all: [
-				"src/game/js/**/*.js",
-				"src/common/**/*.js",
-				"src/map-editor/js/**/*.js",
-				"src/voxel-editor/js/**/*.js",
-			],
-			options: {
-				jshintrc: true
-			}
-		},
 
 		uglify: {
 			options: {
@@ -73,42 +63,21 @@ module.exports = function(grunt) {
 			main: {
 				files: [
 					{ src: "src/game/index_build.html", dest: "build/index.html" },
-					{ src: "src/game/assets/fonts/capsuula.woff", dest: "build/capsuula.woff" },
-					{ src: "src/server/assets.zip", dest: "build/assets.zip" }
+					{ src: "src/game/assets/fonts/capsuula.woff", dest: "build/capsuula.woff" }
 				]
 			}
-		},
-
-		shell: {
-			generateAssetsZip: {
-				command: "gen_assets_zip.sh",
-				options: {
-					stderr: false,
-					execOptions: {
-						cwd: "src/server"
-					}
-				}
-			}
-		},
-
-		connect: {
-			client: {
-				options: {
-					port: 9000,
-					hostname: "localhost",
-					base: "./",
-					keepalive: true,
-				}
-			},
-		},
+		}
 	});
 
-	grunt.loadNpmTasks("grunt-contrib-jshint");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-copy");
-	grunt.loadNpmTasks("grunt-contrib-connect");
-	grunt.loadNpmTasks("grunt-shell");
 
-	grunt.registerTask("default", ["jshint", "shell", "uglify", "copy"]);
+	grunt.registerTask("generate-assets-zip", "generate-assets-zip", function() {
+		var done = this.async();
+
+		generateAssetsZip(done);
+	});
+
+	grunt.registerTask("default", ["uglify", "copy", "generate-assets-zip"]);
 
 };
