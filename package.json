@@ -12,6 +12,9 @@
     "email": "sergiu.bucur@outlook.com"
   },
   "license": "MIT",
+  "scripts": {
+    "plato": "plato -r -d report src\\game\\js"
+  },
   "devDependencies": {
     "archiver": "^0.10.0-alpha",
     "grunt": "^0.4.5",

@@ -1,8 +1,7 @@
 build/
+report/
 node_modules/
 src/game/assets/
-src/server/iisnode/
-src/server/assets.zip
 .DS_Store
 *.sublime-project
 *.sublime-workspace
