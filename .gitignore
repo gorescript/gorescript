@@ -1,4 +1,4 @@
-build/
+dist/
 report/
 node_modules/
 src/game/assets/

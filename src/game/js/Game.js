@@ -33,12 +33,6 @@ GS.Game = function() {
 		this.noMenu = false;
 	}
 
-	this.useAssetsZip = false;
-
-	if (GS.BuildOverride === true) {
-		this.useAssetsZip = true;
-	}
-
 	this.showFPS = GS.Settings.showFPS;
 	this.showPerformanceDebugMeters = false;
 };
@@ -96,11 +90,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	initAssetLoader: function() {
 		var that = this;
 
-		if (this.useAssetsZip) {
-			this.assetLoader = new GS.ZipAssetLoader(this.soundManager.ctx);
-		} else {
-			this.assetLoader = new GS.AssetLoader(this.soundManager.ctx);
-		}
+		this.assetLoader = new GS.ZipAssetLoader(this.soundManager.ctx);
 
 		this.assetLoader.init();
 		this.assetLoader.addEventListener("progress", function(e) {

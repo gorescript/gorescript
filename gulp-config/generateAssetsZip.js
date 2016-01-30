@@ -1,8 +1,13 @@
+var gulp = require("gulp");
+var fs = require("fs");
+var archiver = require("archiver");
+
 var GS = {};
 var assetPaths = {};
 
-var fs = require("fs");
-var archiver = require("archiver");
+gulp.task("generateAssetsZip", function (cb) {
+	run(cb);
+});
 
 function run(done) {
 	loadAssetManifest();
@@ -10,7 +15,7 @@ function run(done) {
 }
 
 function loadAssetManifest() {
-	var path = __dirname + "/../src/game/js/enums/Assets.js";
+	var path = "./src/game/js/enums/Assets.js";
 	var data = fs.readFileSync(path, "utf8");
 
 	eval(data);
@@ -26,13 +31,14 @@ function loadAssetManifest() {
 }
 
 function buildZip(done) {
-	var output = fs.createWriteStream(__dirname + "/../build/assets.zip");
-	var archive = archiver("zip");
+	var output = fs.createWriteStream("./dist/assets.zip");
 
 	output.on("close", function() {
 		console.log(archive.pointer() + " total bytes");
 		done();
 	});
+
+	var archive = archiver("zip");
 
 	archive.on("error", function(err) {
 		throw err;
@@ -40,7 +46,7 @@ function buildZip(done) {
 
 	archive.pipe(output);
 
-	var basePath = __dirname + "/../src/game/assets/";
+	var basePath = "./src/game/assets/";
 
 	Object.keys(GS.AssetTypes).forEach(function(j) {
 		var key = GS.AssetTypes[j];
@@ -67,5 +73,3 @@ function buildZip(done) {
 
 	archive.finalize();
 }
-
-module.exports = run;

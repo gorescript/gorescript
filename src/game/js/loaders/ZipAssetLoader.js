@@ -6,11 +6,7 @@ GS.ZipAssetLoader = function(audioContext) {
 	this.fontLoader = new GS.FontLoader();
 	this.fontLoader.fontPath = "";
 
-	this.zipPath = "../server/assets.zip";
-
-	if (GS.BuildOverride === true) {
-		this.zipPath = "assets.zip";
-	}
+	this.zipPath = "assets.zip";
 
 	this.path = {};
 	this.path[GS.AssetTypes.Texture] = "textures/";
