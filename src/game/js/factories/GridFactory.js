@@ -5,7 +5,7 @@ GS.GridFactory = function(viewFactory, soundManager, renderer, scene, camera) {
 	this.scene = scene;
 	this.camera = camera;
 
-	this.gridCellSize = 8;	
+	this.gridCellSize = 8;
 };
 
 GS.GridFactory.prototype = {
@@ -51,7 +51,8 @@ GS.GridFactory.prototype = {
 		var sectors = map.layerObjects[GS.MapLayers.Sector];
 		var sectorLinks = map.sectorLinks;
 		if (sectorLinks === undefined) {
-			throw "sector links not found";
+			GAME.handleFatalError("invalid map - sector links not found");
+			return;
 		}
 
 		var regionHelper = new GS.RegionHelper();
@@ -92,7 +93,7 @@ GS.GridFactory.prototype = {
 					floor.region = this.getRegionBySectorId(grid, sector.id);
 					this.viewFactory.applySectorView(floor, false);
 					floor.assignToCells(gridLocation);
-				}			
+				}
 
 				if (hasCeiling) {
 					var ceiling = new GS.Concrete(grid, GS.MapLayers.Sector, sector);
@@ -104,14 +105,14 @@ GS.GridFactory.prototype = {
 
 			if (sector.door === true) {
 				this.addDoor(grid, gridLocation, sector);
-			} else 
+			} else
 			if (sector.elevator === true) {
 				this.addElevator(grid, gridLocation, sector);
 			}
 		}
 
-		var segs = grid.map.layerObjects[GS.MapLayers.Segment];		
-		for (var i = 0; i < segs.length; i++) {			
+		var segs = grid.map.layerObjects[GS.MapLayers.Segment];
+		for (var i = 0; i < segs.length; i++) {
 			var seg = segs[i];
 
 			var points = [];
@@ -132,7 +133,7 @@ GS.GridFactory.prototype = {
 			if (seg.type === GS.SegmentTypes.Switch) {
 				this.addSwitch(grid, gridLocation, seg);
 			}
-		}		
+		}
 
 		var entities = grid.map.layerObjects[GS.MapLayers.Entity];
 		for (var i = 0; i < entities.length; i++) {
@@ -195,6 +196,7 @@ GS.GridFactory.prototype = {
 			}
 		}
 
-		throw "sector has no corresponding region";
+		GAME.handleFatalError("sector has no corresponding region");
+		return;
 	},
 };

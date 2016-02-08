@@ -41,7 +41,8 @@ GS.AnimationView.prototype = {
 		Object.keys(this.animations).forEach(function(key) {
 			var loop = that.loops[key];
 			if (that.loops[key] === undefined) {
-				throw "animation loop not found";
+				GAME.handleFatalError("animation loop not found");
+				return;
 			}
 
 			loop.index = 0;
@@ -79,7 +80,7 @@ GS.AnimationView.prototype = {
 			if (loop === this.loops.inactive) {
 				this.floatAngle += this.inactiveFloatSpeed;
 			}
-			
+
 			this.positionYOffset = this.floatYDelta * Math.sin(this.floatAngle);
 
 			if (Math.abs(this.painAngle) > 0) {
@@ -130,7 +131,7 @@ GS.AnimationView.prototype = {
 
 	setLoop: function(name) {
 		this.currentLoop = this.loops[name];
-		this.switchMesh();		
+		this.switchMesh();
 	},
 
 	switchMesh: function() {

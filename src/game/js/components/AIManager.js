@@ -46,11 +46,13 @@ GS.AIManager.prototype = {
 			if (monster.startingSector !== undefined) {
 				var region = that.getRegionBySectorId(monster.startingSector.id);
 				if (region === undefined) {
-					throw "sector not in region";
+					GAME.handleFatalError("sector not in region");
+					return;
 				}
 				region.monsters.push(monster);
 			} else {
-				throw "monster " + monster.id + " has no starting sector";
+				GAME.handleFatalError("monster " + monster.id + " has no starting sector");
+				return;
 			}
 		});
 	},
@@ -82,7 +84,7 @@ GS.AIManager.prototype = {
 			} else
 			if (gridObject instanceof GS.Concrete && gridObject.type == GS.MapLayers.Sector) {
 				library.sectors[gridObject.sourceObj.id] = gridObject;
-			} else 
+			} else
 			if (gridObject instanceof GS.Switch) {
 				library.switches[gridObject.segment.id] = gridObject;
 			}
@@ -295,6 +297,6 @@ GS.AIManager.prototype = {
 			}
 		}
 
-		throw "sector has no corresponding region";
+		GAME.handleFatalError("sector has no corresponding region");
 	},
 };

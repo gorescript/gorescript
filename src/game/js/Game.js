@@ -1,4 +1,5 @@
-GS.GameVersion = "v1.1.5d";
+GS.GameVersion = "v1.1.6";
+GS.ReleaseDate = "february 2016";
 
 GS.GameStates = {
 	Dispose: 0,
@@ -32,6 +33,8 @@ GS.Game = function() {
 	} else {
 		this.noMenu = false;
 	}
+
+	this.firstTimeInMenu = true;
 
 	this.showFPS = GS.Settings.showFPS;
 	this.showPerformanceDebugMeters = false;
@@ -216,6 +219,11 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.graphicsManager.monochromeEnabled = false;
 		}
 
+		if (this.firstTimeInMenu) {
+			this.uiManager.removeNewsBox();
+			this.firstTimeInMenu = false;
+		}
+
 		this.uiManager.menuActive = false;
 		GS.DebugUI.visible = GS.Settings.showHUD;
 	},
@@ -242,7 +250,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		if (this.isTestMap()) {
 			this.mapName = "testMap";
 		} else {
-			this.mapName = "airstrip1";
+		this.mapName = "airstrip1";
 		}
 
 		this.nextState = GS.GameStates.Dispose;
@@ -376,6 +384,24 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.grid.onResize();
 			this.grid.player.playerView.onResize();
 		}
+	},
+
+	handleFatalError: function(message) {
+		var that = this;
+
+		document.body.innerHTML = "<span class='fatal-error'> fatal error: '" + message + "'</span><br/>";
+		document.body.style.padding = "20px";
+
+		var a = document.createElement("a");
+		a.innerHTML = "click here or refresh page to restart";
+		a.className = "fatal-error-link";
+		a.onclick = function() {
+			window.location.reload();
+		};
+
+		document.body.appendChild(a);
+
+		this.nextState = GS.GameStates.Dispose;
 	},
 
 	updateFov: function() {

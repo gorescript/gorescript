@@ -1,4 +1,5 @@
 app/
+app-media/
 dist/
 report/
 node_modules/

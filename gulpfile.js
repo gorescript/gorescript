@@ -12,7 +12,7 @@ gulp.task("default", function() {
 	run();
 
 	gulp.watch([
-		"./src/game/index.html",
+		"./src/game/index.html"
 		], ["copy"]);
 
 	gulp.watch(["./src/**/*.js"], ["js-client"]);

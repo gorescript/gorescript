@@ -12,7 +12,8 @@ GS.MusicManager.prototype = {
 		if (typeof webkitAudioContext !== "undefined") {
 			ctx = new webkitAudioContext();
 		} else {
-			throw "No AudioContext support";
+			GAME.handleFatalError("No AudioContext support");
+			return;
 		}
 
 		this.ctx = ctx;
@@ -55,7 +56,7 @@ GS.MusicManager.prototype = {
 			};
 		}
 	},
-	
+
 	set volume(value) {
 		this._volume = value;
 		if (this.gainNode !== undefined) {

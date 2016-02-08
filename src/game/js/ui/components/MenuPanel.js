@@ -109,7 +109,7 @@ GS.UIComponents.MenuPanel.prototype = {
 		var numberPickerOffset = offset.clone();
 		var numberPickerSize = new THREE.Vector2(this.size.x * 0.2, this.rowHeight);
 		numberPickerOffset.x += this.size.x * 0.5 + 10;
-		var numberPicker = new GS.UIComponents.MenuNumberPicker(this.cvs, numberPickerOffset, this.pos, numberPickerSize, 
+		var numberPicker = new GS.UIComponents.MenuNumberPicker(this.cvs, numberPickerOffset, this.pos, numberPickerSize,
 			this.fontSize, value, min, max, step, onChange);
 
 		this.children.push(numberPicker);
@@ -126,7 +126,7 @@ GS.UIComponents.MenuPanel.prototype = {
 		var offset = this.getRowOffset();
 		var imageButtonOffset = offset.clone();
 		var imageButtonSize = new THREE.Vector2(this.size.x, this.rowHeight);
-		var imageButton = new GS.UIComponents.MenuImageButton(this.cvs, imageButtonOffset, this.pos, 
+		var imageButton = new GS.UIComponents.MenuImageButton(this.cvs, imageButtonOffset, this.pos,
 			imageButtonSize, this.fontSize, text, image, onClick);
 
 		this.children.push(imageButton);
@@ -144,7 +144,8 @@ GS.UIComponents.MenuPanel.prototype = {
 		offset.y += this.rowOffset;
 
 		if (Math.abs(offset.y - this.offset.y) > this.size.y) {
-			throw "menu panel exceeds height";
+			GAME.handleFatalError("menu panel exceeds height");
+			return;
 		}
 
 		return offset;

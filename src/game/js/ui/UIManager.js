@@ -77,7 +77,7 @@ GS.UIManager.prototype = {
 		this.hidden = false;
 	},
 
-	hide: function() {		
+	hide: function() {
 		this.cvs.hide();
 		this.hidden = true;
 	},
@@ -102,7 +102,7 @@ GS.UIManager.prototype = {
 			this.menu.draw();
 
 			this.cvs.flip();
-		} else 
+		} else
 		if (this.winScreen.visible) {
 			this.cvs.clear();
 			this.winScreen.draw();
@@ -150,6 +150,10 @@ GS.UIManager.prototype = {
 		}
 
 		return false;
+	},
+
+	removeNewsBox: function() {
+		this.menu.removeNewsBox();
 	},
 
 	useIngameMenu: function() {

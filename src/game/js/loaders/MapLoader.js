@@ -34,17 +34,24 @@ GS.MapLoader.prototype = {
 	},
 
 	parse: function(text) {
-		var map = JSON.parse(text, function(k, v) {
-			if (v instanceof Object) {
-				if (v.x !== undefined && v.y !== undefined && v.z !== undefined) {
-					return new THREE.Vector3(v.x, v.y, v.z);
-				} else
-				if (v.x !== undefined && v.y !== undefined) {
-					return new THREE.Vector2(v.x, v.y);
+		var map;
+
+		try {
+			map = JSON.parse(text, function(k, v) {
+				if (v instanceof Object) {
+					if (v.x !== undefined && v.y !== undefined && v.z !== undefined) {
+						return new THREE.Vector3(v.x, v.y, v.z);
+					} else
+					if (v.x !== undefined && v.y !== undefined) {
+						return new THREE.Vector2(v.x, v.y);
+					}
 				}
-			}
-			return v;
-		});
+				return v;
+			});
+		}
+		catch (ex) {
+			GAME.handleFatalError("invalid map - parse error");
+		}
 
 		map.bounds = this.getMapBounds(map);
 

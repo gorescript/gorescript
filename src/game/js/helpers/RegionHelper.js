@@ -30,7 +30,7 @@ GS.RegionHelper.prototype = {
 			var obj = sectorDict[keys[i]];
 			obj.index = sectorGraph.getVertexIndex(obj.sector);
 		}
-		
+
 		sectorGraph.computeVertexNeighborSets();
 
 		return {
@@ -56,7 +56,7 @@ GS.RegionHelper.prototype = {
 				}
 				doorCount++;
 			}
-		}		
+		}
 
 		var regions = [];
 		if (doorCount > 0) {
@@ -72,7 +72,7 @@ GS.RegionHelper.prototype = {
 				}
 				if (visited[id]) {
 					continue;
-				}					
+				}
 
 				visited[id] = true;
 				seeds[seedId].sectorIds[id] = true;
@@ -102,7 +102,7 @@ GS.RegionHelper.prototype = {
 
 				for (var j in region.doorIds) {
 					for (var k = 0; k < regions.length; k++) {
-						if (k !== i) {	
+						if (k !== i) {
 							var region2 = regions[k];
 							for (var e in region2.doorIds) {
 								if (e === j) {
@@ -148,6 +148,7 @@ GS.RegionHelper.prototype = {
 			}
 		}
 
-		throw "sector " + id + " not found";
+		GAME.handleFatalError("sector " + id + " not found");
+		return;
 	},
 };

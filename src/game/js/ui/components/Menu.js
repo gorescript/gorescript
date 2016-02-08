@@ -46,6 +46,7 @@ GS.UIComponents.Menu.prototype = {
 		this.initCheatsPanel();
 		this.initLevelSelectPanel();
 		this.initFooter();
+		this.initNewsBox();
 
 		this.activePanel = this.topPanel;
 	},
@@ -388,17 +389,40 @@ GS.UIComponents.Menu.prototype = {
 	},
 
 	initFooter: function() {
-		this.label2 = new GS.UIComponents.MenuLabel(this.cvs, GS.GameVersion,
-			new THREE.Vector2(-12, -60), new THREE.Vector2(1, 1));
+		this.label1 = new GS.UIComponents.MenuLabel(this.cvs, GS.GameVersion,
+			new THREE.Vector2(-20, -105), new THREE.Vector2(1, 1));
+		this.label1.textAlign = "right";
+		this.label1.fontSize = 30;
+		this.children.push(this.label1);
+
+		this.label2 = new GS.UIComponents.MenuLabel(this.cvs, GS.ReleaseDate,
+			new THREE.Vector2(-20, -70), new THREE.Vector2(1, 1));
 		this.label2.textAlign = "right";
 		this.label2.fontSize = 30;
 		this.children.push(this.label2);
 
 		this.label3 = new GS.UIComponents.MenuLabel(this.cvs, "twitter: @gorescript",
-			new THREE.Vector2(-12, -25), new THREE.Vector2(1, 1));
+			new THREE.Vector2(-20, -35), new THREE.Vector2(1, 1));
 		this.label3.textAlign = "right";
 		this.label3.fontSize = 30;
 		this.children.push(this.label3);
+	},
+
+	initNewsBox: function() {
+		var div = document.createElement("div");
+
+		div.className = "news-box";
+
+		var a = document.createElement("a");
+		a.href = "http://gorescript.com";
+		a.target = "_blank";
+		a.innerHTML = "NEWS!";
+
+		div.appendChild(a);
+
+		document.body.appendChild(div);
+
+		this.newsBox = div;
 	},
 
 	switchToIngame: function() {
@@ -429,4 +453,9 @@ GS.UIComponents.Menu.prototype = {
 			this.children[i].draw();
 		}
 	},
+
+	removeNewsBox: function() {
+		$(this.newsBox).remove();
+		this.newsBox = undefined;
+	}
 };
