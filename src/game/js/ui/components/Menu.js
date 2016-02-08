@@ -409,20 +409,8 @@ GS.UIComponents.Menu.prototype = {
 	},
 
 	initNewsBox: function() {
-		var div = document.createElement("div");
-
-		div.className = "news-box";
-
-		var a = document.createElement("a");
-		a.href = "http://gorescript.com";
-		a.target = "_blank";
-		a.innerHTML = "NEWS!";
-
-		div.appendChild(a);
-
-		document.body.appendChild(div);
-
-		this.newsBox = div;
+		this.newsBox = $(".news-box");
+		this.newsBox.show();
 	},
 
 	switchToIngame: function() {
@@ -455,7 +443,7 @@ GS.UIComponents.Menu.prototype = {
 	},
 
 	removeNewsBox: function() {
-		$(this.newsBox).remove();
+		this.newsBox.remove();
 		this.newsBox = undefined;
 	}
 };

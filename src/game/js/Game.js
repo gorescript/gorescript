@@ -1,4 +1,4 @@
-GS.GameVersion = "v1.1.6";
+GS.GameVersion = "v1.2.0";
 GS.ReleaseDate = "february 2016";
 
 GS.GameStates = {
@@ -384,6 +384,34 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.grid.onResize();
 			this.grid.player.playerView.onResize();
 		}
+	},
+
+	customMap: function() {
+		var that = this;
+
+		var customMapInput = $("#customMapInput");
+		var files = customMapInput[0].files;
+
+		if (files === undefined || files.length === 0) {
+			customMapInput.trigger("click");
+			return;
+		}
+
+		var file = files[0];
+		var fileReader = new FileReader();
+
+		fileReader.onload = (e) => {
+			that.assetLoader.assets[GS.AssetTypes.Map].customMap = e.target.result;
+
+			that.loadLevel("customMap");
+		};
+
+		fileReader.onerror = function(e) {
+			GAME.handleFatalError("file read error - " + e.target.error.code);
+		};
+
+		fileReader.readAsText(file);
+		customMapInput.val("");
 	},
 
 	handleFatalError: function(message) {
