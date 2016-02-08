@@ -61,6 +61,10 @@ GS.MapLoader.prototype = {
 	getMapBounds: function(map) {
 		var points = [];
 
+		if (!map.layerObjects) {
+			GAME.handleFatalError("invalid map - no layer objects");
+		}
+
 		var segs = map.layerObjects[GS.MapLayers.Segment];
 		for (var i = 0; i < segs.length; i++) {
 			var seg = segs[i];
