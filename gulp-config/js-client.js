@@ -1,5 +1,6 @@
 var gulp = require("gulp");
 var gulpif = require("gulp-if");
+var gulpUtil = require("gulp-util");
 var uglify = require("gulp-uglify");
 var concat = require("gulp-concat-util");
 var insert = require("gulp-insert");
@@ -37,7 +38,7 @@ gulp.task("js-client", function () {
 		.pipe(gulpif(global.production, uglify({
 			mangle: false,
 			preserveComments: "license"
-		})))
+		}).on("error", gulpUtil.log)))
 
 		.pipe(gulp.dest(global.distFolder));
 });

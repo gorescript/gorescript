@@ -400,7 +400,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		var file = files[0];
 		var fileReader = new FileReader();
 
-		fileReader.onload = (e) => {
+		fileReader.onload = function(e) {
 			that.assetLoader.assets[GS.AssetTypes.Map].customMap = e.target.result;
 
 			that.loadLevel("customMap");
