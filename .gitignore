@@ -1,5 +1,10 @@
-app/
-app-media/
+app/app.zip
+app/assets.zip
+app/capsuula.woff
+app/gorescript-deps.min.js
+app/gorescript.min.js
+app/index.html
+
 dist/
 report/
 node_modules/
