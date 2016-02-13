@@ -12,36 +12,50 @@ GS.GameStates = {
 
 GS.Game = function() {
 	GS.Base.call(this);
-
-	GS.Settings.loadSettings();
-
-	this.state = GS.GameStates.PreLoad;
-	this.nextState = null;
-	this.updated = false;
-	this.firstLoad = true;
-	this.firstPlay = true;
-	this.mapWon = false;
-	this.restartedLevel = false;
-
-	this.antialias = false;
-	this.clearColor = 0x336699;
-	this.cameraFov = GS.Settings.fov;
-	this.cameraFar = 1500;
-
-	if (this.isTestMap()) {
-		this.noMenu = true;
-	} else {
-		this.noMenu = false;
-	}
-
-	this.firstTimeInMenu = true;
-
-	this.showFPS = GS.Settings.showFPS;
-	this.showPerformanceDebugMeters = false;
 };
 
 GS.Game.prototype = GS.inherit(GS.Base, {
 	constructor: GS.Game,
+
+	preInit: function() {
+		// @if TARGET='WEB'
+		GS.Settings.loadSettings();
+		// @endif
+
+		// @if TARGET='CHROME_APP'
+		if (GS.Settings.fullscreen) {
+			chrome.app.window.current().fullscreen();
+		}
+		// @endif
+
+		this.state = GS.GameStates.PreLoad;
+		this.nextState = null;
+		this.updated = false;
+		this.firstLoad = true;
+		this.firstPlay = true;
+		this.mapWon = false;
+		this.restartedLevel = false;
+
+		this.antialias = false;
+		this.clearColor = 0x336699;
+		this.cameraFov = GS.Settings.fov;
+		this.cameraFar = 1500;
+
+		// @if TARGET='WEB'
+		if (this.isTestMap()) {
+			this.noMenu = true;
+		} else {
+		// @endif
+			this.noMenu = false;
+		// @if TARGET='WEB'
+		}
+		// @endif
+
+		this.firstTimeInMenu = true;
+
+		this.showFPS = GS.Settings.showFPS;
+		this.showPerformanceDebugMeters = false;
+	},
 
 	init: function() {
 		GS.DebugUI.init();
@@ -194,7 +208,9 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		if (this.grid !== undefined) {
 			this.grid.player.inMenu = true;
 			this.grid.player.controls.disable();
+			// @if TARGET='WEB'
 			this.grid.player.controls.detachEvents();
+			// @endif
 		}
 
 		this.graphicsManager.monochromeEnabled = true;
@@ -208,7 +224,9 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 
 		if (this.grid !== undefined) {
 			this.grid.player.inMenu = false;
+			// @if TARGET='WEB'
 			this.grid.player.controls.attachEvents();
+			// @endif
 			this.grid.player.controls.enable();
 			this.grid.aiManager.resume();
 
@@ -247,11 +265,15 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.closeMenu();
 		}
 
+		// @if TARGET='WEB'
 		if (this.isTestMap()) {
 			this.mapName = "testMap";
 		} else {
-		this.mapName = "airstrip1";
+		// @endif
+			this.mapName = "airstrip1";
+		// @if TARGET='WEB'
 		}
+		// @endif
 
 		this.nextState = GS.GameStates.Dispose;
 	},
@@ -281,7 +303,9 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.grid.update();
 		this.graphicsManager.setGrid(this.grid);
 
+		// @if TARGET='WEB'
 		this.grid.player.controls.addEventListener("pointerLockDisabled", function() { that.openMenu(); });
+		// @endif
 
 		// console.log("collision triangles", viewFactory.triangleCount);
 	},
@@ -328,6 +352,11 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 					this.loadingUI.hide();
 					this.uiManager.show();
 				}
+				// @if TARGET='CHROME_APP'
+				if (this.nextState == GS.GameStates.Play) {
+					this.grid.player.controls.enable();
+				}
+				// @endif
 
 				this.state = this.nextState;
 				this.nextState = null;
@@ -386,6 +415,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		}
 	},
 
+	// @if TARGET='WEB'
 	customMap: function() {
 		var that = this;
 
@@ -413,6 +443,39 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		fileReader.readAsText(file);
 		customMapInput.val("");
 	},
+	// @endif
+
+	// @if TARGET='CHROME_APP'
+	customMap: function() {
+		var that = this;
+
+		var options = {
+			accepts: [
+				{
+					extensions: ["js", "json"]
+				}
+			]
+		};
+
+		chrome.fileSystem.chooseEntry(options, function(fileEntry) {
+			if (chrome.runtime.lastError) {
+				return;
+			}
+
+			fileEntry.file(function(file) {
+				var reader = new FileReader();
+
+				reader.onloadend = function(e) {
+					that.assetLoader.assets[GS.AssetTypes.Map].customMap = e.target.result;
+
+					that.loadLevel("customMap");
+				};
+
+				reader.readAsText(file);
+			});
+		});
+	},
+	// @endif
 
 	handleFatalError: function(message) {
 		var that = this;
@@ -421,10 +484,20 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		document.body.style.padding = "20px";
 
 		var a = document.createElement("a");
+		// @if TARGET='WEB'
 		a.innerHTML = "click here or refresh page to restart";
+		// @endif
+		// @if TARGET='CHROME_APP'
+		a.innerHTML = "click here to restart";
+		// @endif
 		a.className = "fatal-error-link";
 		a.onclick = function() {
+			// @if TARGET='WEB'
 			window.location.reload();
+			// @endif
+			// @if TARGET='CHROME_APP'
+			chrome.runtime.reload();
+			// @endif
 		};
 
 		document.body.appendChild(a);
@@ -452,6 +525,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		this.nextState = GS.GameStates.PreLoad;
 	},
 
+	// @if TARGET='WEB'
 	dispose: function() {
 		var that = this;
 
@@ -463,12 +537,41 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 			this.disposeEnd();
 		}
 	},
+	// @endif
+
+	// @if TARGET='CHROME_APP'
+	dispose: function() {
+		var that = this;
+
+		if (this.grid !== undefined) {
+			this.grid.player.controls.dispose();
+		}
+		this.disposeEnd();
+	},
+
+	exit: function() {
+		this.dispose();
+
+		chrome.app.window.current().close();
+	},
+	// @endif
 });
 
 var GAME;
 window.addEventListener("load", function() {
 	GS.Detector.run(function() {
 		GAME = new GS.Game();
+
+		// @if TARGET='WEB'
+		GAME.preInit();
 		GAME.init();
+		// @endif
+
+		// @if TARGET='CHROME_APP'
+		GS.Settings.loadSettings(function() {
+			GAME.preInit();
+			GAME.init();
+		});
+		// @endif
 	});
 }, false);

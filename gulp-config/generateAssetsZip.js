@@ -31,7 +31,7 @@ function loadAssetManifest() {
 }
 
 function buildZip(done) {
-	var output = fs.createWriteStream("./dist/assets.zip");
+	var output = fs.createWriteStream(global.distFolder + "/assets.zip");
 
 	output.on("close", function() {
 		console.log(archive.pointer() + " total bytes");

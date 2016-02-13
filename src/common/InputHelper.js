@@ -12,31 +12,47 @@ GS.InputHelper = {
 	shift: false,
 	alt: false,
 	pressedKeys: [],
-	keysPressed: false,		
+	keysPressed: false,
 
 	init: function() {
 		var that = this;
+
+		$(document).on("contextmenu", function(){
+			return false;
+		});
+
 		$(document).keydown(function(e){
 			that.keyState[e.keyCode] = true;
 			that.ctrl = e.ctrlKey;
 			that.alt = e.altKey;
 			that.shift = e.shiftKey;
 
+			// @if TARGET='WEB'
 			// avoid normal behavior: tab, ctrl+a, ctrl+z, ctrl+g, ctrl-minus, ctrl-plus, ctrl-zero
 			if (e.keyCode == 9 || (e.keyCode == 65 && e.ctrlKey) ||
 				(e.keyCode == 90 && e.ctrlKey) || (e.keyCode == 71 && e.ctrlKey) ||
 				(e.keyCode == 189 && e.ctrlKey) || (e.keyCode == 187 && e.ctrlKey) ||
 				(e.keyCode == 48 && e.ctrlKey)) {
+				// @endif
+
 				e.stopPropagation();
 				e.preventDefault();
 				return false;
+			// @if TARGET='WEB'
 			}
+			// @endif
 		});
 		$(document).keyup(function(e){
 			that.keyState[e.keyCode] = false;
 			that.ctrl = e.ctrlKey;
 			that.alt = e.altKey;
 			that.shift = e.shiftKey;
+
+			// @if TARGET='CHROME_APP'
+			e.stopPropagation();
+			e.preventDefault();
+			return false;
+			// @endif
 		});
 		$(document).mousedown(function(e){
 			if (e.which == 1)

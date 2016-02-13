@@ -5,6 +5,7 @@ var uglify = require("gulp-uglify");
 var concat = require("gulp-concat-util");
 var insert = require("gulp-insert");
 var sourcemaps = require("gulp-sourcemaps");
+var preprocess = require("gulp-preprocess");
 
 gulp.task("js-client", function () {
 	var list = [
@@ -21,12 +22,18 @@ gulp.task("js-client", function () {
 		"./src/game/js/loaders/*.js",
 		"./src/game/js/factories/*.js",
 		"./src/game/js/components/*.js",
-		"./src/game/js/views/*.js",
-
-		"./src/game/js/*.js",
+		"./src/game/js/views/*.js"
 	];
 
+	if (global.target === "CHROME_APP") {
+		list.push("./src/game/js/components/MapScript.js");
+		list.push("./src/game/js/map-scripts/*.js");
+	}
+
+	list.push("./src/game/js/*.js");
+
 	return gulp.src(list)
+		.pipe(preprocess({ context: { TARGET: global.target }}))
 		.pipe(gulpif(!global.production, sourcemaps.init()))
 		.pipe(concat("gorescript.min.js", { sep: ";" }))
 

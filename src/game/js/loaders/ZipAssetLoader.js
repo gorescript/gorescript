@@ -122,7 +122,12 @@ GS.ZipAssetLoader.prototype = {
 				this.loadMap(asset.name, asset.filename);
 				break;
 			case GS.AssetTypes.Script:
+				// @if TARGET='WEB'
 				this.loadScript(asset.name, asset.filename);
+				// @endif
+				// @if TARGET='CHROME_APP'
+				this.checkIfFullyLoaded();
+				// @endif
 				break;
 			case GS.AssetTypes.MusicTrack:
 				this.loadSound(asset.name, asset.filename, GS.AssetTypes.MusicTrack);
@@ -206,9 +211,11 @@ GS.ZipAssetLoader.prototype = {
 		if (name !== "testMap") {
 			this.assets[GS.AssetTypes.Map][name] = this.zip.file(path).asText();
 		} else {
+			// @if TARGET='WEB'
 			if (GAME.isTestMap()) {
 				this.assets[GS.AssetTypes.Map][name] = this.mapLoader.loadTestMap();
 			}
+			// @endif
 		}
 
 		this.checkIfFullyLoaded();

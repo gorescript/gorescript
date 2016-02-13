@@ -16,13 +16,13 @@ GS.inherit = function(classObj, members) {
 			base.__defineSetter__(prop, desc.set);
 		}
 	});
-	
+
 	return base;
 };
-	
+
 GS.pushArray = function(dst, src) {
 	src.forEach(function(x) {
-		this.push(x); 
+		this.push(x);
 	}, dst);
 };
 
@@ -80,15 +80,11 @@ GS.Base.prototype = {
 	init: function() {
 		var that = this;
 
-		$(document).on("contextmenu", function(){
-			return false;
-		});
-
 		this.renderer = new THREE.WebGLRenderer({ antialias: this.antialias });
 		this.renderer.setClearColor(this.clearColor, 1);
 		this.renderer.setSize(window.innerWidth, window.innerHeight);
 		this.renderer.domElement.id = "game-canvas";
-	
+
 		this.camera = new THREE.PerspectiveCamera(this.cameraFov, window.innerWidth / window.innerHeight, this.cameraNear, this.cameraFar);
 
 		this.scene = new THREE.Scene();

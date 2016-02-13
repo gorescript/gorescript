@@ -10,6 +10,10 @@ GS.Settings = function() {
 		vignette: true,
 		fxaa: true,
 
+		// @if TARGET='CHROME_APP'
+		fullscreen: true,
+		// @endif
+
 		halfSize: true,
 		showFPS: true,
 
@@ -36,6 +40,7 @@ GS.Settings = function() {
 	};
 
 	return {
+		// @if TARGET='WEB'
 		loadSettings: function() {
 			var jsonStr = localStorage["gs-settings"];
 			if (jsonStr !== undefined) {
@@ -54,10 +59,42 @@ GS.Settings = function() {
 			GS.KeybindSettings.init();
 			settings.keybinds = GS.KeybindSettings.keybinds;
 		},
+		// @endif
+
+		// @if TARGET='CHROME_APP'
+		loadSettings: function(callback) {
+			chrome.storage.local.get("gs-settings", function(result) {
+				var loadedSettings = result["gs-settings"];
+
+				if (loadedSettings) {
+					for (var i in loadedSettings) {
+						if (i in settings) {
+							settings[i] = loadedSettings[i];
+						}
+					}
+
+					if (loadedSettings.keybinds) {
+						GS.KeybindSettings.keybinds = loadedSettings.keybinds;
+					}
+				}
+
+				GS.KeybindSettings.init();
+				settings.keybinds = GS.KeybindSettings.keybinds;
+
+				callback();
+			});
+		},
+		// @endif
 
 		saveSettings: function() {
+			// @if TARGET='WEB'
 			var jsonStr = JSON.stringify(settings);
 			localStorage["gs-settings"] = jsonStr;
+			// @endif
+
+			// @if TARGET='CHROME_APP'
+			chrome.storage.local.set({ "gs-settings": settings });
+			// @endif
 		},
 
 		get fovMin() {
@@ -137,7 +174,7 @@ GS.Settings = function() {
 			settings.viewBob = (value === true);
 			this.saveSettings();
 			if (GAME.grid !== undefined) {
-				GAME.grid.player.playerView.viewBob.enabled = settings.viewBob;				
+				GAME.grid.player.playerView.viewBob.enabled = settings.viewBob;
 			}
 		},
 
@@ -156,6 +193,26 @@ GS.Settings = function() {
 		get weaponBob() {
 			return settings.weaponBob;
 		},
+
+		// @if TARGET='CHROME_APP'
+		set fullscreen(value) {
+			var oldValue = settings.fullscreen;
+			settings.fullscreen = (value === true);
+			this.saveSettings();
+
+			if (oldValue !== value) {
+				if (value === true) {
+					chrome.app.window.current().fullscreen();
+				} else {
+					chrome.app.window.current().restore();
+				}
+			}
+		},
+
+		get fullscreen() {
+			return settings.fullscreen;
+		},
+		// @endif
 
 		set halfSize(value) {
 			settings.halfSize = (value === true);

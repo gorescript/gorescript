@@ -11,10 +11,6 @@ GS.Rebound.prototype = {
 	init: function() {
 		var that = this;
 
-		$(document).on("contextmenu", function() {
-			return false;
-		});
-
 		$(document).on("keydown.keybindUse", function(e) {
 			if (that.modifyingKeybind) {
 				return;
@@ -137,7 +133,7 @@ GS.Rebound.prototype = {
 		} else
 		if (e.which === 2) {
 			name = "MOUSE MIDDLE";
-		} 
+		}
 		// else
 		// if (e.which === 3) {
 		// 	name = "MOUSE RIGHT";

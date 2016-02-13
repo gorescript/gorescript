@@ -55,7 +55,12 @@ GS.UIComponents.Menu.prototype = {
 		var that = this;
 
 		this.topPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160),
+			// @if TARGET='WEB'
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 72, 80);
+			// @endif
+			// @if TARGET='CHROME_APP'
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 60, 70);
+			// @endif
 
 		this.btnNewGame = this.topPanel.addButton("new game");
 		this.btnNewGame.onClick = function() { GAME.newGame(); };
@@ -63,11 +68,21 @@ GS.UIComponents.Menu.prototype = {
 		this.btnLevelSelect = this.topPanel.addButton("level select");
 		this.btnLevelSelect.onClick = function() { that.activePanel = that.levelSelectPanel; };
 
+		// @if TARGET='CHROME_APP'
+		this.btnCustomMap = this.topPanel.addButton("custom map");
+		this.btnCustomMap.onClick = function() { GAME.customMap(); };
+		// @endif
+
 		this.btnOptions = this.topPanel.addButton("options");
 		this.btnOptions.onClick = function() { that.activePanel = that.optionsPanel; };
 
 		this.btnCredits = this.topPanel.addButton("credits");
 		this.btnCredits.onClick = function() { that.activePanel = that.creditsPanel; };
+
+		// @if TARGET='CHROME_APP'
+		this.btnExit = this.topPanel.addButton("exit");
+		this.btnExit.onClick = function() { GAME.exit(); };
+		// @endif
 	},
 
 	initOptionsPanel: function() {
@@ -102,7 +117,19 @@ GS.UIComponents.Menu.prototype = {
 		var that = this;
 
 		this.graphicsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160),
+		// @if TARGET='CHROME_APP'
+			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 28, 31);
+
+		this.btnToggleFullscreen = this.graphicsPanel.addToggleButton("fullscreen");
+		this.btnToggleFullscreen.button.currentStateIndex = (GS.Settings.fullscreen === true) ? 0 : 1;
+		this.btnToggleFullscreen.button.onClick = function(e) { GS.Settings.fullscreen = (e.state === "on"); };
+
+		this.graphicsPanel.addEmptyRow();
+		// @endif
+
+		// @if TARGET='WEB'
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 40, 43);
+		// @endif
 
 		this.btnToggleHalfSize = this.graphicsPanel.addToggleButton("half-size rendering");
 		this.btnToggleHalfSize.button.currentStateIndex = (GS.Settings.halfSize === true) ? 0 : 1;

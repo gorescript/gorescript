@@ -61,11 +61,13 @@ GS.UIComponents.Notifications.prototype = {
 			this.oldShowUsePopup = this.showUsePopup;
 		}
 
+		// @if TARGET='WEB'
 		this.showPointerLockPopup = !this.player.controls.pointerLockEnabled;
 		if (this.showPointerLockPopup != this.oldShowPointerLockPopup) {
 			this.needsRedraw = true;
 			this.oldShowPointerLockPopup = this.showPointerLockPopup;
 		}
+		// @endif
 
 		this.showRestartPopup = this.player.dead;
 		if (this.showRestartPopup != this.oldShowRestartPopup) {
@@ -78,24 +80,28 @@ GS.UIComponents.Notifications.prototype = {
 		if (this.showRestartPopup) {
 			this.drawPopup(this.restartText, this.restartPopup);
 		} else
+		// @if TARGET='WEB'
 		if (this.showPointerLockPopup) {
 			this.drawPopup(this.pointerLockText, this.pointerLockPopup);
 		} else
+		// @endif
 		if (this.showUsePopup) {
 			this.drawPopup(this.useText, this.usePopup);
 		}
 	},
 
 	drawPopup: function(text, popup) {
-		this.cvs.roundedBoxFill(popup.offset, popup.pos, popup.size, true, 
+		this.cvs.roundedBoxFill(popup.offset, popup.pos, popup.size, true,
 			this.boxCornerRadius, GS.UIColors.background);
-		this.cvs.text(popup.textOffset, popup.pos, text, 
+		this.cvs.text(popup.textOffset, popup.pos, text,
 			GS.UIColors.foreground, this.fontSize, "middle", "center", GS.UIFont);
 	},
 
-	calculateSizes: function() {		
+	calculateSizes: function() {
 		this.calculatePopupSize(this.useText, this.usePopup);
+		// @if TARGET='WEB'
 		this.calculatePopupSize(this.pointerLockText, this.pointerLockPopup);
+		// @endif
 		this.calculatePopupSize(this.restartText, this.restartPopup);
 	},
 

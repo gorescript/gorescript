@@ -39,10 +39,14 @@
 
 	<div class="news-box">
 		<a href="http://gorescript.com/news" target="_blank">NEWS!</a><br/>
+		<!-- @if TARGET='WEB' -->
 		<a class="custom-map-link" onclick="GAME.customMap()">custom map</a>
+		<!-- @endif -->
 	</div>
 
+	<!-- @if TARGET='WEB' -->
 	<input id="customMapInput" type="file" accept=".js, .json" onchange="GAME.customMap()">
+	<!-- @endif -->
 
 	<script src="gorescript-deps.min.js"></script>
 	<script src="gorescript.min.js"></script>

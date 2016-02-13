@@ -33,7 +33,7 @@ GS.Player = function(grid, camera, playerView) {
 	this.canUse = true;
 
 	this.ySmoothingMaxCooldown = GS.msToFrames(500);
-	this.ySmoothingCooldown = 0;	
+	this.ySmoothingCooldown = 0;
 
 	this.swapWeaponsOnPickup = true;
 };
@@ -49,12 +49,19 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 			that.availableWeapons[key].pickedUp = false;
 			that.availableWeapons[key].cooldownRemaining = 0;
 		});
-		
+
 		this.computeYFromSector();
 		this.initTriangles();
 		this.updateBoundingBox();
 
+		// @if TARGET='WEB'
 		this.controls = new GS.FPSControls(this.camera);
+		// @endif
+
+		// @if TARGET='CHROME_APP'
+		this.controls = new GS.ChromeAppFPSControls(this.camera);
+		// @endif
+
 		this.controls.eye.copy(this.position);
 		this.controls.followingEye.copy(this.position);
 		this.controls.moveSpeed = this.moveSpeed;
@@ -86,7 +93,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 		for (var i in this.availableWeapons) {
 			pkg.weapons[i] = {};
 			pkg.weapons[i].pickedUp = this.availableWeapons[i].pickedUp;
-			pkg.weapons[i].ammo = this.availableWeapons[i].ammo;			
+			pkg.weapons[i].ammo = this.availableWeapons[i].ammo;
 		}
 
 		return pkg;
@@ -280,7 +287,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 	},
 
 	updateUse: function() {
-		if (this.canUse && GS.Keybinds.use.inUse) {			
+		if (this.canUse && GS.Keybinds.use.inUse) {
 			this.useTarget.onUse();
 		}
 	},
@@ -291,7 +298,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 			if (this.weapon.cooldownRemaining > 0) {
 				this.weapon.cooldownRemaining -= 1;
 				return;
-			}			
+			}
 
 			var oldShooting = this.shooting;
 			if (GS.Keybinds.shoot.inUse && this.playerView.weaponReady) {
@@ -312,13 +319,13 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 					var projectileStart = this.getProjectileStart();
 					if (this.weapon.hitscan) {
 						this.grid.collisionManager.hitscan(this, projectileStart, this.weapon, this.xAngle, this.yAngle);
-					} else 
+					} else
 					if (this.weaponName == "hyper_blaster") {
 						this.grid.addProjectile(this, "hyper_blaster_bolt", projectileStart, this.direction.clone());
 					} else
 					if (this.weaponName == "pistol") {
 						this.grid.addProjectile(this, "pistol_bolt", projectileStart, this.direction.clone());
-					}					
+					}
 				}
 
 				if (!this.weapon.infiniteAmmo && this.weapon.ammo === 0) {
@@ -337,7 +344,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 		var name;
 		if (this.weaponName == "double_shotgun") {
 			name = "shotgun_fire";
-		} else 
+		} else
 		if (this.weaponName == "hyper_blaster") {
 			name = "hyper_blaster_fire";
 		} else
@@ -428,9 +435,9 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 
 		// GS.DebugUI.setStaticLine("position", newPos.toString());
 
-		if (this.moving && !oldMoving) {			
+		if (this.moving && !oldMoving) {
 			this.moveStart();
-		} else 
+		} else
 		if (!this.moving && oldMoving) {
 			this.moveEnd();
 		}

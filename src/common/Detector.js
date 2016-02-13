@@ -6,7 +6,7 @@ GS.Detector = {
 			return;
 		}
 
-		var webGL = (function () { 
+		var webGL = (function () {
 			try {
 				var canvas = document.createElement("canvas");
 				return !!window.WebGLRenderingContext && (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
@@ -31,6 +31,7 @@ GS.Detector = {
 			return;
 		}
 
+		// @if TARGET='WEB'
 		var localStorage;
 		try {
 			localStorage = "localStorage" in window && window["localStorage"] !== null;
@@ -41,6 +42,7 @@ GS.Detector = {
 			this.displayErrorMessage("HTML5 local storage");
 			return;
 		}
+		// @endif
 
 		callback();
 	},
@@ -52,7 +54,7 @@ GS.Detector = {
 		div.style.height = "150px";
 		div.style.marginLeft = "-225px";
 		div.style.marginTop = "-75px";
-		div.style.position = "absolute";		
+		div.style.position = "absolute";
 		div.style.top = "50%";
 		div.style.left = "50%";
 		div.style.backgroundColor = "#000";
