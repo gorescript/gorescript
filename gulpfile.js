@@ -49,13 +49,22 @@ gulp.task("desktop-debug", function() {
 	watch();
 });
 
+gulp.task("desktop-prod", function() {
+	global.production = true;
+	global.target = "DESKTOP";
+	global.distFolder = "./desktop";
+
+	runSequence("clean", "copy", "generateAssetsZip", "js-vendor", "js-client", "electron");
+});
+
 function run() {
 	runSequence("clean", "copy", "generateAssetsZip", "js-vendor", "js-client");
 }
 
 function watch() {
 	gulp.watch([
-		"./src/game/index.html"
+		"./src/game/index.html",
+		"./src/game/main.js"
 		], ["copy"]);
 
 	gulp.watch(["./src/**/*.js"], ["js-client"]);

@@ -33,7 +33,7 @@ gulp.task("js-client", function () {
 	list.push("./src/game/js/*.js");
 
 	return gulp.src(list)
-		.pipe(preprocess({ context: { TARGET: global.target }}))
+		.pipe(preprocess({ context: { TARGET: global.target, DEBUG: !global.production }}))
 		.pipe(gulpif(!global.production, sourcemaps.init()))
 		.pipe(concat("gorescript.min.js", { sep: ";" }))
 

@@ -16,7 +16,9 @@ function createWindow () {
 
 	mainWindow.loadURL("file://" + __dirname + "/index.html");
 
+	// @if DEBUG=true
 	mainWindow.webContents.openDevTools();
+	// @endif
 
 	mainWindow.on("closed", function() {
 		mainWindow = null;

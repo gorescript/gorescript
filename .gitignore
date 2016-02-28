@@ -7,6 +7,7 @@ app/index.html
 
 desktop-build/
 
+desktop/main.js
 desktop/assets.zip
 desktop/capsuula.woff
 desktop/gorescript-deps.min.js
