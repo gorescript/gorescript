@@ -48,16 +48,6 @@
 	<input id="customMapInput" type="file" accept=".js, .json" onchange="GAME.customMap()">
 	<!-- @endif -->
 
-	<!-- @if TARGET='DESKTOP' -->
-	<script>
-
-		if ("require" in window) {
-			window.$ = window.jQuery = require("jquery");
-		}
-
-	</script>
-	<!-- @endif -->
-
 	<script src="gorescript-deps.min.js"></script>
 	<script src="gorescript.min.js"></script>
 

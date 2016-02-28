@@ -5,6 +5,8 @@ app/gorescript-deps.min.js
 app/gorescript.min.js
 app/index.html
 
+desktop-build/
+
 desktop/assets.zip
 desktop/capsuula.woff
 desktop/gorescript-deps.min.js
