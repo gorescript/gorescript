@@ -1,3 +1,7 @@
+// @if TARGET='DESKTOP'
+var electronRemote = require("remote");
+// @endif
+
 GS.GameVersion = "v1.2.0";
 GS.ReleaseDate = "february 2016";
 
@@ -18,13 +22,19 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	constructor: GS.Game,
 
 	preInit: function() {
-		// @if TARGET='WEB'
+		// @if TARGET='WEB' || TARGET='DESKTOP'
 		GS.Settings.loadSettings();
 		// @endif
 
 		// @if TARGET='CHROME_APP'
 		if (GS.Settings.fullscreen) {
 			chrome.app.window.current().fullscreen();
+		}
+		// @endif
+
+		// @if TARGET='DESKTOP'
+		if (GS.Settings.fullscreen) {
+			electronRemote.getCurrentWindow().setFullScreen(true);
 		}
 		// @endif
 
@@ -352,7 +362,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 					this.loadingUI.hide();
 					this.uiManager.show();
 				}
-				// @if TARGET='CHROME_APP'
+				// @if TARGET='CHROME_APP' || TARGET='DESKTOP'
 				if (this.nextState == GS.GameStates.Play) {
 					this.grid.player.controls.enable();
 				}
@@ -415,7 +425,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		}
 	},
 
-	// @if TARGET='WEB'
+	// @if TARGET='WEB' || TARGET='DESKTOP'
 	customMap: function() {
 		var that = this;
 
@@ -484,7 +494,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		document.body.style.padding = "20px";
 
 		var a = document.createElement("a");
-		// @if TARGET='WEB'
+		// @if TARGET='WEB' || TARGET='DESKTOP'
 		a.innerHTML = "click here or refresh page to restart";
 		// @endif
 		// @if TARGET='CHROME_APP'
@@ -492,7 +502,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		// @endif
 		a.className = "fatal-error-link";
 		a.onclick = function() {
-			// @if TARGET='WEB'
+			// @if TARGET='WEB' || TARGET='DESKTOP'
 			window.location.reload();
 			// @endif
 			// @if TARGET='CHROME_APP'
@@ -539,7 +549,7 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 	},
 	// @endif
 
-	// @if TARGET='CHROME_APP'
+	// @if TARGET='CHROME_APP' || TARGET='DESKTOP'
 	dispose: function() {
 		var that = this;
 
@@ -548,11 +558,21 @@ GS.Game.prototype = GS.inherit(GS.Base, {
 		}
 		this.disposeEnd();
 	},
+	// @endif
 
+	// @if TARGET='CHROME_APP'
 	exit: function() {
 		this.dispose();
 
 		chrome.app.window.current().close();
+	},
+	// @endif
+
+	// @if TARGET='DESKTOP'
+	exit: function() {
+		this.dispose();
+
+		electronRemote.getCurrentWindow().close();
 	},
 	// @endif
 });
@@ -562,7 +582,7 @@ window.addEventListener("load", function() {
 	GS.Detector.run(function() {
 		GAME = new GS.Game();
 
-		// @if TARGET='WEB'
+		// @if TARGET='WEB' || TARGET='DESKTOP'
 		GAME.preInit();
 		GAME.init();
 		// @endif

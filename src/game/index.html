@@ -39,13 +39,23 @@
 
 	<div class="news-box">
 		<a href="http://gorescript.com/news" target="_blank">NEWS!</a><br/>
-		<!-- @if TARGET='WEB' -->
+		<!-- @if TARGET='WEB' || TARGET='DESKTOP' -->
 		<a class="custom-map-link" onclick="GAME.customMap()">custom map</a>
 		<!-- @endif -->
 	</div>
 
-	<!-- @if TARGET='WEB' -->
+	<!-- @if TARGET='WEB' || TARGET='DESKTOP' -->
 	<input id="customMapInput" type="file" accept=".js, .json" onchange="GAME.customMap()">
+	<!-- @endif -->
+
+	<!-- @if TARGET='DESKTOP' -->
+	<script>
+
+		if ("require" in window) {
+			window.$ = window.jQuery = require("jquery");
+		}
+
+	</script>
 	<!-- @endif -->
 
 	<script src="gorescript-deps.min.js"></script>

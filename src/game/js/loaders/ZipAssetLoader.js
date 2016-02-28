@@ -122,7 +122,7 @@ GS.ZipAssetLoader.prototype = {
 				this.loadMap(asset.name, asset.filename);
 				break;
 			case GS.AssetTypes.Script:
-				// @if TARGET='WEB'
+				// @if TARGET='WEB' || TARGET='DESKTOP'
 				this.loadScript(asset.name, asset.filename);
 				// @endif
 				// @if TARGET='CHROME_APP'

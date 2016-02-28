@@ -58,7 +58,7 @@ GS.UIComponents.Menu.prototype = {
 			// @if TARGET='WEB'
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 72, 80);
 			// @endif
-			// @if TARGET='CHROME_APP'
+			// @if TARGET='CHROME_APP' || TARGET='DESKTOP'
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 60, 70);
 			// @endif
 
@@ -79,7 +79,7 @@ GS.UIComponents.Menu.prototype = {
 		this.btnCredits = this.topPanel.addButton("credits");
 		this.btnCredits.onClick = function() { that.activePanel = that.creditsPanel; };
 
-		// @if TARGET='CHROME_APP'
+		// @if TARGET='CHROME_APP' || TARGET='DESKTOP'
 		this.btnExit = this.topPanel.addButton("exit");
 		this.btnExit.onClick = function() { GAME.exit(); };
 		// @endif
@@ -117,7 +117,7 @@ GS.UIComponents.Menu.prototype = {
 		var that = this;
 
 		this.graphicsPanel = new GS.UIComponents.MenuPanel(this.cvs, new THREE.Vector2(-400, -160),
-		// @if TARGET='CHROME_APP'
+		// @if TARGET='CHROME_APP' || TARGET='DESKTOP'
 			new THREE.Vector2(0.5, 0.5), new THREE.Vector2(800, 520), 28, 31);
 
 		this.btnToggleFullscreen = this.graphicsPanel.addToggleButton("fullscreen");

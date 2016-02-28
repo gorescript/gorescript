@@ -1,4 +1,5 @@
 var gulp = require("gulp");
+var gulpif = require("gulp-if");
 var uglify = require("gulp-uglify");
 var concat = require("gulp-concat-util");
 var insert = require("gulp-insert");
@@ -24,10 +25,10 @@ gulp.task("js-vendor", function () {
 				"/*! tween.js - http://github.com/sole/tween.js */",
 			].join("\n")))
 
-		.pipe(uglify({
+		.pipe(gulpif(global.production, uglify({
 			mangle: false,
 			preserveComments: "license"
-		}))
+		})))
 
 		.pipe(gulp.dest(global.distFolder));
 });

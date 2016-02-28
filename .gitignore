@@ -5,6 +5,12 @@ app/gorescript-deps.min.js
 app/gorescript.min.js
 app/index.html
 
+desktop/assets.zip
+desktop/capsuula.woff
+desktop/gorescript-deps.min.js
+desktop/gorescript.min.js
+desktop/index.html
+
 dist/
 report/
 node_modules/

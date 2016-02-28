@@ -14,5 +14,14 @@ gulp.task("clean", function (cb) {
 			global.distFolder + "/gorescript.min.js",
 			global.distFolder + "/index.html"
 		]);
+	} else
+	if (global.target === "DESKTOP") {
+		return del([
+			global.distFolder + "/assets.zip",
+			global.distFolder + "/capsuula.woff",
+			global.distFolder + "/gorescript-deps.min.js",
+			global.distFolder + "/gorescript.min.js",
+			global.distFolder + "/index.html"
+		]);
 	}
 });

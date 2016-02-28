@@ -58,7 +58,7 @@ GS.Player.prototype = GS.inherit(GS.GridObject, {
 		this.controls = new GS.FPSControls(this.camera);
 		// @endif
 
-		// @if TARGET='CHROME_APP'
+		// @if TARGET='CHROME_APP' || TARGET='DESKTOP'
 		this.controls = new GS.ChromeAppFPSControls(this.camera);
 		// @endif
 

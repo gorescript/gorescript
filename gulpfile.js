@@ -40,6 +40,15 @@ gulp.task("chrome-app-prod", function() {
 	run();
 });
 
+gulp.task("desktop-debug", function() {
+	global.production = false;
+	global.target = "DESKTOP";
+	global.distFolder = "./desktop";
+
+	run();
+	watch();
+});
+
 function run() {
 	runSequence("clean", "copy", "generateAssetsZip", "js-vendor", "js-client");
 }

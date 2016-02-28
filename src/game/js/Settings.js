@@ -1,3 +1,7 @@
+// @if TARGET='DESKTOP'
+var electronRemote = require("remote");
+// @endif
+
 GS.Settings = function() {
 	var settings = {
 		fovMin: 60,
@@ -10,7 +14,7 @@ GS.Settings = function() {
 		vignette: true,
 		fxaa: true,
 
-		// @if TARGET='CHROME_APP'
+		// @if TARGET='CHROME_APP' || TARGET='DESKTOP'
 		fullscreen: true,
 		// @endif
 
@@ -40,7 +44,7 @@ GS.Settings = function() {
 	};
 
 	return {
-		// @if TARGET='WEB'
+		// @if TARGET='WEB' || TARGET='DESKTOP'
 		loadSettings: function() {
 			var jsonStr = localStorage["gs-settings"];
 			if (jsonStr !== undefined) {
@@ -87,7 +91,7 @@ GS.Settings = function() {
 		// @endif
 
 		saveSettings: function() {
-			// @if TARGET='WEB'
+			// @if TARGET='WEB' || TARGET='DESKTOP'
 			var jsonStr = JSON.stringify(settings);
 			localStorage["gs-settings"] = jsonStr;
 			// @endif
@@ -205,6 +209,26 @@ GS.Settings = function() {
 					chrome.app.window.current().fullscreen();
 				} else {
 					chrome.app.window.current().restore();
+				}
+			}
+		},
+
+		get fullscreen() {
+			return settings.fullscreen;
+		},
+		// @endif
+
+		// @if TARGET='DESKTOP'
+		set fullscreen(value) {
+			var oldValue = settings.fullscreen;
+			settings.fullscreen = (value === true);
+			this.saveSettings();
+
+			if (oldValue !== value) {
+				if (value === true) {
+					electronRemote.getCurrentWindow().setFullScreen(true);
+				} else {
+					electronRemote.getCurrentWindow().setFullScreen(false);
 				}
 			}
 		},
