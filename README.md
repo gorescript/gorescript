@@ -7,4 +7,4 @@ See [releases](https://github.com/gorescript/gorescript/releases) for correspond
 
 Custom maps
 -----------
-- TBD
+- [Halls of Illusion](https://raw.githubusercontent.com/gorescript/gorescript/master/custom-maps/halls_of_illusion_by_harlaap.json) by [@harlaap](https://twitter.com/harlaap)
