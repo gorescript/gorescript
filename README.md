@@ -15,14 +15,17 @@ The steps to build it are:
 - Install Node.js
 - Open a command line window, go to the root folder of the repository
 - Run the commands:
-        `npm install gulp -g`
-        `npm install`
-        `gulp web-debug`
+        
+        npm install gulp -g
+        npm install
+        gulp web-debug
+        
 - When it says "finished js-client" hit CTRL+C and terminate it
 - Go to the newly created \dist folder (in the root of the repository)
 - Run the commands:
-        `npm install http-server -g`
-        `http-server`
+
+        npm install http-server -g
+        http-server
 
 http://localhost:8080 should now contain a playable version of the game.
 
