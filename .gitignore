@@ -14,7 +14,12 @@ desktop/gorescript-deps.min.js
 desktop/gorescript.min.js
 desktop/index.html
 
-dist/
+dist/assets.zip
+dist/capsuula.woff
+dist/gorescript-deps.min.js
+dist/gorescript.min.js
+dist/index.html
+
 report/
 node_modules/
 src/game/assets/

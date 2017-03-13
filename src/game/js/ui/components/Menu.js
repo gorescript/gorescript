@@ -417,22 +417,16 @@ GS.UIComponents.Menu.prototype = {
 
 	initFooter: function() {
 		this.label1 = new GS.UIComponents.MenuLabel(this.cvs, GS.GameVersion,
-			new THREE.Vector2(-20, -105), new THREE.Vector2(1, 1));
+			new THREE.Vector2(-20, -70), new THREE.Vector2(1, 1));
 		this.label1.textAlign = "right";
 		this.label1.fontSize = 30;
 		this.children.push(this.label1);
 
 		this.label2 = new GS.UIComponents.MenuLabel(this.cvs, GS.ReleaseDate,
-			new THREE.Vector2(-20, -70), new THREE.Vector2(1, 1));
+			new THREE.Vector2(-20, -35), new THREE.Vector2(1, 1));
 		this.label2.textAlign = "right";
 		this.label2.fontSize = 30;
 		this.children.push(this.label2);
-
-		this.label3 = new GS.UIComponents.MenuLabel(this.cvs, "twitter: @gorescript",
-			new THREE.Vector2(-20, -35), new THREE.Vector2(1, 1));
-		this.label3.textAlign = "right";
-		this.label3.fontSize = 30;
-		this.children.push(this.label3);
 	},
 
 	initNewsBox: function() {

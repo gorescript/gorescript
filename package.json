@@ -1,8 +1,8 @@
 {
-  "name": "gorescript",
+  "name": "gorescript-classic",
   "description": "Retro first-person shooter, written in JavaScript using three.js",
   "version": "1.1.0",
-  "homepage": "http://gorescript.com",
+  "homepage": "http://gorescript.com/classic",
   "repository": {
     "type": "git",
     "url": "https://github.com/gorescript/gorescript.git"

@@ -1,5 +1,5 @@
-gorescript
-==========
+gorescript classic
+==================
 
 A '90s-style 2.5D first-person shooter game built from scratch, complete with its own content creation pipeline.
 
@@ -15,11 +15,11 @@ The steps to build it are:
 - Install Node.js
 - Open a command line window, go to the root folder of the repository
 - Run the commands:
-        
+
         npm install gulp -g
         npm install
         gulp web-debug
-        
+
 - When it says "finished js-client" hit CTRL+C and terminate it
 - Go to the newly created \dist folder (in the root of the repository)
 - Run the commands:

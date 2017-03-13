@@ -2,8 +2,8 @@
 var electronRemote = require("remote");
 // @endif
 
-GS.GameVersion = "v1.2.0";
-GS.ReleaseDate = "february 2016";
+GS.GameVersion = "v1.2.1";
+GS.ReleaseDate = "march 2017";
 
 GS.GameStates = {
 	Dispose: 0,
