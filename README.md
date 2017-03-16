@@ -1,5 +1,5 @@
-gorescript
-==========
+gorescript classic
+==================
 
 A '90s-style 2.5D first-person shooter game built from scratch, complete with its own content creation pipeline.
 
