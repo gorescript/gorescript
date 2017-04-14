@@ -24,29 +24,9 @@
 		canvas { position: fixed; }
 
 		.news-box { position: absolute; box-sizing: border-box; right: 10px; top: 10px; padding: 0; z-index: 10000;
-					text-align: center; display: none; width: 25%; }
+					text-align: center; display: none; }
 		.news-box a { color: #fff; font-size: 4vw; font-family: "hudFont"; text-decoration: none; }
 		.news-box a:hover { text-decoration: underline; }
-
-		.new-version-container {
-			line-height: 4vh;
-		}
-
-		.new-version-link {
-			font-size: 2vw !important;
-		}
-
-		.new-version-link:hover {
-			text-decoration: none !important;
-		}
-
-		.new-version { width: 100%; margin-top: 1vh; -webkit-box-shadow: 0px 0px 25px 0px rgba(0,0,0,1); -moz-box-shadow: 0px 0px 25px 0px rgba(0,0,0,1); box-shadow: 0px 0px 25px 0px rgba(0,0,0,1); }
-
-		.new-version-link:hover .new-version {
-			-webkit-box-shadow: 0px 0px 25px 0px rgba(255,128,128,1);
-			-moz-box-shadow: 0px 0px 25px 0px rgba(255,128,128,1);
-			box-shadow: 0px 0px 25px 0px rgba(255,128,128,1);
-		}
 
 		.social-media a {
 			font-size: 5vh !important;
@@ -76,20 +56,12 @@
 <body>
 
 	<div class="news-box">
-		<a href="http://gorescript.com" class="new-version-link" target="_blank">
-			<div class="new-version-container">
-				Check out<br/>
-				the new version!
-				<img class="new-version" src="new_version.gif" />
-			</div>
-
-			<div class="social-media">
-				<a href="https://twitter.com/gorescript" target="_blank"><span class="media-icon fa fa-twitter"></span></a>
-				<a href="https://www.facebook.com/gorescript" target="_blank"><span class="media-icon fa fa-facebook-square"></span></a>
-				<a href="https://gorescript.tumblr.com" target="_blank"><span class="media-icon fa fa-tumblr-square"></span></a>
-				<a href="https://youtube.com/c/gorescript" target="_blank"><span class="media-icon fa fa-youtube-square"></span></a>
-			</div>
-		</a>
+		<div class="social-media">
+			<a href="https://twitter.com/gorescript" target="_blank"><span class="media-icon fa fa-twitter"></span></a>
+			<a href="https://www.facebook.com/gorescript" target="_blank"><span class="media-icon fa fa-facebook-square"></span></a>
+			<a href="https://gorescript.tumblr.com" target="_blank"><span class="media-icon fa fa-tumblr-square"></span></a>
+			<a href="https://youtube.com/c/gorescript" target="_blank"><span class="media-icon fa fa-youtube-square"></span></a>
+		</div>
 		<!-- @if TARGET='WEB' || TARGET='DESKTOP' -->
 		<a class="custom-map-link" onclick="GAME.customMap()">load custom map</a>
 		<!-- @endif -->

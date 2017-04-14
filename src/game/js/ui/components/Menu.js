@@ -65,6 +65,18 @@ GS.UIComponents.Menu.prototype = {
 		this.btnNewGame = this.topPanel.addButton("new game");
 		this.btnNewGame.onClick = function() { GAME.newGame(); };
 
+		this.btnSteamPage = this.topPanel.addButton("steam page");
+		this.btnSteamPage.onClick = function() {
+			var a = document.createElement("a");
+			a.href = "https://goo.gl/PZjn5C";
+			// @if TARGET='CHROME_APP' || TARGET='DESKTOP'
+			a.target = "_blank";
+			// @endif
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+		};
+
 		this.btnLevelSelect = this.topPanel.addButton("level select");
 		this.btnLevelSelect.onClick = function() { that.activePanel = that.levelSelectPanel; };
 
@@ -83,6 +95,18 @@ GS.UIComponents.Menu.prototype = {
 		this.btnExit = this.topPanel.addButton("exit");
 		this.btnExit.onClick = function() { GAME.exit(); };
 		// @endif
+
+		this.btnSubscribe = this.topPanel.addButton("subscribe");
+		this.btnSubscribe.onClick = function() {
+			var a = document.createElement("a");
+			a.href = "http://eepurl.com/cEkb3T";
+			// @if TARGET='CHROME_APP' || TARGET='DESKTOP'
+			a.target = "_blank";
+			// @endif
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+		};
 	},
 
 	initOptionsPanel: function() {
