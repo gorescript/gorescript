@@ -68,7 +68,7 @@ GS.UIComponents.Menu.prototype = {
 		this.btnSteamPage = this.topPanel.addButton("steam page");
 		this.btnSteamPage.onClick = function() {
 			var a = document.createElement("a");
-			a.href = "https://goo.gl/PZjn5C";
+			a.href = "https://goo.gl/akICRV";
 			// @if TARGET='CHROME_APP' || TARGET='DESKTOP'
 			a.target = "_blank";
 			// @endif
